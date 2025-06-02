@@ -19,7 +19,7 @@ export default function LoginForm() {
 
   const onSubmit = (data: LoginFormData) => {
     // TODO: Server Api + AfterLogin 이동 후, JWT 토큰 관리 로직
-    console.log("로그인 데이터:", data);
+    console.log("로그인 성공! 데이터:", data);
   };
 
   const router = useRouter();
