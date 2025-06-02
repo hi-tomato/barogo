@@ -1,26 +1,52 @@
+@import url("https://cdn.jsdelivr.net/gh/sunn-us/SUIT/fonts/static/woff2/SUIT.css");
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+body {
+  font-family: "SUIT", -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@keyframes float-0 {
+  0%,
+  100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  33% {
+    transform: translateY(-20px) rotate(10deg);
+  }
+  66% {
+    transform: translateY(10px) rotate(-5deg);
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@keyframes float-1 {
+  0%,
+  100% {
+    transform: translateX(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateX(30px) rotate(15deg);
+  }
+}
+
+@keyframes float-2 {
+  0%,
+  100% {
+    transform: translateY(0px) translateX(0px);
+  }
+  25% {
+    transform: translateY(-15px) translateX(15px);
+  }
+  75% {
+    transform: translateY(15px) translateX(-10px);
+  }
+}
+
+.animate-float-0 {
+  animation: float-0 infinite ease-in-out;
+}
+.animate-float-1 {
+  animation: float-1 infinite ease-in-out;
+}
+.animate-float-2 {
+  animation: float-2 infinite ease-in-out;
 }
