@@ -6,7 +6,12 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 export const useBaropotList = (tab: BaropotTab = "ongoing") => {
   return useQuery({
     queryKey: queryKeys.baropot.list(tab),
-    queryFn: () => baropot.getList(tab),
+    queryFn: async () => {
+      console.log("queryFn 실행됨, tab:", tab);
+      const result = await baropot.getList(tab);
+      console.log("API 결과:", result);
+      return result;
+    },
     staleTime: 1000 * 60 * 5,
   });
 };
