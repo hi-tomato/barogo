@@ -35,8 +35,6 @@ export default function MainHeader() {
           </button>
         </div>
       </div>
-
-      {/* Tab Menu */}
     </header>
   );
 }
