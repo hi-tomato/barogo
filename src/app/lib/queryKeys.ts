@@ -13,5 +13,7 @@ export const queryKeys = {
     favorites: () => [...queryKeys.restaurant.all, "favorites"] as const,
     detail: (id: number) =>
       [...queryKeys.restaurant.all, "detail", id] as const,
+    nearby: (location: Location) =>
+      [...queryKeys.restaurant.all, "nearby", location] as const,
   },
 } as const;

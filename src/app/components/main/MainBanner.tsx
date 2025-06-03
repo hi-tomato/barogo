@@ -1,3 +1,4 @@
+import Link from "next/link";
 import React from "react";
 
 export default function MainBanner() {
@@ -9,6 +10,7 @@ export default function MainBanner() {
         <br />
         혼자 가기 부담스러운 맛집도 이제 걱정 없어요.
       </p>
+      <Link href="/baropot">바로가기</Link>
     </div>
   );
 }

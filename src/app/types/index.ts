@@ -21,15 +21,18 @@ export interface FavoriteRestaurant {
   image: string;
 }
 
+export interface Location {
+  lat: number;
+  lng: number;
+}
 export interface NearbyRestaurant {
   id: string;
   place_name: string;
   address_name: string;
   phone: string;
-  place_url: string;
+  category_name: string;
   distance: string;
-  x: string; // 경도
-  y: string; // 위도
+  place_url: string;
 }
 
 export interface Position {

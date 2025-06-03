@@ -7,7 +7,6 @@ export const useBaropotList = (tab: BaropotTab = "ongoing") => {
   return useQuery({
     queryKey: queryKeys.baropot.list(tab),
     queryFn: async () => {
-      console.log("queryFn 실행됨, tab:", tab);
       const result = await baropot.getList(tab);
       console.log("API 결과:", result);
       return result;
