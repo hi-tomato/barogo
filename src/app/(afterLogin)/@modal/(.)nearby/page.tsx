@@ -7,6 +7,7 @@ import {
   getCategoryIcon,
   getGradientByCategory,
 } from "@/app/hooks/useCategory";
+import { NearbyRestaurant } from "@/app/types";
 
 export default function NearbyModal() {
   const router = useRouter();
@@ -24,6 +25,18 @@ export default function NearbyModal() {
 
   const isLoading = locationLoading || restaurantsLoading;
   const error = locationError || restaurantsError?.message;
+
+  const handleCreateBaropot = (restaurant: NearbyRestaurant) => {
+    router.push(
+      `/baropot/create?restaurant=${encodeURIComponent(
+        JSON.stringify({
+          name: restaurant.place_name,
+          location: restaurant.address_name,
+          category: restaurant.category_name,
+        })
+      )}`
+    );
+  };
 
   return (
     <div className="fixed inset-0 bg-[#0000004c] flex items-center justify-center p-4 z-50">
@@ -116,6 +129,13 @@ export default function NearbyModal() {
                         </p>
                       )}
                     </div>
+
+                    <button
+                      onClick={() => handleCreateBaropot(restaurant)}
+                      className="px-3 py-1 bg-gradient-to-r from-orange-400 to-red-400 text-white rounded-full text-xs font-medium hover:shadow-md transition-all cursor-pointer"
+                    >
+                      ⚡ 바로팟 만들기
+                    </button>
                   </div>
                 </div>
               ))}
