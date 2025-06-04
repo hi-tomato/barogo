@@ -8,15 +8,27 @@ import {
   getGradientByCategory,
 } from "@/app/hooks/useCategory";
 import { NearbyRestaurant } from "@/app/types";
+import { useEffect } from "react";
+import { useLocationStore } from "@/app/store/useUserLocation";
 
 export default function NearbyModal() {
   const router = useRouter();
+  const { saveLocationFromGeolocation } = useLocationStore();
+
+  // 현재 위치를 받아오는 Hooks
   const {
     location,
     error: locationError,
     isLoading: locationLoading,
     getCurrentLocation,
   } = useGeolocation();
+
+  useEffect(() => {
+    if (location) {
+      saveLocationFromGeolocation(location);
+    }
+  }, [location, saveLocationFromGeolocation]);
+
   const {
     data: restaurants = [],
     isLoading: restaurantsLoading,
@@ -27,15 +39,7 @@ export default function NearbyModal() {
   const error = locationError || restaurantsError?.message;
 
   const handleCreateBaropot = (restaurant: NearbyRestaurant) => {
-    router.push(
-      `/baropot/create?restaurant=${encodeURIComponent(
-        JSON.stringify({
-          name: restaurant.place_name,
-          location: restaurant.address_name,
-          category: restaurant.category_name,
-        })
-      )}`
-    );
+    router.push(`/baropot/create/${restaurant.id}`);
   };
 
   return (
@@ -70,6 +74,10 @@ export default function NearbyModal() {
                 {locationLoading ? "위치 찾는 중..." : "현재 위치 찾기"}
               </button>
             </div>
+          )}
+
+          {locationError && (
+            <div className="text-center py-8 text-red-500">{locationError}</div>
           )}
 
           {isLoading && location && (
