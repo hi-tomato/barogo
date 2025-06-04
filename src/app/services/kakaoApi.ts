@@ -5,7 +5,7 @@ export const kakaoApiService = {
     location: Location
   ): Promise<NearbyRestaurant[]> => {
     const response = await fetch(
-      `/api/nearby-restaurants?lat=${location.lat}&lng=${location.lng}`
+      `/api/nearby-restaurants?lat=${location.latitude}&lng=${location.longitude}`
     );
 
     if (!response.ok) {

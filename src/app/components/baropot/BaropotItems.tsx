@@ -1,3 +1,4 @@
+import { getStatusColor, getStatusText } from "@/app/hooks/useBaropotStatus";
 import { BaropotItem } from "@/app/types";
 
 interface BaropotItemProps {
@@ -6,32 +7,6 @@ interface BaropotItemProps {
 }
 
 export default function BaropotItems({ baropot, onJoin }: BaropotItemProps) {
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case "recruiting":
-        return "bg-blue-100 text-blue-600";
-      case "full":
-        return "bg-gray-100 text-gray-600";
-      case "closed":
-        return "bg-red-100 text-red-600";
-      default:
-        return "bg-gray-100 text-gray-600";
-    }
-  };
-
-  const getStatusText = (status: string) => {
-    switch (status) {
-      case "recruiting":
-        return "모집중";
-      case "full":
-        return "모집완료";
-      case "closed":
-        return "마감";
-      default:
-        return "알 수 없음";
-    }
-  };
-
   return (
     <div className="border border-gray-200 rounded-lg p-4 hover:border-blue-300 hover:shadow-md transition-all">
       {/* 헤더 */}

@@ -21,6 +21,7 @@ export default function BaropotModal() {
     error,
     refetch,
   } = useBaropotList(activeTab);
+
   const joinMutation = useJoinBaropot();
 
   // 핸들러들

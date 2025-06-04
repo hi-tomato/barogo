@@ -41,7 +41,7 @@ export default function NearbyModal() {
 
   const handleCreateBaropot = (restaurant: NearbyRestaurant) => {
     setSelectedRestaurant(restaurant);
-    console.log("현재 보고있는 맛집: ", location);
+
     sessionStorage.setItem(
       "selectedRestaurant",
       JSON.stringify({

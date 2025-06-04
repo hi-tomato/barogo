@@ -3,11 +3,11 @@ import { baropot } from "@/app/services/mockapi";
 import { BaropotTab } from "@/app/types";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
-export const useBaropotList = (tab: BaropotTab = "ongoing") => {
+export const useBaropotList = (tab?: BaropotTab) => {
   return useQuery({
-    queryKey: queryKeys.baropot.list(tab),
+    queryKey: queryKeys.baropot.list(tab || "ongoing"),
     queryFn: async () => {
-      const result = await baropot.getList(tab);
+      const result = await baropot.getList(tab || "ongoing");
       console.log("API 결과:", result);
       return result;
     },
