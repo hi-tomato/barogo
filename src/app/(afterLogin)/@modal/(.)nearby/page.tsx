@@ -10,11 +10,12 @@ import {
 import { NearbyRestaurant } from "@/app/types";
 import { useEffect } from "react";
 import { useLocationStore } from "@/app/store/useUserLocation";
+import { useBaropotStore } from "@/app/store/useBaropotStore";
 
 export default function NearbyModal() {
   const router = useRouter();
   const { saveLocationFromGeolocation } = useLocationStore();
-
+  const { setSelectedRestaurant } = useBaropotStore();
   // 현재 위치를 받아오는 Hooks
   const {
     location,
@@ -39,7 +40,19 @@ export default function NearbyModal() {
   const error = locationError || restaurantsError?.message;
 
   const handleCreateBaropot = (restaurant: NearbyRestaurant) => {
-    router.push(`/baropot/create/${restaurant.id}`);
+    setSelectedRestaurant(restaurant);
+    console.log("현재 보고있는 맛집: ", location);
+    sessionStorage.setItem(
+      "selectedRestaurant",
+      JSON.stringify({
+        id: restaurant.id,
+        name: restaurant.place_name,
+        location: restaurant.address_name,
+        category: restaurant.category_name,
+        phone: restaurant.phone || "",
+      })
+    );
+    window.location.href = `/baropot/create/${restaurant.id}`;
   };
 
   return (
