@@ -8,7 +8,12 @@ export default function BottomTabBar() {
   const tabs = [
     { id: "main", icon: HiHome, label: "홈", path: "/main" },
     { id: "map", icon: HiMap, label: "지도", path: "/map" },
-    { id: "baropot", icon: HiLightningBolt, label: "바로팟", path: "/baropot" },
+    {
+      id: "baropot",
+      icon: HiLightningBolt,
+      label: "바로팟 생성",
+      path: "/baropot/new/create",
+    },
     { id: "mypage", icon: HiUser, label: "마이", path: "/mypage" },
   ];
 

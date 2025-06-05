@@ -69,7 +69,7 @@ export default function NearbyModal() {
             </p>
           </div>
           <Button
-            text="✕"
+            text="X"
             onClick={() => router.back()}
             className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-100 text-gray-400"
           />

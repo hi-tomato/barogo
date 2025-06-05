@@ -70,6 +70,7 @@ export default function CreateBaropotForm() {
   } = useBaropotFormLogic({ watch, setValue, router });
 
   if (loading) <p>레스토랑 데이터를 불러오는 중입니다 ...</p>;
+
   return (
     <div className="min-h-screen bg-[#E6EEF5] pt-16 pb-24">
       {/* 헤더 */}

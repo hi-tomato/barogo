@@ -1,6 +1,5 @@
 "use client";
 import { useLocationStore } from "@/app/store/useUserLocation";
-import { relative } from "path";
 import React, { useEffect, useState } from "react";
 import { Map, MapMarker, CustomOverlayMap } from "react-kakao-maps-sdk";
 
@@ -88,15 +87,6 @@ export default function KakaoMapView() {
           </CustomOverlayMap>
         )}
       </Map>
-
-      {/* 새로고침 버튼 */}
-      <button
-        onClick={getCurrentLocation}
-        className="absolute top-4 right-4 z-10 p-2 bg-white rounded-full shadow hover:bg-gray-100"
-        title="내 위치로 이동"
-      >
-        📍
-      </button>
     </div>
   );
 }
