@@ -22,7 +22,9 @@ export default function BaropotModal() {
     refetch,
   } = useBaropotList(activeTab);
 
-  const joinMutation = useJoinBaropot();
+  const joinMutation =
+    useJoinBaropot();
+    // TODO: 바로팟 참가 로직
 
   // 핸들러들
   const handleJoin = (id: number) => {

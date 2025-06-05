@@ -53,10 +53,12 @@ export const baropot = {
       return true;
     });
   },
+
   create: async (data: Omit<BaropotItem, "id">): Promise<BaropotItem> => {
     await new Promise((resolve) => setTimeout(resolve, 1000));
     return { ...data, id: Date.now() };
   },
+
   join: async (id: number): Promise<void> => {
     await new Promise((resolve) => setTimeout(resolve, 500));
   },
