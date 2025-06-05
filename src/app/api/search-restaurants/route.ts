@@ -1,3 +1,5 @@
+import { KakaoSearchResponse } from "@/app/types/kakao";
+
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const query = searchParams.get("query");
@@ -22,7 +24,7 @@ export async function GET(request: Request) {
       throw new Error(`카카오 API 오류: ${response.status}`);
     }
 
-    const data = await response.json();
+    const data: KakaoSearchResponse = await response.json();
     return Response.json(data);
   } catch (error) {
     console.error("카카오 검색 API 에러:", error);

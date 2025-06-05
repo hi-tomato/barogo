@@ -1,6 +1,7 @@
+"use client";
 import { useFavoriteRestaurants } from "@/app/hooks/queries/useMockRestaurant";
 import { RestaurantData } from "@/app/types/restaurant";
-import React from "react";
+import { FavoriteRestaurant } from "@/app/types/kakao";
 
 interface FavoriteRestaurantModalProps {
   onClose: () => void;
@@ -13,7 +14,7 @@ export default function FavoriteRestaurantModal({
 }: FavoriteRestaurantModalProps) {
   const { data: favorites, isLoading, isError } = useFavoriteRestaurants();
 
-  const handleSelect = (restaurant) => {
+  const handleSelect = (restaurant: FavoriteRestaurant) => {
     const restaurantData: RestaurantData = {
       id: restaurant.id.toString(),
       name: restaurant.name,
@@ -69,52 +70,54 @@ export default function FavoriteRestaurantModal({
 
           {favorites && favorites.length > 0 && (
             <div className="p-4 space-y-2">
-              {favorites.map((restaurant, index: number) => (
-                <button
-                  key={restaurant.id}
-                  onClick={() => handleSelect(restaurant)}
-                  className="w-full p-3 border border-gray-200 rounded-lg hover:border-blue-300 hover:shadow-sm transition-all text-left"
-                >
-                  <div className="flex items-center space-x-3">
-                    {/* 순위 */}
-                    <div className="w-8 h-8 flex items-center justify-center bg-gray-100 rounded text-sm font-medium text-gray-600 flex-shrink-0">
-                      {index + 1}
-                    </div>
+              {favorites.map(
+                (restaurant: FavoriteRestaurant, index: number) => (
+                  <button
+                    key={restaurant.id}
+                    onClick={() => handleSelect(restaurant)}
+                    className="w-full p-3 border border-gray-200 rounded-lg hover:border-blue-300 hover:shadow-sm transition-all text-left"
+                  >
+                    <div className="flex items-center space-x-3">
+                      {/* 순위 */}
+                      <div className="w-8 h-8 flex items-center justify-center bg-gray-100 rounded text-sm font-medium text-gray-600 flex-shrink-0">
+                        {index + 1}
+                      </div>
 
-                    {/* 이미지 자리 */}
-                    <div className="w-12 h-12 bg-gradient-to-br from-orange-400 to-red-500 rounded-lg flex items-center justify-center flex-shrink-0">
-                      <span className="text-white text-lg">🍽️</span>
-                    </div>
+                      {/* 이미지 자리 */}
+                      <div className="w-12 h-12 bg-gradient-to-br from-orange-400 to-red-500 rounded-lg flex items-center justify-center flex-shrink-0">
+                        <span className="text-white text-lg">🍽️</span>
+                      </div>
 
-                    {/* 정보 */}
-                    <div className="flex-1 min-w-0">
-                      <h4 className="font-medium text-gray-900 truncate mb-1">
-                        {restaurant.name}
-                      </h4>
-                      <p className="text-sm text-gray-500 mb-1 truncate">
-                        {restaurant.address}
-                      </p>
-                      <div className="flex items-center space-x-3">
-                        <div className="flex items-center">
-                          <span className="text-yellow-500 text-sm">⭐</span>
-                          <span className="text-sm font-medium ml-1">
-                            {restaurant.rating}
-                          </span>
-                        </div>
-                        <div className="flex items-center">
-                          <span className="text-red-500 text-sm">👍</span>
-                          <span className="text-red-500 text-sm font-medium ml-1">
-                            {restaurant.reviews}개
-                          </span>
+                      {/* 정보 */}
+                      <div className="flex-1 min-w-0">
+                        <h4 className="font-medium text-gray-900 truncate mb-1">
+                          {restaurant.name}
+                        </h4>
+                        <p className="text-sm text-gray-500 mb-1 truncate">
+                          {restaurant.address}
+                        </p>
+                        <div className="flex items-center space-x-3">
+                          <div className="flex items-center">
+                            <span className="text-yellow-500 text-sm">⭐</span>
+                            <span className="text-sm font-medium ml-1">
+                              {restaurant.rating}
+                            </span>
+                          </div>
+                          <div className="flex items-center">
+                            <span className="text-red-500 text-sm">👍</span>
+                            <span className="text-red-500 text-sm font-medium ml-1">
+                              {restaurant.reviews}개
+                            </span>
+                          </div>
                         </div>
                       </div>
-                    </div>
 
-                    {/* 선택 아이콘 */}
-                    <div className="text-blue-500">→</div>
-                  </div>
-                </button>
-              ))}
+                      {/* 선택 아이콘 */}
+                      <div className="text-blue-500">→</div>
+                    </div>
+                  </button>
+                )
+              )}
             </div>
           )}
         </div>

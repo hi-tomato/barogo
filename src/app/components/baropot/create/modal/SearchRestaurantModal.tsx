@@ -1,4 +1,5 @@
 "use client";
+import { KakaoRestaurant } from "@/app/types/kakao";
 import { RestaurantData } from "@/app/types/restaurant";
 import React, { useState } from "react";
 
@@ -12,7 +13,7 @@ export default function SearchRestaurantModal({
   onSelect,
 }: SearchRestaurantModalProps) {
   const [searchQuery, setSearchQuery] = useState("");
-  const [searchResults, setSearchResults] = useState<any[]>([]);
+  const [searchResults, setSearchResults] = useState<KakaoRestaurant[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [hasSearched, setHasSearched] = useState(false);
 
@@ -35,7 +36,7 @@ export default function SearchRestaurantModal({
     }
   };
 
-  const handleSelect = (restaurant: any) => {
+  const handleSelect = (restaurant: KakaoRestaurant) => {
     const restaurantData: RestaurantData = {
       id: restaurant.id,
       name: restaurant.place_name,
@@ -114,35 +115,37 @@ export default function SearchRestaurantModal({
 
           {searchResults.length > 0 && (
             <div className="p-4 space-y-2">
-              {searchResults.map((restaurant: any, index: number) => (
-                <button
-                  key={restaurant.id || index}
-                  onClick={() => handleSelect(restaurant)}
-                  className="w-full p-3 border border-gray-200 rounded-lg hover:border-blue-300 hover:shadow-sm transition-all text-left"
-                >
-                  <div className="flex items-start space-x-3">
-                    <div className="w-10 h-10 bg-gradient-to-br from-orange-400 to-red-500 rounded-lg flex items-center justify-center flex-shrink-0">
-                      <span className="text-white text-sm">🍽️</span>
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <h4 className="font-medium text-gray-900 truncate">
-                        {restaurant.place_name}
-                      </h4>
-                      <p className="text-sm text-gray-600 truncate">
-                        {restaurant.category_name}
-                      </p>
-                      <p className="text-xs text-gray-500 truncate">
-                        {restaurant.address_name}
-                      </p>
-                      {restaurant.phone && (
-                        <p className="text-xs text-gray-500">
-                          📞 {restaurant.phone}
+              {searchResults.map(
+                (restaurant: KakaoRestaurant, index: number) => (
+                  <button
+                    key={restaurant.id || index}
+                    onClick={() => handleSelect(restaurant)}
+                    className="w-full p-3 border border-gray-200 rounded-lg hover:border-blue-300 hover:shadow-sm transition-all text-left"
+                  >
+                    <div className="flex items-start space-x-3">
+                      <div className="w-10 h-10 bg-gradient-to-br from-orange-400 to-red-500 rounded-lg flex items-center justify-center flex-shrink-0">
+                        <span className="text-white text-sm">🍽️</span>
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <h4 className="font-medium text-gray-900 truncate">
+                          {restaurant.place_name}
+                        </h4>
+                        <p className="text-sm text-gray-600 truncate">
+                          {restaurant.category_name}
                         </p>
-                      )}
+                        <p className="text-xs text-gray-500 truncate">
+                          {restaurant.address_name}
+                        </p>
+                        {restaurant.phone && (
+                          <p className="text-xs text-gray-500">
+                            📞 {restaurant.phone}
+                          </p>
+                        )}
+                      </div>
                     </div>
-                  </div>
-                </button>
-              ))}
+                  </button>
+                )
+              )}
             </div>
           )}
         </div>
