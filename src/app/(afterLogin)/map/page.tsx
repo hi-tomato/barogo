@@ -1,103 +1,39 @@
 "use client";
-import { useLocationStore } from "@/app/store/useUserLocation";
-import React, { useEffect, useState } from "react";
-import { Map, MapMarker, CustomOverlayMap } from "react-kakao-maps-sdk";
-
-interface Restaurant {
-  id: number;
-  name: string;
-  lat: number;
-  lng: number;
-  description: string;
-}
+import KaKaoContainer from "@/app/components/map/KaKaoContainer";
+import { Restaurant } from "@/app/types/map";
+import { useRouter } from "next/navigation";
 
 export default function KakaoMapView() {
-  const { latitude, longitude, getCurrentLocation, loading } =
-    useLocationStore();
-  const [selected, setSelected] = useState<Restaurant | null>(null);
-
-  const mapCenter =
-    latitude && longitude
-      ? { lat: latitude, lng: longitude }
-      : { lat: 37.5665, lng: 126.978 };
-
-  useEffect(() => {
-    if (!latitude || !longitude) {
-      getCurrentLocation();
-    }
-  }, []);
-
-  if (loading || !latitude || !longitude) {
-    return (
-      <div className="h-screen bg-gray-100 flex items-center justify-center">
-        로딩 중...
-      </div>
-    );
-  }
+  const router = useRouter();
 
   return (
-    <div className="relative h-screen w-full">
-      <Map
-        center={mapCenter}
-        style={{ width: "100%", height: "100%" }}
-        level={5}
-      >
-        {/* 유저 현재 위치 */}
-        <MapMarker position={{ lat: latitude, lng: longitude }}>
-          <div className="text-center bg-white/80 backdrop-blur-sm px-2 py-1 rounded-full shadow border text-[12px] font-medium text-blue-600">
-            <span>📍</span>
-            <span>내 위치</span>
-          </div>
-        </MapMarker>
+    <div className="min-h-screen bg-[#E6EEF5]">
+      {/* 뒤로가기 헤더 등 */}
+      <div className="bg-white sticky top-0 z-40 border-b border-gray-200">
+        <div className="flex items-center px-4 py-3">
+          <button onClick={() => router.back()}>←</button>
+          <h1 className="flex-1 text-center text-lg font-semibold">지도</h1>
+        </div>
+      </div>
 
-        {/* 맛집 마커들 */}
-        {dummyRestaurants.map((store) => (
-          <MapMarker
-            key={store.id}
-            position={{ lat: store.lat, lng: store.lng }}
-            onClick={() => setSelected(store)}
-          />
-        ))}
-
-        {/* 팝업 오버레이 */}
-        {selected && (
-          <CustomOverlayMap position={{ lat: selected.lat, lng: selected.lng }}>
-            <div className="relative w-[220px] bg-white rounded-xl shadow-xl border border-gray-200 p-3 text-sm">
-              <div className="font-bold text-base text-gray-800 mb-1">
-                {selected.name}
-              </div>
-              <p className="text-gray-500 line-clamp-2">
-                {selected.description}
-              </p>
-
-              <button
-                onClick={() => alert("상세 페이지로 이동")}
-                className="mt-3 w-full text-center bg-blue-500 text-white text-xs py-1 rounded-lg hover:bg-blue-600 transition"
-              >
-                상세보기 →
-              </button>
-
-              <button
-                onClick={() => setSelected(null)}
-                className="absolute top-2 right-2 text-gray-400 hover:text-gray-600"
-              >
-                ✕
-              </button>
-            </div>
-          </CustomOverlayMap>
-        )}
-      </Map>
+      <KaKaoContainer />
     </div>
   );
 }
 
-const dummyRestaurants: Restaurant[] = [
+// 더미 데이터 (바로팟 정보 추가)
+export const dummyRestaurants: Restaurant[] = [
   {
     id: 1,
     name: "토마토김밥",
     lat: 37.5665,
     lng: 126.978,
     description: "김밥계의 샤넬. 언제나 옳은 맛",
+    category: "한식",
+    hasBaropot: true,
+    baropotCount: 2,
+    rating: 4.5,
+    reviewCount: 128,
   },
   {
     id: 2,
@@ -105,5 +41,46 @@ const dummyRestaurants: Restaurant[] = [
     lat: 37.5655,
     lng: 126.976,
     description: "중독주의! 얼얼한 마라의 세계",
+    category: "중식",
+    hasBaropot: true,
+    baropotCount: 1,
+    rating: 4.2,
+    reviewCount: 89,
+  },
+  {
+    id: 3,
+    name: "스타벅스 홍대점",
+    lat: 37.567,
+    lng: 126.975,
+    description: "커피 한 잔의 여유를 즐겨보세요",
+    category: "카페",
+    hasBaropot: false,
+    baropotCount: 0,
+    rating: 4.0,
+    reviewCount: 256,
+  },
+  {
+    id: 4,
+    name: "스시 오마카세",
+    lat: 37.5645,
+    lng: 126.98,
+    description: "신선한 스시를 합리적인 가격에",
+    category: "일식",
+    hasBaropot: true,
+    baropotCount: 3,
+    rating: 4.8,
+    reviewCount: 67,
+  },
+  {
+    id: 5,
+    name: "파스타 레스토랑",
+    lat: 37.568,
+    lng: 126.972,
+    description: "정통 이탈리안 파스타 전문점",
+    category: "양식",
+    hasBaropot: false,
+    baropotCount: 0,
+    rating: 4.3,
+    reviewCount: 143,
   },
 ];
