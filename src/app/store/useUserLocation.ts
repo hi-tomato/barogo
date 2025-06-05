@@ -1,20 +1,5 @@
 import { create } from "zustand";
-import { LocationState } from "@/app/types/location";
-
-interface LocationActions {
-  setLocation: (lat: number, lng: number) => void;
-  setAddress: (address: string) => void;
-  setLoading: (loading: boolean) => void;
-  setError: (error: string | null) => void;
-  getCurrentLocation: () => Promise<void>;
-  clearLocation: () => void;
-  saveLocationFromGeolocation: (location: {
-    latitude: number;
-    longitude: number;
-  }) => void;
-}
-
-type LocationStore = LocationState & LocationActions;
+import { LocationStore } from "@/app/types/location";
 
 export const useLocationStore = create<LocationStore>((set, get) => ({
   latitude: null,
