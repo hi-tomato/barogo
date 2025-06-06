@@ -1,17 +1,3 @@
-export interface BaropotItem {
-  id: number;
-  title: string;
-  restaurant: string;
-  location: string;
-  date: string;
-  time: string;
-  maxPeople: number;
-  currentPeople: number;
-  status: "recruiting" | "full" | "closed";
-  host: string;
-  tags: string[];
-}
-
 export interface FavoriteRestaurant {
   id: number;
   name: string;
@@ -62,9 +48,6 @@ export interface PaginatedResponse<T> {
     hasMore: boolean;
   };
 }
-
-// Query Key 타입들
-export type BaropotTab = "ongoing" | "upcoming" | "my";
 
 export interface ApiError {
   message: string;

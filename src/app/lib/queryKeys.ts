@@ -1,4 +1,4 @@
-import { BaropotTab } from "../types";
+import { BaropotTab } from "../types/baropot";
 
 export const queryKeys = {
   baropot: {

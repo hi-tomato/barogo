@@ -1,4 +1,3 @@
-// components/baropot/BaropotHeader.tsx
 import Button from "@/app/components/ui/Button";
 
 interface BaropotHeaderProps {
@@ -20,13 +19,11 @@ export default function BaropotHeader({
       </div>
       <div className="flex items-center gap-2">
         {onRefresh && (
-          <button
+          <Button
+            text="🔄"
             onClick={onRefresh}
             className="p-2 text-gray-400 hover:text-gray-600 rounded-full hover:bg-gray-100"
-            title="새로고침"
-          >
-            🔄
-          </button>
+          />
         )}
         <Button
           text="×"

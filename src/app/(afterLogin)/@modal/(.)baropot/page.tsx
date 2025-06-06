@@ -8,11 +8,11 @@ import {
 import BaropotHeader from "@/app/components/baropot/BaropotHeader";
 import BaropotTabs from "@/app/components/baropot/BaropotTabs";
 import BaropotList from "@/app/components/baropot/BaropotList";
-import { BaropotTab } from "@/app/types";
 import Button from "@/app/components/ui/Button";
+import { BaropotTab } from "@/app/types/baropot";
 
 export default function BaropotModal() {
-  const [activeTab, setActiveTab] = useState<BaropotTab>("ongoing");
+  const [activeTab, setActiveTab] = useState<BaropotTab>("available");
   const router = useRouter();
 
   const {
@@ -21,19 +21,29 @@ export default function BaropotModal() {
     error,
     refetch,
   } = useBaropotList(activeTab);
+  const joinMutation = useJoinBaropot();
 
-  const joinMutation =
-    useJoinBaropot();
-    // TODO: 바로팟 참가 로직
-
-  // 핸들러들
+  // TODO: 바로팟 참가 로직
   const handleJoin = (id: number) => {
-    joinMutation.mutate(id);
+    if (joinMutation.isPending) return;
+    joinMutation.mutate(id, {
+      onSuccess: () => {
+        // 성공 알림
+        alert("바로팟에 참가했습니다!");
+      },
+      onError: () => {
+        // 실패 알림
+        alert("참가에 실패했습니다. 다시 시도해주세요.");
+      },
+    });
   };
 
   const handleCreateNew = () => {
-    // TODO: 바로팟 생성 페이지로 이동
-    console.log("새 바로팟 생성");
+    router.back();
+
+    setTimeout(() => {
+      router.push("/baropot/create"); // 잠시 후 페이지 이동
+    }, 100);
   };
 
   return (

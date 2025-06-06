@@ -1,5 +1,6 @@
-import { BaropotItem, BaropotTab } from "../types";
+import { BaropotItem, BaropotTab } from "../types/baropot";
 
+// TODO: baropot에 관련된 useQuery Fn(Functions)를 관리하는 객체
 export const baropot = {
   getList: async (tab: BaropotTab): Promise<BaropotItem[]> => {
     await new Promise((resolve) => setTimeout(resolve, 500));
@@ -16,6 +17,18 @@ export const baropot = {
         currentPeople: 2,
         status: "recruiting",
         host: "김맛집",
+        participants: [
+          {
+            userId: "김맛집",
+            nickname: "김맛집",
+            joinedAt: "2025-06-01T10:00:00Z",
+          },
+          {
+            userId: "user123",
+            nickname: "박철수",
+            joinedAt: "2025-06-01T14:30:00Z",
+          },
+        ],
         tags: ["멕시칸", "20대", "직장인"],
       },
       {
@@ -29,6 +42,38 @@ export const baropot = {
         currentPeople: 6,
         status: "full",
         host: "고기왕",
+        participants: [
+          {
+            userId: "고기왕",
+            nickname: "고기왕",
+            joinedAt: "2025-06-01T09:00:00Z",
+          },
+          {
+            userId: "user456",
+            nickname: "이영희",
+            joinedAt: "2025-06-01T11:15:00Z",
+          },
+          {
+            userId: "user789",
+            nickname: "최민수",
+            joinedAt: "2025-06-01T12:20:00Z",
+          },
+          {
+            userId: "김맛집",
+            nickname: "김맛집",
+            joinedAt: "2025-06-01T15:45:00Z",
+          },
+          {
+            userId: "user101",
+            nickname: "정수진",
+            joinedAt: "2025-06-01T16:30:00Z",
+          },
+          {
+            userId: "user202",
+            nickname: "한지민",
+            joinedAt: "2025-06-01T17:10:00Z",
+          },
+        ],
         tags: ["한식", "30대", "회식"],
       },
       {
@@ -42,14 +87,39 @@ export const baropot = {
         currentPeople: 1,
         status: "recruiting",
         host: "레트로러버",
+        participants: [
+          {
+            userId: "레트로러버",
+            nickname: "레트로러버",
+            joinedAt: "2025-06-01T08:00:00Z",
+          },
+        ],
         tags: ["퓨전", "20대", "데이트"],
       },
     ];
 
+    // TODO: 실제 로그인한 유저 ID로 변경
+    const currentUserId = "김맛집";
+
     return dummyData.filter((item) => {
-      if (tab === "ongoing") return item.status === "recruiting";
-      if (tab === "upcoming") return true;
-      if (tab === "my") return item.host === "김맛집";
+      if (tab === "available") {
+        // TODO:모집중이고 내가 참여하지 않은 모임
+        const isParticipant = item.participants.some(
+          (p) => p.userId === currentUserId
+        );
+        return item.status === "recruiting" && !isParticipant;
+      }
+      if (tab === "joined") {
+        // TODO:내가 참여한 모임 (호스트가 아닌 참가자로)
+        const isParticipant = item.participants.some(
+          (p) => p.userId === currentUserId
+        );
+        return isParticipant && item.host !== currentUserId;
+      }
+      if (tab === "created") {
+        // 내가 만든 모임
+        return item.host === currentUserId;
+      }
       return true;
     });
   },

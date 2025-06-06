@@ -5,10 +5,10 @@ import { HiPlus } from "react-icons/hi";
 import { useBaropotList } from "@/app/hooks/queries/useMockBaropot";
 import BaropotTabs from "@/app/components/baropot/BaropotTabs";
 import BaropotList from "@/app/components/baropot/BaropotList";
-import { BaropotTab } from "@/app/types";
+import { BaropotTab } from "@/app/types/baropot";
 
 export default function BaropotMainPage() {
-  const [activeTab, setActiveTab] = useState<BaropotTab>("ongoing");
+  const [activeTab, setActiveTab] = useState<BaropotTab>("available");
   const {
     data: baropotList = [],
     isLoading,
