@@ -14,43 +14,70 @@ import { useState } from "react";
 export default function SearchPage() {
   const router = useRouter();
   const { location } = useGeolocation();
+
   const [selectedRestaurant, setSelectedRestaurant] =
     useState<NearbyRestaurant | null>(null);
   const [showPreview, setShowPreview] = useState(false);
+
   const { query, setQuery, result, loading, error } = useRestaurantSearch({
     lat: location?.latitude,
     lng: location?.longitude,
   });
 
   const handleSelectRestaurant = (restaurant: NearbyRestaurant) => {
+    console.log("선택된 맛집 데이터:", restaurant);
     setSelectedRestaurant(restaurant);
     setShowPreview(true);
   };
 
   const handleConfirmSelection = (restaurant: NearbyRestaurant) => {
-    sessionStorage.setItem(
-      "selectedRestaurant",
-      JSON.stringify({
+    console.log("확인된 맛집 데이터:", restaurant);
+    if (
+      !restaurant.id ||
+      !restaurant.place_name ||
+      !restaurant.address_name ||
+      !restaurant.category_name ||
+      !restaurant.x ||
+      !restaurant.y
+    ) {
+      console.error("필수 데이터 누락:", {
         id: restaurant.id,
-        name: restaurant.place_name,
-        location: restaurant.address_name,
-        category: restaurant.category_name,
-        phone: restaurant.phone || "",
-      })
-    );
+        place_name: restaurant.place_name,
+        address_name: restaurant.address_name,
+        category_name: restaurant.category_name,
+        x: restaurant.x,
+        y: restaurant.y,
+      });
 
-    router.push(`/baropot/create/${restaurant.id}`);
+      console.error("맛집 정보가 불완전합니다. 다시 선택해주세요.");
+      return;
+    }
+
+    const params = new URLSearchParams({
+      name: restaurant.place_name,
+      location: restaurant.address_name,
+      category: restaurant.category_name,
+      kakaoId: restaurant.id,
+      lat: restaurant.y,
+      lng: restaurant.x,
+    });
+
+    const targetUrl = `/baropot/create/${restaurant.id}?${params.toString()}`;
+    console.log("이동할 URL:", targetUrl);
+    console.log("URL 파라미터:", params.toString());
+
+    router.push(targetUrl);
   };
+
   return (
     <div className="min-h-screen bg-white">
       <SearchHeader query={query} setQuery={setQuery} loading={loading} />
       <div className="px-4 py-6 space-y-8">
-        {/* 검색 결과가 있으면 결과 표시, 없으면 기본 컨텐츠 */}
         {query ? (
           <SearchResults
             results={result}
             loading={loading}
-            error={error}
+            error={error?.message || null}
             onSelectRestaurant={handleSelectRestaurant}
           />
         ) : (

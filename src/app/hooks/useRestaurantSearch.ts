@@ -1,60 +1,62 @@
-import { useEffect, useState } from "react";
-import { NearbyRestaurant } from "../types";
+import { useQuery } from "@tanstack/react-query";
+import { useState, useEffect } from "react";
+import { NearbyRestaurant } from "@/app/types";
 
-interface useRestaurantSearchProps {
+interface UseRestaurantSearchProps {
   lat?: number;
   lng?: number;
 }
-export const useRestaurantSearch = ({ lat, lng }: useRestaurantSearchProps) => {
+
+export const useRestaurantSearch = ({ lat, lng }: UseRestaurantSearchProps) => {
   const [query, setQuery] = useState("");
-  const [result, setResult] = useState<NearbyRestaurant[]>([]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [debouncedQuery, setDebouncedQuery] = useState("");
 
-  const searchRestaurants = async (searchQuery: string) => {
-    if (!searchQuery.trim()) return;
-    setLoading(true);
-    setError(null);
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedQuery(query);
+    }, 300);
 
-    try {
-      const URL = `/api/search-restaurants?q=${searchQuery}${
-        lat && lng ? `&lat=${lat}&lng=${lng}` : ""
-      }`;
+    return () => clearTimeout(timer);
+  }, [query]);
 
-      const response = await fetch(URL);
+  const {
+    data: result = [],
+    isLoading: loading,
+    error,
+    refetch,
+  } = useQuery({
+    queryKey: ["restaurants", debouncedQuery, lat, lng],
+    queryFn: async () => {
+      if (!debouncedQuery.trim()) return [];
+
+      const url = `/api/search-restaurants?q=${encodeURIComponent(
+        debouncedQuery
+      )}${lat && lng ? `&lat=${lat}&lng=${lng}` : ""}`;
+
+      const response = await fetch(url);
 
       if (!response.ok) {
         throw new Error("검색 요청 실패");
       }
 
       const data = await response.json();
-      setResult(data.documents || []);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "검색에 실패했습니다");
-      setResult([]);
-    } finally {
-      setLoading(false);
-    }
-  };
+      return data.documents || [];
+    },
+    enabled: !!debouncedQuery.trim(),
+  });
 
   const clearSearch = () => {
     setQuery("");
-    setResult([]);
-    setError(null);
+    setDebouncedQuery("");
   };
-  useEffect(() => {
-    if (!query.trim()) {
-      setResult([]);
-      setError(null);
-      return;
-    }
 
-    const timer = setTimeout(() => {
-      searchRestaurants(query);
-    }, 300);
-
-    return () => clearTimeout(timer);
-  }, [query, lat, lng]);
-
-  return { query, setQuery, result, loading, error, clearSearch };
+  return {
+    query,
+    setQuery,
+    result: result as NearbyRestaurant[],
+    loading,
+    error: error as Error | null,
+    clearSearch,
+    refetch,
+  };
 };

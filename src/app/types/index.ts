@@ -19,6 +19,9 @@ export interface NearbyRestaurant {
   category_name: string;
   distance: string;
   place_url: string;
+  road_address_name?: string;
+  x?: string;
+  y?: string;
 }
 
 export interface Position {
