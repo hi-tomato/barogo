@@ -1,6 +1,8 @@
 import { useQuery } from "@tanstack/react-query";
 import { useState, useEffect } from "react";
 import { NearbyRestaurant } from "@/app/types";
+import { searchRestaurants } from "../services/searchRestaurantService";
+import { queryKeys } from "../lib/queryKeys";
 
 interface UseRestaurantSearchProps {
   lat?: number;
@@ -15,7 +17,6 @@ export const useRestaurantSearch = ({ lat, lng }: UseRestaurantSearchProps) => {
     const timer = setTimeout(() => {
       setDebouncedQuery(query);
     }, 300);
-
     return () => clearTimeout(timer);
   }, [query]);
 
@@ -25,23 +26,8 @@ export const useRestaurantSearch = ({ lat, lng }: UseRestaurantSearchProps) => {
     error,
     refetch,
   } = useQuery({
-    queryKey: ["restaurants", debouncedQuery, lat, lng],
-    queryFn: async () => {
-      if (!debouncedQuery.trim()) return [];
-
-      const url = `/api/search-restaurants?q=${encodeURIComponent(
-        debouncedQuery
-      )}${lat && lng ? `&lat=${lat}&lng=${lng}` : ""}`;
-
-      const response = await fetch(url);
-
-      if (!response.ok) {
-        throw new Error("검색 요청 실패");
-      }
-
-      const data = await response.json();
-      return data.documents || [];
-    },
+    queryKey: queryKeys.restaurant.search(debouncedQuery, lat!, lng),
+    queryFn: async () => searchRestaurants({ query: debouncedQuery, lat, lng }),
     enabled: !!debouncedQuery.trim(),
   });
 
