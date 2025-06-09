@@ -3,6 +3,8 @@ import React from "react";
 import { useForm } from "react-hook-form";
 import Button from "@/app/components/ui/Button";
 import { useRouter } from "next/navigation";
+import { motion } from "framer-motion";
+import { containerVariants, itemVariants } from "@/app/lib/animation";
 
 interface RegisterFormData {
   email: string;
@@ -13,15 +15,17 @@ interface RegisterFormData {
 }
 
 export default function RegisterForm() {
+  const router = useRouter();
+
   const {
     register,
     handleSubmit,
     watch,
     formState: { errors, isSubmitting },
   } = useForm<RegisterFormData>();
+
   const password = watch("password");
 
-  const router = useRouter();
   const onSubmit = async (data: RegisterFormData) => {
     // TODO: Server Api + 회원가입 로직 처리
     console.log("회원가입 데이터 성공:", data);
@@ -39,8 +43,14 @@ export default function RegisterForm() {
         </p>
 
         {/* 회원가입 폼 */}
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-          <div>
+        <motion.form
+          onSubmit={handleSubmit(onSubmit)}
+          className="space-y-4"
+          variants={containerVariants}
+          initial="hidden"
+          animate="visible"
+        >
+          <motion.div variants={itemVariants}>
             <label
               className="block text-sm text-[#2B2B2B] mb-1 font-suit"
               htmlFor="email"
@@ -66,9 +76,9 @@ export default function RegisterForm() {
                 {errors.email.message}
               </p>
             )}
-          </div>
+          </motion.div>
 
-          <div>
+          <motion.div variants={itemVariants}>
             <label
               htmlFor="nickname"
               className="block text-sm text-[#2B2B2B] mb-1 font-suit"
@@ -98,9 +108,9 @@ export default function RegisterForm() {
                 {errors.nickname.message}
               </p>
             )}
-          </div>
+          </motion.div>
 
-          <div>
+          <motion.div variants={itemVariants}>
             <label
               htmlFor="password"
               className="block text-sm text-[#2B2B2B] mb-1 font-suit"
@@ -131,10 +141,10 @@ export default function RegisterForm() {
                 {errors.password.message}
               </p>
             )}
-          </div>
+          </motion.div>
 
           {/* 비밀번호 확인 */}
-          <div>
+          <motion.div variants={itemVariants}>
             <label
               id="confirm"
               className="block text-sm text-[#2B2B2B] mb-1 font-suit"
@@ -159,32 +169,9 @@ export default function RegisterForm() {
                 {errors.confirmPassword.message}
               </p>
             )}
-          </div>
+          </motion.div>
 
-          {/* 약관 동의 */}
-          <div className="flex items-start gap-3">
-            <input
-              {...register("terms", {
-                required: "이용약관에 동의해주세요",
-              })}
-              type="checkbox"
-              id="terms"
-              className="mt-1 w-4 h-4 text-[#1C4E80] border-gray-300 rounded focus:ring-[#1C4E80]"
-            />
-            <label
-              htmlFor="terms"
-              className="text-sm text-[#2B2B2B] font-suit leading-relaxed"
-            >
-              <span className="text-[#1C4E80] underline cursor-pointer">
-                이용약관
-              </span>{" "}
-              및{" "}
-              <span className="text-[#1C4E80] underline cursor-pointer">
-                개인정보처리방침
-              </span>
-              에 동의합니다
-            </label>
-          </div>
+          {/* 에러 메시지 */}
           {errors.terms && (
             <p className="text-red-500 text-xs font-suit">
               {errors.terms.message}
@@ -197,7 +184,7 @@ export default function RegisterForm() {
             disabled={isSubmitting}
             className="w-full bg-[#1C4E80] text-white font-semibold tracking-tight px-6 py-3 rounded-lg hover:opacity-90 transition-opacity font-suit disabled:opacity-50"
           />
-        </form>
+        </motion.form>
 
         {/* 하단 */}
         <div className="text-sm text-[#8A8A8A] text-center mt-6 font-suit leading-relaxed">
