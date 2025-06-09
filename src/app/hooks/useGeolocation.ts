@@ -1,4 +1,3 @@
-// src/app/hooks/useGeolocation.ts
 import { useState } from "react";
 import { Location } from "@/app/types";
 

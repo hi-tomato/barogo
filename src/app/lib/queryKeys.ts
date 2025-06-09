@@ -11,8 +11,6 @@ export const queryKeys = {
   restaurant: {
     all: ["restaurant"] as const,
     favorites: () => [...queryKeys.restaurant.all, "favorites"] as const,
-    detail: (id: number) =>
-      [...queryKeys.restaurant.all, "detail", id] as const,
     nearby: (location: Location) =>
       [...queryKeys.restaurant.all, "nearby", location] as const,
     search: (query: string, lat: number, lng?: number) => [
@@ -20,5 +18,7 @@ export const queryKeys = {
       "search",
       { query, lat, lng },
     ],
+    detail: (kakaoId: string) =>
+      [...queryKeys.restaurant.all, "detail", kakaoId] as const,
   },
 } as const;

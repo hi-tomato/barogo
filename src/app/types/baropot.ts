@@ -18,7 +18,7 @@ export interface BaropotItem {
   maxPeople: number;
   currentPeople: number;
   status: "recruiting" | "full" | "closed";
-  participants: Participant[];
+  participants?: Participant[];
   host: string;
   tags: string[];
 }

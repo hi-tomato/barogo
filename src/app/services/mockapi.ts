@@ -1,4 +1,5 @@
 import { BaropotItem, BaropotTab } from "../types/baropot";
+import { RestaurantDetail } from "../types/restaurant";
 
 // TODO: baropot에 관련된 useQuery Fn(Functions)를 관리하는 객체
 export const baropot = {
@@ -171,5 +172,50 @@ export const restaurant = {
         image: "/api/placeholder/80/80",
       },
     ];
+  },
+
+  getRestaurantDetail: async (kakaoId: string): Promise<RestaurantDetail> => {
+    await new Promise((resolve) => setTimeout(resolve, 500));
+    return {
+      // 카카오 기본 데이터
+      kakaoId: kakaoId,
+      name: "홀리스 타코",
+      address: "서울 마포구 홍익로 20",
+      phone: "02-1234-5678",
+      category: "멕시칸음식",
+      coordinates: {
+        lat: 37.5518,
+        lng: 126.9219,
+      },
+
+      // 서버 확장 데이터
+      id: 1,
+      description:
+        "홍대 최고의 멕시칸 레스토랑! 신선한 재료로 만든 타코와 부리또가 일품입니다.",
+      images: [
+        "https://images.unsplash.com/photo-1565299624946-b28f40a0ca4b?w=400",
+        "https://images.unsplash.com/photo-1551504734-5ee1c4a1479b?w=400",
+        "https://images.unsplash.com/photo-1565958011703-44f9829ba187?w=400",
+      ],
+      rating: 4.8,
+      reviewCount: 284,
+      tags: ["멕시칸", "타코", "부리또", "데이트", "홍대맛집"],
+      openHours: "11:00 - 22:00 (라스트오더 21:30)",
+      baropots: [
+        {
+          id: 1,
+          title: "홀리스 타코 같이 가실분!",
+          restaurant: "홀리스 타코",
+          location: "홍대입구역 2번 출구",
+          date: "2025-06-10",
+          time: "19:00",
+          maxPeople: 4,
+          currentPeople: 2,
+          status: "recruiting",
+          host: "타코러버",
+          tags: ["멕시칸", "20대", "데이트"],
+        },
+      ],
+    };
   },
 };
