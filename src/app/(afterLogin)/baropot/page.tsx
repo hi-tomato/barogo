@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { HiPlus } from "react-icons/hi";
-import { useBaropotList } from "@/app/hooks/queries/useMockBaropot";
+import { useBaropotList } from "@/app/features/baropot/hooks/queries/useMockBaropot";
 import BaropotTabs from "@/app/features/baropot/components/BaropotTabs";
 import BaropotList from "@/app/features/baropot/components/BaropotList";
 import { BaropotTab } from "@/app/features/baropot/types/baropot";

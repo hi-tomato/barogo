@@ -4,7 +4,7 @@ import MapHeaderBar from "./MapHeaderBar";
 import KakaoMapView from "./KakaoMapView";
 
 import { useFilteredRestaurants } from "@/app/features/map/hooks/useFilteredRestaurants";
-import { Restaurant } from "@/app/types/map";
+import { Restaurant } from "@/app/shared/types/map";
 import { dummyRestaurants } from "@/app/(afterLogin)/map/page";
 import RestaurantPopup from "./RestaurantPopup";
 

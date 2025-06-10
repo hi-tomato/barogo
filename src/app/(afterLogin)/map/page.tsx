@@ -1,6 +1,6 @@
 "use client";
 import KaKaoContainer from "@/app/features/map/components/KaKaoContainer";
-import { Restaurant } from "@/app/types/map";
+import { Restaurant } from "@/app/shared/types/map";
 import { useRouter } from "next/navigation";
 
 export default function KakaoMapView() {

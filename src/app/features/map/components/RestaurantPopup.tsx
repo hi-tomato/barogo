@@ -1,8 +1,7 @@
-import React from "react";
 import { CustomOverlayMap } from "react-kakao-maps-sdk";
 import Button from "@/app/shared/ui/Button";
 
-import { Restaurant } from "@/app/types/map";
+import { Restaurant } from "@/app/shared/types/map";
 import PopupHeader from "./popup/PopupHeader";
 import PopupContents from "./popup/PopupContents";
 import PopupActions from "./popup/PopupActions";

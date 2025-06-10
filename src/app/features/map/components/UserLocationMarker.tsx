@@ -1,4 +1,3 @@
-import React from "react";
 import { MapMarker } from "react-kakao-maps-sdk";
 
 export default function UserLocationMarker({

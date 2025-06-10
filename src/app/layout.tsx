@@ -1,6 +1,6 @@
 import Script from "next/script";
 import "./globals.css";
-import QueryProvider from "./providers/QueryProvider";
+import QueryProvider from "./shared/providers/QueryProvider";
 
 export default function RootLayout({
   children,

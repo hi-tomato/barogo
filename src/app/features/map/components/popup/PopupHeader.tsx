@@ -1,4 +1,4 @@
-import { Restaurant } from "@/app/types/map";
+import { Restaurant } from "@/app/shared/types/map";
 
 export default function PopupHeader({
   restaurant,

@@ -1,5 +1,3 @@
-import React from "react";
-
 export default function MainHeadingText() {
   return (
     <div className="mb-8">

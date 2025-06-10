@@ -1,5 +1,4 @@
 import { NearbyRestaurant } from "@/app/types";
-import React from "react";
 
 interface RestaurantPreviewModalProps {
   restaurant: NearbyRestaurant;

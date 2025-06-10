@@ -1,4 +1,3 @@
-import React from "react";
 import MainHeadingText from "@/app/features/main/components/MainHeadingText";
 import MainTabMenu from "@/app/features/main/components/MainTabMenu";
 import MainBanner from "@/app/features/main/components/MainBanner";

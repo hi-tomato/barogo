@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import {
   useBaropotList,
   useJoinBaropot,
-} from "@/app/hooks/queries/useMockBaropot";
+} from "@/app/features/baropot/hooks/queries/useMockBaropot";
 import BaropotHeader from "@/app/features/baropot/components/BaropotHeader";
 import BaropotTabs from "@/app/features/baropot/components/BaropotTabs";
 import BaropotList from "@/app/features/baropot/components/BaropotList";

@@ -1,5 +1,4 @@
 // components/FloatingEmojis.tsx
-import React from "react";
 
 const foodEmojis = ["🍕", "🍔", "🍜", "🍣", "🌮", "🍝", "🥘", "🍱", "🥗", "🍛"];
 

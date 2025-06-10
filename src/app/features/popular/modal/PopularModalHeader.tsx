@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+
 import Button from "@/app/shared/ui/Button";
 import { useRouter } from "next/navigation";
 

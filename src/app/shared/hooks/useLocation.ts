@@ -1,5 +1,5 @@
+import { useLocationStore } from "@/app/features/map/store/useUserLocation";
 import { useEffect } from "react";
-import { useLocationStore } from "@/app/store/useUserLocation";
 
 interface UseLocationOptions {
   autoFetch?: boolean;

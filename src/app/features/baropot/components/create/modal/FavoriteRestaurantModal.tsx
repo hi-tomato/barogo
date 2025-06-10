@@ -1,7 +1,7 @@
 "use client";
 import { useFavoriteRestaurants } from "@/app/hooks/queries/useMockRestaurant";
 import { RestaurantData } from "@/app/features/nearby/types/restaurant";
-import { FavoriteRestaurant } from "@/app/types/kakao";
+import { FavoriteRestaurant } from "@/app/shared/types";
 
 interface FavoriteRestaurantModalProps {
   onClose: () => void;

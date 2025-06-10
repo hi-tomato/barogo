@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Location } from "@/app/types";
+import { Location } from "@/app/shared/types";
 
 export const useGeolocation = () => {
   const [location, setLocation] = useState<Location | null>(null);

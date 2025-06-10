@@ -1,4 +1,4 @@
-import { Restaurant } from "../../../types/map";
+import { Restaurant } from "../../../shared/types/map";
 
 // 마커 이미지 상수 정의
 const selectedMarkerImage = {

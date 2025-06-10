@@ -2,7 +2,7 @@ import {
   getCategoryIcon,
   getGradientByCategory,
 } from "@/app/features/nearby/utils/categoryHelpers";
-import { NearbyRestaurant } from "@/app/types";
+import { NearbyRestaurant } from "@/app/shared/types";
 import Button from "@/app/shared/ui/Button";
 
 interface RestaurantListProps {

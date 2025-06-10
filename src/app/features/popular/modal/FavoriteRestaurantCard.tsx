@@ -1,5 +1,4 @@
 import { FavoriteRestaurant } from "@/app/types";
-import React from "react";
 
 interface FavoriteRestaurantCardProps {
   restaurant: FavoriteRestaurant;

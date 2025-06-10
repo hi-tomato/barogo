@@ -3,7 +3,6 @@ import {
   getGradientByCategory,
 } from "@/app/features/nearby/utils/categoryHelpers";
 import { NearbyRestaurant } from "@/app/types";
-import React from "react";
 
 interface SearchResultsProps {
   results: NearbyRestaurant[];

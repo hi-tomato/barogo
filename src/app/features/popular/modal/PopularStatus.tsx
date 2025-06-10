@@ -1,5 +1,3 @@
-import React from "react";
-
 interface PopularStatusProps {
   type: "loading" | "error" | "notFound";
 }

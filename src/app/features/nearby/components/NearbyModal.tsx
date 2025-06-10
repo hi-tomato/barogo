@@ -1,14 +1,14 @@
 "use client";
 import { useEffect } from "react";
-import { useGeolocation } from "@/app/features/nearby/hooks/useGeolocation";
+import { useGeolocation } from "@/app/shared/hooks/useGeolocation";
 import { useMockNearby } from "@/app/features/nearby/hooks/queries/useMockNearby";
-import { NearbyRestaurant } from "@/app/types";
 import { useBaropotStore } from "../../baropot/store/useBaropotStore";
 
 import RestaurantList from "@/app/features/nearby/modal/RestaurantList";
 import NearbyStatus from "@/app/features/nearby/modal/NearbyStatus";
 import NearbyHeader from "@/app/features/nearby/modal/NearbyHeader";
 import { useLocationStore } from "../../map/store/useUserLocation";
+import { NearbyRestaurant } from "@/app/shared/types";
 
 export default function NearbyModal() {
   const { saveLocationFromGeolocation } = useLocationStore();

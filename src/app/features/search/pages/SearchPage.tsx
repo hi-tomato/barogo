@@ -6,7 +6,7 @@ import RestaurantPreviewModal from "@/app/features/search/components/RestaurantP
 import SearchHeader from "@/app/features/search/components/SearchHeader";
 import SearchResults from "@/app/features/search/components/SearchResults";
 
-import { useGeolocation } from "@/app/features/nearby/hooks/useGeolocation";
+import { useGeolocation } from "@/app/shared/hooks/useGeolocation";
 import { useRestaurantSearch } from "@/app/features/search/hooks/useSearch";
 import { NearbyRestaurant } from "@/app/types";
 import { useRouter } from "next/navigation";

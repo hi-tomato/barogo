@@ -1,4 +1,3 @@
-import React from "react";
 import RestaurantHeader from "../components/detail/RestaurantHeader";
 import RestaurantImages from "../components/detail/RestaurantImages";
 import RestaurantInfo from "../components/detail/RestaurantInfo";

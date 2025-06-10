@@ -2,7 +2,6 @@
 import { useRestaurantDetail } from "@/app/hooks/queries/useRestaurantDetail";
 import { motion } from "framer-motion";
 import { useParams } from "next/navigation";
-import React from "react";
 
 export default function RestaurantInfo() {
   const params = useParams<{ kakaoId: string }>();

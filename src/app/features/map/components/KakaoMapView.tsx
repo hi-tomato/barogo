@@ -1,9 +1,9 @@
 "use client";
-import React from "react";
+
 import { Map } from "react-kakao-maps-sdk";
 import RestaurantMarker from "./RestaurantMarker";
 import UserLocationMarker from "./UserLocationMarker";
-import { Restaurant } from "@/app/types/map";
+import { Restaurant } from "@/app/shared/types/map";
 import { useLocationStore } from "../store/useUserLocation";
 
 interface KakaoMapViewProps {
