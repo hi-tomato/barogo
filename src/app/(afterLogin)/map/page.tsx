@@ -1,5 +1,5 @@
 "use client";
-import KaKaoContainer from "@/app/components/map/KaKaoContainer";
+import KaKaoContainer from "@/app/features/map/components/KaKaoContainer";
 import { Restaurant } from "@/app/types/map";
 import { useRouter } from "next/navigation";
 
@@ -21,7 +21,7 @@ export default function KakaoMapView() {
   );
 }
 
-// 더미 데이터 (바로팟 정보 추가)
+// 더미 데이터
 export const dummyRestaurants: Restaurant[] = [
   {
     id: 1,

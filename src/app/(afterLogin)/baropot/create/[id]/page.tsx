@@ -10,7 +10,7 @@ import DetailedInfoSection from "@/app/features/baropot/components/create/Detail
 import { useBaropotFormLogic } from "@/app/features/baropot/hooks/useBaropotForm";
 import { BaropotFormData } from "@/app/features/baropot/types/baropot";
 import { useEffect, useState } from "react";
-import { RestaurantData } from "@/app/types/restaurant";
+import { RestaurantData } from "@/app/features/nearby/types/restaurant";
 
 export default function CreateBaropotForm() {
   const router = useRouter();

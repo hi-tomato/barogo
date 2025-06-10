@@ -1,5 +1,5 @@
 import { BaropotTab } from "@/app/features/baropot/types/baropot";
-import Button from "@/app/components/ui/Button";
+import Button from "@/app/shared/ui/Button";
 
 interface BaropotTabsProps {
   activeTab: BaropotTab;

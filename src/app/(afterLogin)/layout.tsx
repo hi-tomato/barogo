@@ -1,5 +1,5 @@
 import React, { ReactNode } from "react";
-import Footer from "@/app/components/layout/Footer";
+import BottomTabBar from "@/app/features/main/components/Footer";
 
 export default function AfterLoginLoot({
   children,
@@ -11,7 +11,7 @@ export default function AfterLoginLoot({
   return (
     <div>
       <main className="pb-20">{children}</main>
-      <Footer />
+      <BottomTabBar />
       {modal}
     </div>
   );

@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import RestaurantSelector from "@/app/features/baropot/components/create/RestaurantSelector";
-import { RestaurantData } from "@/app/types/restaurant";
+import { RestaurantData } from "@/app/features/nearby/types/restaurant";
 
 export default function CreateBaropotPage() {
   const [selectedRestaurant, setSelectedRestaurant] =

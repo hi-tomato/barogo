@@ -1,4 +1,4 @@
-import Button from "@/app/components/ui/Button";
+import Button from "@/app/shared/ui/Button";
 
 interface BaropotHeaderProps {
   onClose: () => void;

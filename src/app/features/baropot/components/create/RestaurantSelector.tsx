@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import { RestaurantData } from "@/app/types/restaurant";
+import { RestaurantData } from "@/app/features/nearby/types/restaurant";
 import FavoriteRestaurantModal from "./modal/FavoriteRestaurantModal";
 import SearchRestaurantModal from "./modal/SearchRestaurantModal";
 import NearbyRestaurantModal from "./modal/NearbyRestaurantModal";

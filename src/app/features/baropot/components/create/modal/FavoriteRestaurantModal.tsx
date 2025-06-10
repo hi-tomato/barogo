@@ -1,6 +1,6 @@
 "use client";
 import { useFavoriteRestaurants } from "@/app/hooks/queries/useMockRestaurant";
-import { RestaurantData } from "@/app/types/restaurant";
+import { RestaurantData } from "@/app/features/nearby/types/restaurant";
 import { FavoriteRestaurant } from "@/app/types/kakao";
 
 interface FavoriteRestaurantModalProps {

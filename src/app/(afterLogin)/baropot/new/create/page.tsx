@@ -11,7 +11,7 @@ import TagsSection from "@/app/features/baropot/components/create/TagsSection";
 import DetailedInfoSection from "@/app/features/baropot/components/create/DetailedInfoSection";
 import { useBaropotFormLogic } from "@/app/features/baropot/hooks/useBaropotForm";
 import { BaropotFormData } from "@/app/features/baropot/types/baropot";
-import { RestaurantData } from "@/app/types/restaurant";
+import { RestaurantData } from "@/app/features/nearby/types/restaurant";
 
 export default function CreateBaropotPage() {
   const router = useRouter();

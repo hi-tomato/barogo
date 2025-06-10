@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import { useForm } from "react-hook-form";
-import Button from "@/app/components/ui/Button";
+import Button from "@/app/shared/ui/Button";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { containerVariants, itemVariants } from "@/app/lib/animation";

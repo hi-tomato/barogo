@@ -3,7 +3,7 @@ import React from "react";
 import { RiKakaoTalkFill } from "react-icons/ri";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
-import Button from "@/app/components/ui/Button";
+import Button from "@/app/shared/ui/Button";
 import { motion } from "framer-motion";
 import { containerVariants, itemVariants } from "@/app/lib/animation";
 

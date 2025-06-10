@@ -1,12 +1,12 @@
 "use client";
-import { useGeolocation } from "@/app/hooks/useGeolocation";
-import { useMockNearby } from "@/app/hooks/queries/useMockNearby";
-import { RestaurantData } from "@/app/types/restaurant";
+import { useGeolocation } from "@/app/features/nearby/hooks/useGeolocation";
+import { useMockNearby } from "@/app/features/nearby/hooks/queries/useMockNearby";
+import { RestaurantData } from "@/app/features/nearby/types/restaurant";
 import { NearbyRestaurant } from "@/app/types/kakao";
 import {
   getCategoryIcon,
   getGradientByCategory,
-} from "@/app/hooks/useCategory";
+} from "@/app/features/nearby/utils/categoryHelpers";
 
 interface NearbyRestaurantModalProps {
   onClose: () => void;

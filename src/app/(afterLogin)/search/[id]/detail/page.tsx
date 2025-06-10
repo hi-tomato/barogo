@@ -1,19 +1,5 @@
-import RestaurantHeader from "@/app/components/restaurant/RestaurantHeader";
-import RestaurantImages from "@/app/components/restaurant/RestaurantImages";
-import RestaurantInfo from "@/app/components/restaurant/RestaurantInfo";
-import RestaurantMap from "@/app/components/restaurant/RestaurantMap";
-import RestaurantReviews from "@/app/components/restaurant/RestaurantReviews";
-import RestaurantSection from "@/app/components/restaurant/RestaurantSection";
+import SearchDetailPage from "@/app/features/search/pages/SearchDetailPage";
 
-export default function DetailPage() {
-  return (
-    <div>
-      <RestaurantHeader />
-      <RestaurantImages />
-      <RestaurantInfo />
-      <RestaurantReviews />
-      <RestaurantSection />
-      <RestaurantMap />
-    </div>
-  );
+export default function page() {
+  return <SearchDetailPage />;
 }

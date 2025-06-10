@@ -1,5 +1,5 @@
 import { BaropotItem, BaropotTab } from "../types/baropot";
-import { RestaurantDetail } from "../types/restaurant";
+import { RestaurantDetail } from "../features/nearby/types/restaurant";
 
 // TODO: baropot에 관련된 useQuery Fn(Functions)를 관리하는 객체
 export const baropot = {

@@ -1,7 +1,7 @@
 import {
   getCategoryIcon,
   getGradientByCategory,
-} from "@/app/hooks/useCategory";
+} from "@/app/features/nearby/utils/categoryHelpers";
 import { NearbyRestaurant } from "@/app/types";
 import React from "react";
 

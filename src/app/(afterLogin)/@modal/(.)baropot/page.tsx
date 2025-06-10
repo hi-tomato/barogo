@@ -8,7 +8,7 @@ import {
 import BaropotHeader from "@/app/features/baropot/components/BaropotHeader";
 import BaropotTabs from "@/app/features/baropot/components/BaropotTabs";
 import BaropotList from "@/app/features/baropot/components/BaropotList";
-import Button from "@/app/components/ui/Button";
+import Button from "@/app/shared/ui/Button";
 import { BaropotTab } from "@/app/features/baropot/types/baropot";
 
 export default function BaropotModal() {

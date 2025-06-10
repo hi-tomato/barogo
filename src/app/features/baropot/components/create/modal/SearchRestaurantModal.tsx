@@ -1,6 +1,6 @@
 "use client";
 import { KakaoRestaurant } from "@/app/types/kakao";
-import { RestaurantData } from "@/app/types/restaurant";
+import { RestaurantData } from "@/app/features/nearby/types/restaurant";
 import React, { useState } from "react";
 
 interface SearchRestaurantModalProps {
