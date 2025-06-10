@@ -1,5 +1,5 @@
-import { queryKeys } from "@/app/lib/queryKeys";
-import { restaurant } from "@/app/services/mockapi";
+import { queryKeys } from "@/app/shared/lib/queryKeys";
+import { restaurant } from "@/app/shared/services/mockapi";
 import { useQuery } from "@tanstack/react-query";
 
 export const useRestaurantDetail = (kakaoId: string) => {

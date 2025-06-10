@@ -1,8 +1,8 @@
 import { useQuery } from "@tanstack/react-query";
 import { useState, useEffect } from "react";
-import { NearbyRestaurant } from "@/app/types";
-import { searchRestaurants } from "../../../services/searchRestaurantService";
-import { queryKeys } from "../../../lib/queryKeys";
+import { queryKeys } from "@/app/shared/lib/queryKeys";
+import { NearbyRestaurant } from "@/app/shared/types";
+import { searchRestaurants } from "../api/searchRestaurantService";
 
 interface UseRestaurantSearchProps {
   lat?: number;

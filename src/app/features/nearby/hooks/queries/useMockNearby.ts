@@ -1,4 +1,4 @@
-import { queryKeys } from "@/app/lib/queryKeys";
+import { queryKeys } from "@/app/shared/lib/queryKeys";
 import { kakaoApiService } from "@/app/features/nearby/services/kakaoApi";
 import { Location } from "@/app/types";
 import { useQuery } from "@tanstack/react-query";

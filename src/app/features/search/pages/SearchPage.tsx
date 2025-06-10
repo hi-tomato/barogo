@@ -8,9 +8,9 @@ import SearchResults from "@/app/features/search/components/SearchResults";
 
 import { useGeolocation } from "@/app/shared/hooks/useGeolocation";
 import { useRestaurantSearch } from "@/app/features/search/hooks/useSearch";
-import { NearbyRestaurant } from "@/app/types";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { NearbyRestaurant } from "@/app/shared/types";
 
 export default function SearchPage() {
   const router = useRouter();

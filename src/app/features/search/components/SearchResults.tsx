@@ -2,7 +2,7 @@ import {
   getCategoryIcon,
   getGradientByCategory,
 } from "@/app/features/nearby/utils/categoryHelpers";
-import { NearbyRestaurant } from "@/app/types";
+import { NearbyRestaurant } from "@/app/shared/types";
 
 interface SearchResultsProps {
   results: NearbyRestaurant[];
@@ -34,6 +34,7 @@ export default function SearchResults({
   error,
   onSelectRestaurant,
 }: SearchResultsProps) {
+  console.log("검색 결과" + results);
   if (loading) return <Loading />;
   if (error) return <Error error={error} />;
   if (results.length === 0) return null;

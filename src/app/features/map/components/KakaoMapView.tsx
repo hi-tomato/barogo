@@ -1,5 +1,4 @@
 "use client";
-
 import { Map } from "react-kakao-maps-sdk";
 import RestaurantMarker from "./RestaurantMarker";
 import UserLocationMarker from "./UserLocationMarker";

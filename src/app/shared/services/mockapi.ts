@@ -1,5 +1,5 @@
-import { BaropotItem, BaropotTab } from "../types/baropot";
-import { RestaurantDetail } from "../features/nearby/types/restaurant";
+import { BaropotItem, BaropotTab } from "@/app/features/baropot/types/baropot";
+import { RestaurantDetail } from "@/app/features/nearby/types/restaurant";
 
 // TODO: baropot에 관련된 useQuery Fn(Functions)를 관리하는 객체
 export const baropot = {
@@ -105,14 +105,14 @@ export const baropot = {
     return dummyData.filter((item) => {
       if (tab === "available") {
         // TODO:모집중이고 내가 참여하지 않은 모임
-        const isParticipant = item.participants.some(
+        const isParticipant = item.participants?.some(
           (p) => p.userId === currentUserId
         );
         return item.status === "recruiting" && !isParticipant;
       }
       if (tab === "joined") {
         // TODO:내가 참여한 모임 (호스트가 아닌 참가자로)
-        const isParticipant = item.participants.some(
+        const isParticipant = item.participants?.some(
           (p) => p.userId === currentUserId
         );
         return isParticipant && item.host !== currentUserId;
@@ -131,6 +131,7 @@ export const baropot = {
   },
 
   join: async (id: number): Promise<void> => {
+    console.log(id);
     await new Promise((resolve) => setTimeout(resolve, 500));
   },
 };

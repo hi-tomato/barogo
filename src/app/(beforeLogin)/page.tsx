@@ -1,7 +1,7 @@
 "use client";
 import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
-import { containerVariants, itemVariants } from "@/app/lib/animation";
+import { containerVariants, itemVariants } from "@/app/shared/lib/animation";
 
 export default function LandingPage() {
   const router = useRouter();
