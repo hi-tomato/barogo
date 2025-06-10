@@ -5,11 +5,11 @@ import {
   useBaropotList,
   useJoinBaropot,
 } from "@/app/hooks/queries/useMockBaropot";
-import BaropotHeader from "@/app/components/baropot/BaropotHeader";
-import BaropotTabs from "@/app/components/baropot/BaropotTabs";
-import BaropotList from "@/app/components/baropot/BaropotList";
+import BaropotHeader from "@/app/features/baropot/components/BaropotHeader";
+import BaropotTabs from "@/app/features/baropot/components/BaropotTabs";
+import BaropotList from "@/app/features/baropot/components/BaropotList";
 import Button from "@/app/components/ui/Button";
-import { BaropotTab } from "@/app/types/baropot";
+import { BaropotTab } from "@/app/features/baropot/types/baropot";
 
 export default function BaropotModal() {
   const [activeTab, setActiveTab] = useState<BaropotTab>("available");

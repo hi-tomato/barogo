@@ -1,5 +1,4 @@
-// components/baropot/ContactPaymentSection.tsx
-import { BaropotFormData } from "@/app/types/baropot";
+import { BaropotFormData } from "@/app/features/baropot/types/baropot";
 import {
   Controller,
   Control,

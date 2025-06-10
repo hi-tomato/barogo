@@ -3,9 +3,9 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { HiPlus } from "react-icons/hi";
 import { useBaropotList } from "@/app/hooks/queries/useMockBaropot";
-import BaropotTabs from "@/app/components/baropot/BaropotTabs";
-import BaropotList from "@/app/components/baropot/BaropotList";
-import { BaropotTab } from "@/app/types/baropot";
+import BaropotTabs from "@/app/features/baropot/components/BaropotTabs";
+import BaropotList from "@/app/features/baropot/components/BaropotList";
+import { BaropotTab } from "@/app/features/baropot/types/baropot";
 
 export default function BaropotMainPage() {
   const [activeTab, setActiveTab] = useState<BaropotTab>("available");

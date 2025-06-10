@@ -1,14 +1,14 @@
 "use client";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
-import BasicInfoSection from "@/app/components/baropot/create/BasicInfoSection";
-import ScheduleSection from "@/app/components/baropot/create/ScheduleSection";
-import ParticipantConditionsSection from "@/app/components/baropot/create/ParticipantConditionsSection";
-import ContactPaymentSection from "@/app/components/baropot/create/ContactPaymentSection";
-import TagsSection from "@/app/components/baropot/create/TagsSection";
-import DetailedInfoSection from "@/app/components/baropot/create/DetailedInfoSection";
-import { useBaropotFormLogic } from "@/app/hooks/useBaropotFormLogin";
-import { BaropotFormData } from "@/app/types/baropot";
+import BasicInfoSection from "@/app/features/baropot/components/create/BasicInfoSection";
+import ScheduleSection from "@/app/features/baropot/components/create/ScheduleSection";
+import ParticipantConditionsSection from "@/app/features/baropot/components/create/ParticipantConditionsSection";
+import ContactPaymentSection from "@/app/features/baropot/components/create/ContactPaymentSection";
+import TagsSection from "@/app/features/baropot/components/create/TagsSection";
+import DetailedInfoSection from "@/app/features/baropot/components/create/DetailedInfoSection";
+import { useBaropotFormLogic } from "@/app/features/baropot/hooks/useBaropotForm";
+import { BaropotFormData } from "@/app/features/baropot/types/baropot";
 import { useEffect, useState } from "react";
 import { RestaurantData } from "@/app/types/restaurant";
 

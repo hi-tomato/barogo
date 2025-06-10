@@ -1,7 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { queryKeys } from "@/app/lib/queryKeys";
 import { baropot } from "@/app/services/mockapi";
-import { BaropotTab } from "@/app/types/baropot";
+import { BaropotTab } from "@/app/features/baropot/types/baropot";
 
 export const useBaropotList = (tab?: BaropotTab) => {
   return useQuery({

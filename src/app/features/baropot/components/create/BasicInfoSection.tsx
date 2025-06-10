@@ -1,4 +1,4 @@
-import { BaropotFormData } from "@/app/types/baropot";
+import { BaropotFormData } from "@/app/features/baropot/types/baropot";
 import React from "react";
 import { FieldErrors, UseFormRegister } from "react-hook-form";
 

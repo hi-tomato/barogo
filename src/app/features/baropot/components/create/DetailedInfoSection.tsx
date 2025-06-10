@@ -1,4 +1,4 @@
-import { BaropotFormData } from "@/app/types/baropot";
+import { BaropotFormData } from "@/app/features/baropot/types/baropot";
 import { UseFormRegister } from "react-hook-form";
 
 interface DetailedInfoSectionProps {

@@ -1,5 +1,8 @@
-import { getStatusColor, getStatusText } from "@/app/hooks/useBaropotStatus";
-import { BaropotItem } from "@/app/types";
+import {
+  getStatusColor,
+  getStatusText,
+} from "@/app/features/baropot/hooks/useBaropotStatus";
+import { BaropotItem } from "@/app/features/baropot/types/baropot";
 
 interface BaropotItemProps {
   baropot: BaropotItem;

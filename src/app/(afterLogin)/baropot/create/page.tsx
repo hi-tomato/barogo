@@ -1,8 +1,7 @@
-// src/app/(afterLogin)/baropot/create/page.tsx
 "use client";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import RestaurantSelector from "@/app/components/baropot/create/RestaurantSelector";
+import RestaurantSelector from "@/app/features/baropot/components/create/RestaurantSelector";
 import { RestaurantData } from "@/app/types/restaurant";
 
 export default function CreateBaropotPage() {

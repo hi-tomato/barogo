@@ -4,7 +4,7 @@ import { useMockNearby } from "@/app/hooks/queries/useMockNearby";
 import { NearbyRestaurant } from "@/app/types";
 import { useEffect } from "react";
 import { useLocationStore } from "@/app/store/useUserLocation";
-import { useBaropotStore } from "@/app/store/useBaropotStore";
+import { useBaropotStore } from "@/app/features/baropot/store/useBaropotStore";
 import NearbyHeader from "@/app/components/nearby/modal/NearbyHeader";
 import NearbyStatus from "@/app/components/nearby/modal/NearbyStatus";
 import RestaurantList from "@/app/components/nearby/RestaurantList";

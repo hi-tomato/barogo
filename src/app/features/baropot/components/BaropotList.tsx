@@ -1,5 +1,5 @@
 import BaropotItem from "./BaropotItems";
-import { BaropotItem as BaropotItemType } from "@/app/types/baropot";
+import { BaropotItem as BaropotItemType } from "@/app/features/baropot/types/baropot";
 
 interface BaropotListProps {
   baropotList: BaropotItemType[];
