@@ -9,6 +9,7 @@ export const useBaropotList = (tab?: BaropotTab) => {
     queryFn: async () => {
       const result = await baropot.getList(tab || "available");
       console.log("API 결과:", result);
+      console.log("API 결과2:", result);
       return result;
     },
     staleTime: 1000 * 60 * 5,
