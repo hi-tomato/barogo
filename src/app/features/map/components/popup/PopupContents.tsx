@@ -27,7 +27,7 @@ export default function PopupContents({
               🔥 진행중인 바로팟
             </div>
             <span className="text-orange-600 font-bold text-sm">
-              {restaurant.baropotCount}개
+              {restaurant.baropotCount}명
             </span>
           </div>
           <div className="text-orange-500 text-xs mt-1">
