@@ -177,46 +177,84 @@ export const restaurant = {
 
   getRestaurantDetail: async (kakaoId: string): Promise<RestaurantDetail> => {
     await new Promise((resolve) => setTimeout(resolve, 500));
-    return {
-      // 카카오 기본 데이터
-      kakaoId: kakaoId,
-      name: "홀리스 타코",
-      address: "서울 마포구 홍익로 20",
-      phone: "02-1234-5678",
-      category: "멕시칸음식",
-      coordinates: {
-        lat: 37.5518,
-        lng: 126.9219,
+    const mockRestaurants: Record<string, RestaurantDetail> = {
+      // 스타벅스 (실제 검색되는 맛집)
+      "11111111": {
+        kakaoId: "11111111",
+        name: "스타벅스 홍대점",
+        address: "서울 마포구 홍익로 20",
+        phone: "1522-3232",
+        category: "카페",
+        coordinates: { lat: 37.5518, lng: 126.9219 },
+        id: 1,
+        description:
+          "홍대에서 가장 유명한 스타벅스 매장입니다. 넓은 공간과 좋은 분위기!",
+        images: [
+          "https://images.unsplash.com/photo-1565299624946-b28f40a0ca4b?w=400",
+          "https://images.unsplash.com/photo-1551504734-5ee1c4a1479b?w=400",
+        ],
+        rating: 4.5,
+        reviewCount: 1284,
+        tags: ["카페", "커피", "홍대", "스터디", "미팅"],
+        openHours: "06:00 - 24:00",
+        baropots: [
+          {
+            id: 1,
+            title: "스타벅스에서 커피챗 하실분!",
+            restaurant: "스타벅스 홍대점",
+            location: "홍대입구역 2번 출구",
+            date: "2025-06-10",
+            time: "19:00",
+            maxPeople: 4,
+            currentPeople: 2,
+            status: "recruiting",
+            host: "커피러버",
+            tags: ["카페", "20대", "커피챗"],
+          },
+        ],
       },
 
-      // 서버 확장 데이터
-      id: 1,
-      description:
-        "홍대 최고의 멕시칸 레스토랑! 신선한 재료로 만든 타코와 부리또가 일품입니다.",
-      images: [
-        "https://images.unsplash.com/photo-1565299624946-b28f40a0ca4b?w=400",
-        "https://images.unsplash.com/photo-1551504734-5ee1c4a1479b?w=400",
-        "https://images.unsplash.com/photo-1565958011703-44f9829ba187?w=400",
-      ],
-      rating: 4.8,
-      reviewCount: 284,
-      tags: ["멕시칸", "타코", "부리또", "데이트", "홍대맛집"],
-      openHours: "11:00 - 22:00 (라스트오더 21:30)",
-      baropots: [
-        {
-          id: 1,
-          title: "홀리스 타코 같이 가실분!",
-          restaurant: "홀리스 타코",
-          location: "홍대입구역 2번 출구",
-          date: "2025-06-10",
-          time: "19:00",
-          maxPeople: 4,
-          currentPeople: 2,
-          status: "recruiting",
-          host: "타코러버",
-          tags: ["멕시칸", "20대", "데이트"],
-        },
-      ],
+      // 맥도날드 (실제 검색되는 맛집)
+      "22222222": {
+        kakaoId: "22222222",
+        name: "맥도날드 홍대점",
+        address: "서울 마포구 양화로 161",
+        phone: "02-333-4444",
+        category: "햄버거",
+        coordinates: { lat: 37.556, lng: 126.9236 },
+        id: 2,
+        description:
+          "24시간 운영하는 홍대 맥도날드! 늦은 시간에도 부담없이 방문하세요.",
+        images: [
+          "https://images.unsplash.com/photo-1558618666-fbd6c327cd47?w=400",
+          "https://images.unsplash.com/photo-1546833999-b9f581a1996d?w=400",
+        ],
+        rating: 4.0,
+        reviewCount: 856,
+        tags: ["햄버거", "패스트푸드", "24시간", "홍대"],
+        openHours: "24시간 운영",
+        baropots: [
+          {
+            id: 2,
+            title: "맥도날드에서 간단한 식사!",
+            restaurant: "맥도날드 홍대점",
+            location: "홍대입구역 9번 출구",
+            date: "2025-06-11",
+            time: "20:30",
+            maxPeople: 3,
+            currentPeople: 1,
+            status: "recruiting",
+            host: "햄버거킹",
+            tags: ["햄버거", "학생", "간단식사"],
+          },
+        ],
+      },
     };
+
+    const restaurant = mockRestaurants[kakaoId];
+    if (!restaurant) {
+      throw new Error("찾을 수 없는 데이터 입니다");
+    }
+    return restaurant;
   },
 };
