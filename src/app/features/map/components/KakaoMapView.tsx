@@ -4,16 +4,19 @@ import RestaurantMarker from "./RestaurantMarker";
 import UserLocationMarker from "./UserLocationMarker";
 import { Restaurant } from "@/app/shared/types/map";
 import { useLocationStore } from "../store/useUserLocation";
+import RestaurantPopup from "./RestaurantPopup";
 
 interface KakaoMapViewProps {
   restaurants: Restaurant[];
   selectedRestaurant: Restaurant | null;
+  onClosePopup: () => void;
   onRestaurantSelect: (restaurant: Restaurant) => void;
 }
 
 export default function KakaoMapView({
   restaurants,
   selectedRestaurant,
+  onClosePopup,
   onRestaurantSelect,
 }: KakaoMapViewProps) {
   const { latitude, longitude } = useLocationStore();
@@ -30,10 +33,16 @@ export default function KakaoMapView({
         <RestaurantMarker
           key={restaurant.id}
           restaurant={restaurant}
-          isSelected={selectedRestaurant?.id === restaurant.id}
           onClick={() => onRestaurantSelect(restaurant)}
         />
       ))}
+
+      {selectedRestaurant && (
+        <RestaurantPopup
+          restaurant={selectedRestaurant}
+          onClose={onClosePopup}
+        />
+      )}
     </Map>
   );
 }

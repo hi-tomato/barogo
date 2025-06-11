@@ -1,10 +1,7 @@
 import { CustomOverlayMap } from "react-kakao-maps-sdk";
 import Button from "@/app/shared/ui/Button";
-
 import { Restaurant } from "@/app/shared/types/map";
-import PopupHeader from "./popup/PopupHeader";
-import PopupContents from "./popup/PopupContents";
-import PopupActions from "./popup/PopupActions";
+import PopupContainer from "./popup/PopupContainer";
 
 interface RestaurantPopupProps {
   restaurant: Restaurant;
@@ -18,13 +15,7 @@ export default function RestaurantPopup({
   return (
     <CustomOverlayMap position={{ lat: restaurant.lat, lng: restaurant.lng }}>
       <div className="relative w-[250px] bg-white rounded-xl shadow-xl border border-gray-200 p-4 text-sm">
-        {/* 헤더 */}
-        <PopupHeader restaurant={restaurant} />
-        {/* Contents */}
-        <PopupContents restaurant={restaurant} />
-        {/* Actions */}
-        <PopupActions restaurants={restaurant} />
-        {/* 닫기 버튼 */}
+        <PopupContainer restaurant={restaurant} />
         <Button
           text="X"
           onClick={onClose}

@@ -178,76 +178,58 @@ export const restaurant = {
   getRestaurantDetail: async (kakaoId: string): Promise<RestaurantDetail> => {
     await new Promise((resolve) => setTimeout(resolve, 500));
     const mockRestaurants: Record<string, RestaurantDetail> = {
-      // 스타벅스 (실제 검색되는 맛집)
-      "11111111": {
-        kakaoId: "11111111",
-        name: "스타벅스 홍대점",
+      // ⭐ 지도 더미 데이터와 같은 ID 사용
+      "26338954": {
+        kakaoId: "26338954",
+        name: "토마토김밥",
         address: "서울 마포구 홍익로 20",
-        phone: "1522-3232",
-        category: "카페",
-        coordinates: { lat: 37.5518, lng: 126.9219 },
+        phone: "02-1234-5678",
+        category: "한식",
+        coordinates: { lat: 37.5665, lng: 126.978 },
         id: 1,
-        description:
-          "홍대에서 가장 유명한 스타벅스 매장입니다. 넓은 공간과 좋은 분위기!",
+        description: "김밥계의 샤넬. 언제나 옳은 맛",
         images: [
           "https://images.unsplash.com/photo-1565299624946-b28f40a0ca4b?w=400",
           "https://images.unsplash.com/photo-1551504734-5ee1c4a1479b?w=400",
         ],
         rating: 4.5,
-        reviewCount: 1284,
-        tags: ["카페", "커피", "홍대", "스터디", "미팅"],
-        openHours: "06:00 - 24:00",
+        reviewCount: 128,
+        tags: ["한식", "김밥", "홍대맛집"],
+        openHours: "09:00 - 22:00",
         baropots: [
           {
             id: 1,
-            title: "스타벅스에서 커피챗 하실분!",
-            restaurant: "스타벅스 홍대점",
+            title: "토마토김밥 같이 드실분!",
+            restaurant: "토마토김밥",
             location: "홍대입구역 2번 출구",
             date: "2025-06-10",
             time: "19:00",
             maxPeople: 4,
             currentPeople: 2,
             status: "recruiting",
-            host: "커피러버",
-            tags: ["카페", "20대", "커피챗"],
+            host: "김밥러버",
+            tags: ["한식", "20대", "간단식사"],
           },
         ],
       },
 
-      // 맥도날드 (실제 검색되는 맛집)
-      "22222222": {
-        kakaoId: "22222222",
-        name: "맥도날드 홍대점",
+      "87654321": {
+        kakaoId: "87654321",
+        name: "스타벅스 홍대점",
         address: "서울 마포구 양화로 161",
-        phone: "02-333-4444",
-        category: "햄버거",
-        coordinates: { lat: 37.556, lng: 126.9236 },
+        phone: "1522-3232",
+        category: "카페",
+        coordinates: { lat: 37.567, lng: 126.975 },
         id: 2,
-        description:
-          "24시간 운영하는 홍대 맥도날드! 늦은 시간에도 부담없이 방문하세요.",
+        description: "커피 한 잔의 여유를 즐겨보세요",
         images: [
-          "https://images.unsplash.com/photo-1558618666-fbd6c327cd47?w=400",
-          "https://images.unsplash.com/photo-1546833999-b9f581a1996d?w=400",
+          "https://images.unsplash.com/photo-1565299624946-b28f40a0ca4b?w=400",
         ],
         rating: 4.0,
-        reviewCount: 856,
-        tags: ["햄버거", "패스트푸드", "24시간", "홍대"],
-        openHours: "24시간 운영",
-        baropots: [
-          {
-            id: 2,
-            title: "맥도날드에서 간단한 식사!",
-            restaurant: "맥도날드 홍대점",
-            location: "홍대입구역 9번 출구",
-            date: "2025-06-11",
-            time: "20:30",
-            maxPeople: 3,
-            currentPeople: 1,
-            status: "recruiting",
-            host: "햄버거킹",
-            tags: ["햄버거", "학생", "간단식사"],
-          },
-        ],
+        reviewCount: 256,
+        tags: ["카페", "커피", "스터디", "홍대"],
+        openHours: "06:00 - 24:00",
+        baropots: [],
       },
     };
 

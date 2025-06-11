@@ -1,32 +1,23 @@
-import { Restaurant } from "../../../shared/types/map";
-
-// 마커 이미지 상수 정의
-const selectedMarkerImage = {
-  src: "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/marker_red.png",
-  size: { width: 64, height: 69 },
-  options: { offset: { x: 32, y: 69 } },
-};
+import { Restaurant } from "@/app/shared/types/map";
 
 const baropotMarkerImage = {
-  src: "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/marker_red.png",
-  size: { width: 48, height: 52 },
+  src: "https://cdn1.iconfinder.com/data/icons/camping-65/500/bonfire-256.png",
+  size: { width: 34, height: 36 },
   options: { offset: { x: 24, y: 52 } },
 };
 
 const normalMarkerImage = {
-  src: "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png",
-  size: { width: 40, height: 44 },
+  src: "https://cdn0.iconfinder.com/data/icons/social-reaction-and-emoji/519/like-256.png",
+  size: { width: 28, height: 28 },
   options: { offset: { x: 20, y: 44 } },
 };
 
 // 마커 이미지 선택 함수
-export const getMarkerImage = (restaurant: Restaurant, isSelected: boolean) => {
-  if (isSelected) return selectedMarkerImage;
+export const getMarkerImage = (restaurant: Restaurant) => {
   if (restaurant.hasBaropot) return baropotMarkerImage;
   return normalMarkerImage;
 };
 
-// 카테고리 상수
 export const categories = [
   "전체",
   "한식",
@@ -35,4 +26,4 @@ export const categories = [
   "양식",
   "카페",
   "술집",
-];
+] as const;

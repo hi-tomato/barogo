@@ -5,17 +5,15 @@ import { MapMarker } from "react-kakao-maps-sdk";
 
 interface RestaurantMarkerProps {
   restaurant: Restaurant;
-  isSelected: boolean;
   onClick: () => void;
 }
 
 export default function RestaurantMarker({
   restaurant,
-  isSelected,
   onClick,
 }: RestaurantMarkerProps) {
-  const markerImage = getMarkerImage(restaurant, isSelected);
-
+  console.log(restaurant);
+  const markerImage = getMarkerImage(restaurant);
   return (
     <>
       <MapMarker
