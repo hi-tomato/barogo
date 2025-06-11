@@ -1,4 +1,4 @@
-import { BaropotItem } from "./baropot";
+import { BaropotItem } from "../../baropot/types/baropot";
 
 export interface RestaurantData {
   id: string;
@@ -6,6 +6,10 @@ export interface RestaurantData {
   location: string;
   category: string;
   phone: string;
+  // 좌표값 추가
+  lat?: string;
+  lng?: string;
+  kakaoId?: string;
 }
 
 export interface RestaurantDetail {

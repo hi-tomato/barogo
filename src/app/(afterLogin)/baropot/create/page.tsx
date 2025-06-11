@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import RestaurantSelector from "@/app/features/baropot/components/create/RestaurantSelector";
 import { RestaurantData } from "@/app/features/nearby/types/restaurant";
@@ -8,6 +8,31 @@ export default function CreateBaropotPage() {
   const [selectedRestaurant, setSelectedRestaurant] =
     useState<RestaurantData | null>(null);
   const router = useRouter();
+
+  useEffect(() => {
+    const getRestaurantData = () => {
+      try {
+        const saveData = sessionStorage.getItem("selectedRestaurant");
+        if (saveData) {
+          const restaurant: RestaurantData = JSON.parse(saveData);
+          if (restaurant.name && restaurant.location && restaurant.category) {
+            setSelectedRestaurant(restaurant);
+            console.log("받은 맛집 데이터:", restaurant);
+          } else {
+            console.error("맛집 데이터가 불안전합니다");
+            router.back();
+          }
+
+          sessionStorage.removeItem("selectedRestaurant");
+        }
+      } catch (error) {
+        console.log("선택된 맛집이 없습니다.", error);
+        router.back();
+      }
+    };
+
+    getRestaurantData();
+  }, [router]);
 
   return (
     <div className="min-h-screen bg-[#E6EEF5] pt-16 pb-24">

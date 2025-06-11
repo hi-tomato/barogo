@@ -1,17 +1,20 @@
 import { UseFormWatch, UseFormSetValue } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import { BaropotFormData } from "../types/baropot";
+import { RestaurantData } from "../../nearby/types/restaurant";
 
 interface UseBaropotFormLogicProps {
   watch: UseFormWatch<BaropotFormData>;
   setValue: UseFormSetValue<BaropotFormData>;
   router: ReturnType<typeof useRouter>;
+  restaurantData: RestaurantData | null;
 }
 
 export function useBaropotFormLogic({
   watch,
   setValue,
   router,
+  restaurantData,
 }: UseBaropotFormLogicProps) {
   // Watch values
   const watchContactMethod = watch("contactMethod");
@@ -44,6 +47,16 @@ export function useBaropotFormLogic({
       maxPeople: parseInt(data.maxPeople),
       hostId: "user123", // TODO: 실제 로그인 사용자 ID
       contactMethod: data.contactMethod,
+
+      // ⭐ 레스토랑 좌표 정보 추가
+      restaurantCoordinates:
+        restaurantData?.lat && restaurantData?.lng
+          ? {
+              lat: parseFloat(restaurantData.lat),
+              lng: parseFloat(restaurantData.lng),
+              kakaoId: restaurantData.kakaoId || restaurantData.id,
+            }
+          : null,
 
       // 시스템 필드
       status: "recruiting" as const,

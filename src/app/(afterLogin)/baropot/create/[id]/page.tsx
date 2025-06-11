@@ -23,22 +23,31 @@ export default function CreateBaropotForm() {
     const getCurrentData = () => {
       try {
         const savedData = sessionStorage.getItem("selectedRestaurant");
-
         if (savedData) {
           const restaurant = JSON.parse(savedData);
-          setRestaurantData(restaurant);
-
-          sessionStorage.removeItem("selectedRestaurant");
+          console.log("📍 받은 데이터:", restaurant);
+          setRestaurantData({
+            id: restaurant.kakaoId,
+            name: restaurant.name,
+            location: restaurant.location,
+            category: restaurant.category,
+            phone: restaurant.phone || "",
+            lat: restaurant.lat,
+            lng: restaurant.lng,
+            kakaoId: restaurant.kakaoId,
+          });
         }
+        // 사용 후 즉시 삭제
+        sessionStorage.removeItem("selectedRestaurant");
       } catch (error) {
-        console.error("레스토랑 데이터 파싱 오류: ", error);
+        console.error("데이터 파싱 오류:", error);
+        router.back();
       } finally {
         setLoading(false);
       }
     };
-
     getCurrentData();
-  }, []);
+  }, [router]);
 
   const {
     register,
@@ -67,7 +76,7 @@ export default function CreateBaropotForm() {
     watchTags,
     toggleArrayField,
     onSubmit,
-  } = useBaropotFormLogic({ watch, setValue, router });
+  } = useBaropotFormLogic({ watch, setValue, router, restaurantData });
 
   if (loading) <p>레스토랑 데이터를 불러오는 중입니다 ...</p>;
 

@@ -1,4 +1,4 @@
-import { NearbyRestaurant } from "@/app/types";
+import { NearbyRestaurant } from "@/app/shared/types";
 
 interface RestaurantPreviewModalProps {
   restaurant: NearbyRestaurant;

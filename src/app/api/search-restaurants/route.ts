@@ -3,14 +3,13 @@ export async function GET(request: Request) {
   const query = searchParams.get("q");
   const lat = searchParams.get("lat");
   const lng = searchParams.get("lng");
-  console.log("받은 파라미터:", { query, lat, lng });
 
   if (!query) {
     return Response.json({ error: "검색어가 필요합니다." }, { status: 400 });
   }
 
   try {
-    const URL = `https://dapi.kakao.com/v2/local/search/keyword.json?query=${query}&size=10${
+    const URL = `https://dapi.kakao.com/v2/local/search/keyword.json?query=${query}&category_group_code=FD6&size=10${
       lat && lng ? `&x=${lng}&y=${lat}&radius=5000&sort=distance` : ""
     }`;
     console.log("카카오 API URL:", URL);

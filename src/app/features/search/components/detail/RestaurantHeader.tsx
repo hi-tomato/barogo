@@ -1,8 +1,6 @@
 "use client";
 import { useRouter } from "next/navigation";
-
 import Button from "@/app/shared/ui/Button";
-("@/app/shared/ui/Button");
 
 export default function RestaurantHeader() {
   const router = useRouter();

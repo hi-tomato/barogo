@@ -14,11 +14,11 @@ import { NearbyRestaurant } from "@/app/shared/types";
 
 export default function SearchPage() {
   const router = useRouter();
-  const { location } = useGeolocation();
-
+  const [showPreview, setShowPreview] = useState(false);
   const [selectedRestaurant, setSelectedRestaurant] =
     useState<NearbyRestaurant | null>(null);
-  const [showPreview, setShowPreview] = useState(false);
+
+  const { location } = useGeolocation();
 
   const { query, setQuery, result, loading, error } = useRestaurantSearch({
     lat: location?.latitude,
@@ -49,25 +49,32 @@ export default function SearchPage() {
         x: restaurant.x,
         y: restaurant.y,
       });
-
       console.error("맛집 정보가 불완전합니다. 다시 선택해주세요.");
       return;
     }
+    const saved = sessionStorage.setItem(
+      "selectedRestaurant",
+      JSON.stringify({
+        name: restaurant.place_name,
+        location: restaurant.address_name,
+        category: restaurant.category_name,
+        kakaoId: restaurant.id,
+        lat: restaurant.y,
+        lng: restaurant.x,
+      })
+    );
 
-    const params = new URLSearchParams({
-      name: restaurant.place_name,
-      location: restaurant.address_name,
-      category: restaurant.category_name,
-      kakaoId: restaurant.id,
-      lat: restaurant.y,
-      lng: restaurant.x,
-    });
+    console.log(saved);
 
-    const targetUrl = `/baropot/create/${restaurant.id}?${params.toString()}`;
-    console.log("이동할 URL:", targetUrl);
-    console.log("URL 파라미터:", params.toString());
+    router.back();
 
-    router.push(targetUrl);
+    setTimeout(() => {
+      router.push(`/baropot/create/${restaurant.id}`);
+    }, 100);
+  };
+
+  const handleSearchClick = (searchTerm: string) => {
+    setQuery(searchTerm);
   };
 
   return (
@@ -83,7 +90,7 @@ export default function SearchPage() {
           />
         ) : (
           <>
-            <RecommendedSearches />
+            <RecommendedSearches onSearchClick={handleSearchClick} />
             <div>
               <h2 className="text-lg font-bold text-gray-900 mb-4">
                 어떤 매장을 찾으세요?

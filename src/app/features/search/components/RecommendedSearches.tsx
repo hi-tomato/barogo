@@ -1,10 +1,16 @@
+interface RecommendedSearchesProps {
+  onSearchClick: (searchTerm: string) => void;
+}
+
 const recentSearches = [
   { icon: "🍷", text: "콜키지 프리", color: "bg-blue-100" },
   { icon: "📈", text: "검색 급상승 랭킹", color: "bg-orange-100" },
   { icon: "🚗", text: "무료 주차", color: "bg-blue-100" },
 ];
 
-export default function RecommendedSearches() {
+export default function RecommendedSearches({
+  onSearchClick,
+}: RecommendedSearchesProps) {
   return (
     <div>
       <div className="flex items-center justify-between mb-4">
@@ -15,7 +21,8 @@ export default function RecommendedSearches() {
         {recentSearches.map((item, index) => (
           <button
             key={index}
-            className={`${item.color} rounded-xl p-4 text-left transition-transform active:scale-95`}
+            onClick={() => onSearchClick(item.text)}
+            className={`${item.color} rounded-xl p-4 text-left transition-transform active:scale-95 hover:shadow-md`}
           >
             <div className="text-xl mb-2">{item.icon}</div>
             <div className="text-sm font-medium text-gray-800 leading-tight">
