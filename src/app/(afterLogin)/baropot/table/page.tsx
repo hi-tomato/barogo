@@ -5,10 +5,7 @@ import { useBaropotList } from "@/app/features/baropot/hooks/queries/useMockBaro
 import BaropotTableHeader from "@/app/features/baropot/components/table/BaropotTableHeader";
 import BaropotTableStats from "@/app/features/baropot/components/table/BaropotTableStats";
 import BaropotTableFilters from "@/app/features/baropot/components/table/BaropotTableFilters";
-// import BaropotTableHeader from "@/app/features/baropot/components/table/BaropotTableHeader";
-// import BaropotTableFilters from "@/app/features/baropot/components/table/BaropotTableFilters";
-// import BaropotTableGrid from "@/app/features/baropot/components/table/BaropotTableGrid";
-// import BaropotTableStats from "@/app/features/baropot/components/table/BaropotTableStats";
+import BaropotTableGrid from "@/app/features/baropot/components/table/BaropotTableGrid";
 
 type FilterType = "all" | "recruiting" | "full" | "closed";
 type SortType = "latest" | "deadline" | "popular" | "distance";
@@ -26,7 +23,6 @@ export default function BaropotTablePage() {
     refetch,
   } = useBaropotList("available");
 
-  // 추가 목업 데이터 (전체 바로팟 시뮬레이션)
   const allBaropots = [
     ...baropotList,
     {
@@ -70,7 +66,6 @@ export default function BaropotTablePage() {
     },
   ];
 
-  // 필터링 및 정렬 로직
   const filteredAndSortedBaropots = allBaropots
     .filter((baropot) => {
       // 상태 필터
@@ -161,11 +156,11 @@ export default function BaropotTablePage() {
       />
 
       {/* 바로팟 그리드 */}
-      {/* <BaropotTableGrid
+      <BaropotTableGrid
         baropotList={filteredAndSortedBaropots}
         onJoin={handleJoinBaropot}
         onDetail={(id: number) => router.push(`/baropot/${id}`)}
-      /> */}
+      />
     </div>
   );
 }
