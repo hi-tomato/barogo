@@ -6,6 +6,8 @@ import { motion } from "framer-motion";
 import { containerVariants, itemVariants } from "@/app/shared/lib/animation";
 import { useSignUp } from "@/app/shared/hooks/queries/useAuth";
 import { SignupRequest } from "@/app/shared/types/auth";
+import { useState } from "react";
+import SignUpSuccessModal from "../_components/SignUpSuccessModal";
 
 interface SignupFormData extends SignupRequest {
   confirmPassword: string;
@@ -14,7 +16,8 @@ interface SignupFormData extends SignupRequest {
 
 export default function RegisterForm() {
   const router = useRouter();
-  const signupMutation = useSignUp();
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const { mutate: signUp, isPending: isLoading } = useSignUp();
 
   const {
     register,
@@ -26,20 +29,18 @@ export default function RegisterForm() {
   const password = watch("password");
 
   const onSubmit = async (data: SignupFormData) => {
-    try {
-      const signupData: SignupRequest = {
-        name: data.name,
-        email: data.email,
-        password: data.password,
-      };
+    const signupData: SignupRequest = {
+      name: data.name,
+      email: data.email,
+      password: data.password,
+    };
 
-      await signupMutation.mutateAsync(signupData);
-    } catch (error) {
-      console.error("회원가입 실패:", error);
-    }
+    signUp(signupData, {
+      onSuccess: () => {
+        setShowSuccessModal(true);
+      },
+    });
   };
-
-  const isLoading = signupMutation.isPending;
 
   return (
     <div className="min-h-screen flex items-center justify-center px-4 py-12 relative">
@@ -200,6 +201,10 @@ export default function RegisterForm() {
           />
         </motion.form>
 
+        <SignUpSuccessModal
+          isOpen={showSuccessModal}
+          userName={watch("name")}
+        />
         {/* 하단 */}
         <div className="text-sm text-[#8A8A8A] text-center mt-6 font-suit leading-relaxed">
           이미 계정이 있으신가요?
