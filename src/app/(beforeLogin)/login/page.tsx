@@ -23,7 +23,6 @@ export default function LoginForm() {
 
   const onSubmit = (data: LoginFormData) => {
     login(data);
-    console.log("로그인 성공! 데이터:", data);
   };
 
   return (
