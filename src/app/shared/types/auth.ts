@@ -13,3 +13,15 @@ export interface SignupRequest {
   email: string;
   password: string;
 }
+
+// 회원가입 API 응답
+export interface SignupResponse {
+  id: number;
+  name: string;
+  email: string;
+}
+
+export interface SignInRequest {
+  email: string;
+  password: string;
+}

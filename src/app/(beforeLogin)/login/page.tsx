@@ -1,11 +1,11 @@
 "use client";
-
 import { RiKakaoTalkFill } from "react-icons/ri";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import Button from "@/app/shared/ui/Button";
 import { motion } from "framer-motion";
 import { containerVariants, itemVariants } from "@/app/shared/lib/animation";
+import { useSignIn } from "@/app/shared/hooks/queries/useAuth";
 
 interface LoginFormData {
   email: string;
@@ -13,18 +13,17 @@ interface LoginFormData {
 }
 
 export default function LoginForm() {
+  const router = useRouter();
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<LoginFormData>();
+  const { mutate: login, isPending, error } = useSignIn();
 
   const onSubmit = (data: LoginFormData) => {
-    // TODO: Server Api + AfterLogin 이동 후, JWT 토큰 관리 로직
-    console.log("로그인 성공! 데이터:", data);
+    login(data);
   };
-
-  const router = useRouter();
 
   return (
     <div className="min-h-screen flex items-center justify-center px-4 py-12">
@@ -120,7 +119,7 @@ export default function LoginForm() {
           <motion.div variants={itemVariants} className="space-y-3">
             <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
               <Button
-                text="로그인"
+                text={isPending ? "로그인 중..." : "로그인"}
                 type="submit"
                 className="w-full bg-[#1C4E80] text-white font-semibold tracking-tight px-6 py-3 rounded-lg hover:opacity-90 transition-opacity font-suit"
               />
@@ -136,6 +135,16 @@ export default function LoginForm() {
             </motion.div>
           </motion.div>
         </motion.form>
+        {/* 로그인 실패 시 (Error) */}
+        {error && (
+          <motion.div
+            className="text-red-500 text-sm text-center bg-red-50 p-3 rounded-lg"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+          >
+            로그인에 실패했습니다. 다시 시도해주세요.
+          </motion.div>
+        )}
 
         <motion.div
           className="text-sm text-[#8A8A8A] text-center mt-6 font-suit leading-relaxed"
