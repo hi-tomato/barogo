@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, { AxiosResponse } from "axios";
 export interface ApiResponse<T> {
   success: boolean;
   data: T;
@@ -14,6 +14,13 @@ export const apiClient = axios.create({
     "Content-Type": "application/json",
   },
 });
+
+export function post<T = any>(
+  url: string,
+  data: any
+): Promise<AxiosResponse<T>> {
+  return apiClient.post(url, data);
+}
 
 // 요청 시, 토큰을 자동 추가 (인터셉트)
 apiClient.interceptors.request.use(
