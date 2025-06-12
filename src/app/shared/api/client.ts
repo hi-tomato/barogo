@@ -14,3 +14,19 @@ export const apiClient = axios.create({
     "Content-Type": "application/json",
   },
 });
+
+// 요청 시, 토큰을 자동 추가 (인터셉트)
+apiClient.interceptors.request.use(
+  (config) => {
+    if (typeof window !== "undefined") {
+      const token = localStorage.getItem("access_token");
+      if (token) {
+        config.headers.Authorization = `Bearer ${token}`;
+      }
+    }
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
