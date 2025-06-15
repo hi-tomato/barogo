@@ -1,9 +1,17 @@
 "use client";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { useLogout } from "@/app/shared/hooks/queries/useAuth";
+import { useAuthStore } from "@/app/shared/store/useAuthStore";
+import LogoutConfirm from "@/app/features/mypage/components/LogoutConfirm";
+import Button from "@/app/shared/ui/Button";
 
 export default function MyPage() {
   const router = useRouter();
+  const { user } = useAuthStore();
+  const logout = useLogout();
+  const [showLogoutModal, setShowLogoutModal] = useState(false);
+
   const [userStats] = useState({
     reviews: 12,
     baropots: 12,
@@ -75,17 +83,21 @@ export default function MyPage() {
         {/* 프로필 섹션 */}
         <div className="bg-white rounded-xl p-6 shadow-sm">
           <div className="flex items-center space-x-4">
-            {/* 프로필 이미지 */}
+            {/* 프로필 이미지 - 실제 사용자 이름 사용 */}
             <div className="w-16 h-16 bg-[#1C4E80] rounded-full flex items-center justify-center">
-              <span className="text-white text-2xl font-bold">태</span>
+              <span className="text-white text-2xl font-bold">
+                {user?.name?.charAt(0) || "U"}
+              </span>
             </div>
 
-            {/* 사용자 정보 */}
+            {/* 사용자 정보 - 실제 데이터 사용 */}
             <div className="flex-1">
               <h2 className="text-xl font-semibold text-[#2B2B2B] mb-1">
-                대짭토
+                {user?.name || "사용자"}
               </h2>
-              <p className="text-[#8A8A8A] text-sm">맛집 탐험가</p>
+              <p className="text-[#8A8A8A] text-sm">
+                {user?.email || "맛집 탐험가"}
+              </p>
             </div>
           </div>
 
@@ -126,7 +138,7 @@ export default function MyPage() {
           ))}
         </div>
 
-        {/* 추가 정보 섹션 : 하드코딩 해두어씀 */}
+        {/* 추가 정보 섹션 */}
         <div className="bg-white rounded-xl p-4 shadow-sm">
           <h3 className="font-semibold text-[#2B2B2B] mb-3">최근 활동</h3>
           <div className="space-y-3">
@@ -166,11 +178,22 @@ export default function MyPage() {
           </div>
         </div>
 
-        {/* 로그아웃 버튼 */}
-        <button className="w-full bg-white text-red-500 font-medium py-4 rounded-xl shadow-sm hover:bg-red-50 transition-colors">
-          로그아웃
-        </button>
+        {/* 개선된 로그아웃 버튼 */}
+        <Button
+          text={logout.isPending ? "로그아웃 중..." : "로그아웃"}
+          onClick={() => setShowLogoutModal(true)}
+          disabled={logout.isPending}
+          className="w-full bg-white text-red-500 font-medium py-4 rounded-xl shadow-sm hover:bg-red-50 transition-colors disabled:opacity-50"
+        />
       </div>
+
+      {showLogoutModal && (
+        <LogoutConfirm
+          isOpen={showLogoutModal}
+          onClose={() => setShowLogoutModal(false)}
+          logout={logout}
+        />
+      )}
     </div>
   );
 }

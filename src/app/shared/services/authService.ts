@@ -1,11 +1,25 @@
-import { apiClient } from "@/app/shared/api/client";
-import { SignupRequest } from "@/app/shared/types/auth";
+import { get, post } from "@/app/shared/api/client";
+import {
+  SignInRequest,
+  SignInResponse,
+  SignupRequest,
+  SignupResponse,
+  User,
+} from "@/app/shared/types/auth";
 
 export const authService = {
   signUp: async (params: SignupRequest) => {
-    const response = await apiClient.post("/auth/signup", params);
-    const data = response.data;
-    console.log(`회원가입 응답체크: ${data}`);
+    const { data } = await post<SignupResponse>("/auth/signup", params);
+    return data;
+  },
+
+  signIn: async (params: SignInRequest) => {
+    const { data } = await post<SignInResponse>("/auth/signin", params);
+    return data;
+  },
+
+  getUser: async (): Promise<User> => {
+    const { data } = await get<User>("/user/me");
     return data;
   },
 };
