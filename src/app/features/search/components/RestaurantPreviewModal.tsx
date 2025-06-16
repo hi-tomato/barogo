@@ -6,7 +6,6 @@ import {
   useCreateRestaurant,
   useRestaurantDetail,
 } from "@/app/shared/hooks/queries/useRestaurant";
-import { mapCategory } from "@/app/shared/lib/kakaoCategory";
 
 interface RestaurantPreviewModalProps {
   restaurant: NearbyRestaurant;
@@ -23,7 +22,6 @@ export default function RestaurantPreviewModal({
 }: RestaurantPreviewModalProps) {
   const router = useRouter();
   const createRestaurant = useCreateRestaurant();
-
   const {
     data: restaurantDetail,
     isLoading,
@@ -36,9 +34,6 @@ export default function RestaurantPreviewModal({
   // 상세보기 버튼 클릭
   const handleDetailView = () => {
     onClose();
-    setTimeout(() => {
-      router.push(`/search/${restaurant.id}/detail`);
-    }, 100);
   };
 
   // 맛집 등록 버튼 클릭
@@ -47,29 +42,17 @@ export default function RestaurantPreviewModal({
       alert("위치 정보가 없어서 맛집을 등록할 수 없습니다.");
       return;
     }
-
-    const newRestaurantData = {
-      name: restaurant.place_name,
-      category: mapCategory(restaurant.category_name),
-      address: restaurant.address_name,
-      lat: parseFloat(restaurant.y),
-      lng: parseFloat(restaurant.x),
-      phoneNumber: restaurant.phone || "",
-      description: `${restaurant.place_name}은 ${restaurant.address_name}에 위치한 맛집입니다.`,
-      openingTime: "11:00",
-      closingTime: "22:00",
-      lastOrderTime: "21:00",
-      tags: [mapCategory(restaurant.category_name)],
-      photos: [],
-    };
-
-    try {
-      await createRestaurant.mutateAsync(newRestaurantData);
-      alert("맛집이 성공적으로 등록되었습니다!");
-      console.log("맛집 등록 성공!");
-    } catch (error) {
-      console.error("맛집 등록 실패:", error);
-    }
+    sessionStorage.setItem(
+      "selectedRestaurant",
+      JSON.stringify({
+        id: restaurant.id,
+        name: restaurant.place_name,
+        location: restaurant.address_name,
+        category: restaurant.category_name,
+        phone: restaurant.phone || "",
+      })
+    );
+    router.push(`/restaurant/${restaurant.id}`);
   };
 
   // 바로팟 만들기 버튼 클릭

@@ -1,0 +1,177 @@
+"use client";
+import Button from "@/app/shared/ui/Button";
+import React, { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { useCreateRestaurant } from "@/app/shared/hooks/queries/useRestaurant";
+import { FormData, RestaurantData } from "../types";
+import {
+  ReviewHeader,
+  ReviewMessage,
+  ReviewBasicInfo,
+  ReviewImageFile,
+  ReviewTags,
+  ReviewStatus,
+} from "./index";
+import ReviewdeScription from "./ReviewdeScription";
+
+export default function ReviewContainer() {
+  const router = useRouter();
+  const createRestaurant = useCreateRestaurant();
+  const [restaurant, setRestaurant] = useState<RestaurantData | null>(null);
+  console.log(restaurant);
+  const [isLoading, setIsLoading] = useState(true);
+  const [formData, setFormData] = useState<FormData>({
+    description: "",
+    images: [],
+    tags: "",
+    openingTime: "09:00",
+    closingTime: "21:00",
+    lastOrderTime: "20:30",
+  });
+
+  useEffect(() => {
+    try {
+      const data = sessionStorage.getItem("selectedRestaurant");
+      if (data) {
+        const restaurantData = JSON.parse(data);
+        setRestaurant(restaurantData);
+      } else {
+        // 데이터가 없으면 이전 페이지로
+        router.back();
+      }
+    } catch (error) {
+      console.error("맛집 데이터 로드 실패:", error);
+      router.back();
+    } finally {
+      setIsLoading(false);
+    }
+  }, [router]);
+
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(e.target.files || []);
+    setFormData((prev) => ({
+      ...prev,
+      images: [...prev.images, ...files].slice(0, 5), // 최대 5장
+    }));
+  };
+
+  const removeImage = (index: number) => {
+    setFormData((prev) => ({
+      ...prev,
+      images: prev.images.filter((_, i) => i !== index),
+    }));
+  };
+
+  const addTag = (tag: string) => {
+    const currentTags = formData.tags.split(" ").filter((t) => t.length > 0);
+    if (!currentTags.includes(tag)) {
+      setFormData((prev) => ({
+        ...prev,
+        tags: [...currentTags, tag].join(" "),
+      }));
+    }
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!formData.description.trim()) {
+      alert("맛집 설명을 입력해주세요!");
+      return;
+    }
+    if (!restaurant?.lat || !restaurant?.lng) {
+      alert("위치 정보가 없어서 등록할 수 없습니다!");
+      return;
+    }
+    // TODO: 이미지 업로드는 별도 API 호출이 필요함.
+    const photos: string[] = [];
+    const createRestaurantData = {
+      name: restaurant.name,
+      category: restaurant.category,
+      address: restaurant.location,
+      lat: parseFloat(restaurant.lat),
+      lng: parseFloat(restaurant.lng),
+      description: formData.description,
+      phoneNumber: restaurant.phone || "",
+      openingTime: formData.openingTime,
+      closingTime: formData.closingTime,
+      lastOrderTime: formData.lastOrderTime,
+      tags: formData.tags.split(" ").filter((tag) => tag.trim().length > 0),
+      photos: photos,
+    };
+    console.log("서버로 전송할 데이터:", createRestaurantData);
+
+    await createRestaurant.mutateAsync(createRestaurantData);
+    sessionStorage.removeItem("selectedRestaurant");
+    router.push("/main");
+  };
+
+  if (isLoading) return <ReviewStatus type="isLoading" />;
+  if (!restaurant) return <ReviewStatus type="notFound" />;
+  return (
+    <div className="min-h-screen bg-[#E6EEF5]">
+      {/* 헤더 */}
+      <ReviewHeader />
+      <form onSubmit={handleSubmit} className="px-4 py-6 space-y-6 pb-24">
+        {/* 맛집 정보 표시 */}
+        <ReviewBasicInfo restaurant={restaurant} />
+        {/* 맛집에 대한 설명 */}
+        <ReviewdeScription
+          formData={formData}
+          handleInputChange={handleInputChange}
+        />
+        {/* 사진 미리보기 & 등록 */}
+        <ReviewImageFile
+          formData={formData}
+          handleFileChange={handleFileChange}
+          removeImage={removeImage}
+        />
+        {/* 태그 입력 & 태그 추천 */}
+        <ReviewTags
+          formData={formData}
+          handleInputChange={handleInputChange}
+          addTag={addTag}
+        />
+        {/* 제출 버튼 */}
+        <div className="space-y-3">
+          <button
+            type="submit"
+            disabled={
+              createRestaurant.isPending || !formData.description.trim()
+            }
+            className="w-full bg-gradient-to-r from-[#1C4E80] to-[#2563eb] text-white font-semibold py-4 rounded-xl hover:shadow-lg transition-all duration-200 flex items-center justify-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            {createRestaurant.isPending ? (
+              <>
+                <div className="animate-spin w-5 h-5 border-2 border-white border-t-transparent rounded-full" />
+                <span>등록 중...</span>
+              </>
+            ) : (
+              <>
+                <span>맛집 등록하기</span>
+              </>
+            )}
+          </button>
+
+          <Button
+            text="취소"
+            onClick={() => router.back()}
+            disabled={createRestaurant.isPending}
+            className="w-full border border-gray-300 text-gray-700 font-medium py-4 rounded-xl hover:bg-gray-50 transition-colors disabled:opacity-50"
+          />
+        </div>
+        {/* 안내 메시지 */}
+        <ReviewMessage />
+      </form>
+    </div>
+  );
+}

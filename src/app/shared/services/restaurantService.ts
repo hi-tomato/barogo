@@ -4,18 +4,17 @@ import {
   RestaurantList,
 } from "../types/restaurant";
 import { get, post } from "../api/client";
-const BASE_URL = "http://localhost:8000";
 
 export const restaurantService = {
   // TODO: 맛집 조회
   getList: async () => {
-    const { data } = await get<RestaurantList>(`${BASE_URL}/restaurants`);
+    const { data } = await get<RestaurantList>(`/restaurants`);
     return data;
   },
   // TODO: 맛집 등록
   create: async (restaurantData: CreateRestaurantRequest) => {
     const { data } = await post<CreateRestaurantRequest>(
-      `${BASE_URL}/restaurants`,
+      `/restaurants`,
       restaurantData
     );
     return data;
@@ -27,4 +26,9 @@ export const restaurantService = {
     );
     return data;
   },
+  //TODO: 상세페이지 (수정)
+  updateRestaurant: () => {},
+
+  // TODO: 상세페이지 (삭제)
+  deleteRestaurant: () => {},
 };

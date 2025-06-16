@@ -7,8 +7,6 @@ interface RestaurantInfoProps {
 }
 
 export default function RestaurantInfo({ restaurant }: RestaurantInfoProps) {
-  // 평균 평점 계산
-
   return (
     <motion.div
       className="bg-white"
