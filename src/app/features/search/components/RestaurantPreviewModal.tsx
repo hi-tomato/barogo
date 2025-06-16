@@ -1,9 +1,12 @@
 "use client";
-import { useRestaurantDetail } from "@/app/hooks/queries/useRestaurantDetail";
 import { NearbyRestaurant } from "@/app/shared/types";
 import { useRouter } from "next/navigation";
-import { getActionButton, getActionButtonIcon } from "../util/getActions";
 import Button from "@/app/shared/ui/Button";
+import {
+  useCreateRestaurant,
+  useRestaurantDetail,
+} from "@/app/shared/hooks/queries/useRestaurant";
+import { mapCategory } from "@/app/shared/lib/kakaoCategory";
 
 interface RestaurantPreviewModalProps {
   restaurant: NearbyRestaurant;
@@ -19,26 +22,60 @@ export default function RestaurantPreviewModal({
   onConfirm,
 }: RestaurantPreviewModalProps) {
   const router = useRouter();
+  const createRestaurant = useCreateRestaurant();
+
   const {
     data: restaurantDetail,
     isLoading,
     isError,
-  } = useRestaurantDetail(restaurant.id, isOpen);
-  const modalState = { isLoading, isError, restaurantDetail };
+  } = useRestaurantDetail(restaurant.id);
 
-  const handleActions = () => {
-    // TODO: 서버에 등록된 데이터가 있을 때,
-    if (restaurantDetail && !isError) {
-      console.log(`서버에 데이터가 있습니다! 디테일 페이지로 이동함둥`);
-      onClose();
+  // 서버에 데이터가 있는지 확인
+  const hasServerData = restaurantDetail && !isError;
+
+  // 상세보기 버튼 클릭
+  const handleDetailView = () => {
+    onClose();
+    setTimeout(() => {
       router.push(`/search/${restaurant.id}/detail`);
-    } else {
-      // TODO: 서버에 등록된 데이터가 없을 때.
-      console.log(
-        `서버에 등록된 데이터가 없습니다. 바로팟 만들기 페이지로 이동합니다.`
-      );
-      onConfirm(restaurant);
+    }, 100);
+  };
+
+  // 맛집 등록 버튼 클릭
+  const handleRegisterRestaurant = async () => {
+    if (!restaurant.x || !restaurant.y) {
+      alert("위치 정보가 없어서 맛집을 등록할 수 없습니다.");
+      return;
     }
+
+    const newRestaurantData = {
+      name: restaurant.place_name,
+      category: mapCategory(restaurant.category_name),
+      address: restaurant.address_name,
+      lat: parseFloat(restaurant.y),
+      lng: parseFloat(restaurant.x),
+      phoneNumber: restaurant.phone || "",
+      description: `${restaurant.place_name}은 ${restaurant.address_name}에 위치한 맛집입니다.`,
+      openingTime: "11:00",
+      closingTime: "22:00",
+      lastOrderTime: "21:00",
+      tags: [mapCategory(restaurant.category_name)],
+      photos: [],
+    };
+
+    try {
+      await createRestaurant.mutateAsync(newRestaurantData);
+      alert("맛집이 성공적으로 등록되었습니다!");
+      console.log("맛집 등록 성공!");
+    } catch (error) {
+      console.error("맛집 등록 실패:", error);
+    }
+  };
+
+  // 바로팟 만들기 버튼 클릭
+  const handleCreateBaropot = () => {
+    console.log("바로팟 만들기로 이동");
+    onConfirm(restaurant);
   };
 
   if (!isOpen) return null;
@@ -75,21 +112,52 @@ export default function RestaurantPreviewModal({
           )}
         </div>
 
-        {/* Action Buttons (서버에 데이터가 있는지 없는지 확인하는 btns) */}
-        <div className="flex space-x-3">
+        {/* Action Buttons */}
+        <div className="space-y-3">
+          {/* 상단: 상세보기 버튼 (서버에 데이터가 있을 때만) */}
+          {hasServerData && (
+            <button
+              onClick={handleDetailView}
+              disabled={isLoading}
+              className="w-full px-4 py-3 bg-[#1C4E80] text-white rounded-lg hover:bg-[#154066] transition-colors disabled:opacity-50 flex items-center justify-center space-x-2"
+            >
+              <span>🔍</span>
+              <span>맛집 상세보기</span>
+            </button>
+          )}
+
+          {/* 하단: 맛집 등록 + 바로팟 만들기 버튼들 */}
+          <div className="flex space-x-3">
+            {/* 맛집 등록 버튼 (서버에 데이터가 없을 때만) */}
+            {!hasServerData && !isLoading && (
+              <button
+                onClick={handleRegisterRestaurant}
+                disabled={createRestaurant.isPending}
+                className="flex-1 px-4 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors disabled:opacity-50 flex items-center justify-center space-x-2"
+              >
+                <span>📝</span>
+                <span>
+                  {createRestaurant.isPending ? "등록 중..." : "맛집 등록"}
+                </span>
+              </button>
+            )}
+
+            {/* 바로팟 만들기 버튼 */}
+            <button
+              onClick={handleCreateBaropot}
+              className="flex-1 px-4 py-3 bg-gradient-to-r from-orange-400 to-red-500 text-white rounded-lg hover:shadow-md transition-all flex items-center justify-center space-x-2"
+            >
+              <span>⚡</span>
+              <span>바로팟 만들기</span>
+            </button>
+          </div>
+
+          {/* 다시 선택 버튼 */}
           <Button
             text="다시 선택"
             onClick={onClose}
-            className="flex-1 px-4 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
+            className="w-full px-4 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
           />
-          <button
-            onClick={handleActions}
-            disabled={isLoading}
-            className="flex-1 px-4 py-3 bg-[#1C4E80] text-white rounded-lg hover:bg-[#154066] transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center space-x-2"
-          >
-            <span>{getActionButton(modalState)}</span>
-            <span>{getActionButtonIcon(modalState)}</span>
-          </button>
         </div>
       </div>
     </div>

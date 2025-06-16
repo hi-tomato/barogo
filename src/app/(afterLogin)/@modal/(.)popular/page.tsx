@@ -2,11 +2,10 @@
 import FavoriteRestaurantCard from "@/app/features/popular/modal/FavoriteRestaurantCard";
 import PopularModalHeader from "@/app/features/popular/modal/PopularModalHeader";
 import PopularStatus from "@/app/features/popular/modal/PopularStatus";
-import { useFavoriteRestaurants } from "@/app/hooks/queries/useMockRestaurant";
-import { FavoriteRestaurant } from "@/app/shared/types";
+import { useRestaurantList } from "@/app/shared/hooks/queries/useRestaurant";
 
 export default function FavoriteRestaurantsModal() {
-  const { data: favorites, isLoading, isError } = useFavoriteRestaurants();
+  const { data: favorites, isLoading, isError } = useRestaurantList();
 
   if (isLoading) return <PopularStatus type="loading" />;
   if (isError) return <PopularStatus type="error" />;
@@ -20,7 +19,7 @@ export default function FavoriteRestaurantsModal() {
         {/* 리스트 */}
         <div className="overflow-y-auto max-h-[60vh]">
           <div className="divide-y divide-gray-100">
-            {favorites?.map((restaurant: FavoriteRestaurant, index: number) => (
+            {favorites?.map((restaurant, index: number) => (
               <FavoriteRestaurantCard
                 restaurant={restaurant}
                 key={restaurant.id}

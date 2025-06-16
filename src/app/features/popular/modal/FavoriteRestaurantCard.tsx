@@ -1,7 +1,10 @@
-import { FavoriteRestaurant } from "@/app/types";
+"use client";
+import { Restaurant } from "@/app/shared/types/restaurant";
+import Button from "@/app/shared/ui/Button";
+import { useRouter } from "next/navigation";
 
 interface FavoriteRestaurantCardProps {
-  restaurant: FavoriteRestaurant;
+  restaurant: Restaurant;
   index: number;
 }
 
@@ -9,6 +12,11 @@ export default function FavoriteRestaurantCard({
   restaurant,
   index,
 }: FavoriteRestaurantCardProps) {
+  const router = useRouter();
+  const handleDetailView = () => {
+    console.log("상세 페이지로 이동:", restaurant.id);
+    router.push(`/search/${restaurant.id}/detail`);
+  };
   return (
     <div
       key={restaurant.id}
@@ -34,13 +42,12 @@ export default function FavoriteRestaurantCard({
           <div className="flex items-center">
             <span className="text-red-500 text-sm">👍</span>
             <span className="text-red-500 text-sm font-medium ml-1">
-              별점 좋아요 {restaurant.reviews}개
+              댓글 {restaurant.reviewCount}개
             </span>
           </div>
         </div>
         <div className="flex items-center mt-1">
-          <span className="text-yellow-500 text-sm">⭐</span>
-          <span className="text-sm font-medium ml-1">{restaurant.rating}</span>
+          <Button text="🔍 상세보기" onClick={handleDetailView} />
         </div>
       </div>
     </div>

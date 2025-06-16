@@ -1,6 +1,6 @@
 "use client";
-import { useFavoriteRestaurants } from "@/app/hooks/queries/useMockRestaurant";
 import { RestaurantData } from "@/app/features/nearby/types/restaurant";
+import { useRestaurantList } from "@/app/shared/hooks/queries/useRestaurant";
 import { FavoriteRestaurant } from "@/app/shared/types";
 
 interface FavoriteRestaurantModalProps {
@@ -12,7 +12,7 @@ export default function FavoriteRestaurantModal({
   onClose,
   onSelect,
 }: FavoriteRestaurantModalProps) {
-  const { data: favorites, isLoading, isError } = useFavoriteRestaurants();
+  const { data: favorites, isLoading, isError } = useRestaurantList();
 
   const handleSelect = (restaurant: FavoriteRestaurant) => {
     const restaurantData: RestaurantData = {
