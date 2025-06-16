@@ -1,9 +1,9 @@
 import { RestaurantData } from "../types";
 
-interface ReviewBasicInfoProps {
+interface CreateBasicInfoProps {
   restaurant: RestaurantData;
 }
-export default function ReviewBasicInfo({ restaurant }: ReviewBasicInfoProps) {
+export default function CreateBasicInfo({ restaurant }: CreateBasicInfoProps) {
   return (
     <div className="bg-white rounded-xl p-6 shadow-sm">
       <h3 className="font-semibold text-[#2B2B2B] mb-4 border-b border-gray-100 pb-2">

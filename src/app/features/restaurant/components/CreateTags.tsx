@@ -1,6 +1,6 @@
 import { FormData } from "../types";
 
-interface ReviewTagsProps {
+interface CreateTagsProps {
   formData: FormData;
   handleInputChange: (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -21,11 +21,11 @@ const RECOMMENDED_TAGS = [
   "#주차가능",
 ];
 
-export default function ReviewTags({
+export default function CreateTags({
   formData,
   handleInputChange,
   addTag,
-}: ReviewTagsProps) {
+}: CreateTagsProps) {
   // 현재 입력된 태그들을 배열로 변환
   const currentTags = formData.tags
     .split(" ")

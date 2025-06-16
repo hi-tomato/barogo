@@ -2,7 +2,7 @@
 import Button from "@/app/shared/ui/Button";
 import { useRouter } from "next/navigation";
 
-export default function ReviewHeader() {
+export default function CreateHeader() {
   const router = useRouter();
   return (
     <div className="bg-white sticky top-0 z-40 border-b border-gray-200">

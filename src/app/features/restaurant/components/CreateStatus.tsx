@@ -1,11 +1,11 @@
 import Button from "@/app/shared/ui/Button";
 import { useRouter } from "next/navigation";
 
-interface ReviewStatusProps {
+interface CreateStatusProps {
   type: "isLoading" | "notFound";
 }
 
-export default function ReviewStatus({ type }: ReviewStatusProps) {
+export default function CreateStatus({ type }: CreateStatusProps) {
   const router = useRouter();
   const renderMessage = () => {
     switch (type) {

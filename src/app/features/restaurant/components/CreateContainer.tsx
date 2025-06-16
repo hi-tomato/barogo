@@ -5,16 +5,16 @@ import { useRouter } from "next/navigation";
 import { useCreateRestaurant } from "@/app/shared/hooks/queries/useRestaurant";
 import { FormData, RestaurantData } from "../types";
 import {
-  ReviewHeader,
-  ReviewMessage,
-  ReviewBasicInfo,
-  ReviewImageFile,
-  ReviewTags,
-  ReviewStatus,
+  CreateStatus,
+  CreateHeader,
+  CreateBasicInfo,
+  CreateImageFile,
+  CreateTags,
+  CreateMessage,
 } from "./index";
-import ReviewdeScription from "./ReviewdeScription";
+import CreatedeScription from "./CreatedeScription";
 
-export default function ReviewContainer() {
+export default function CreateContainer() {
   const router = useRouter();
   const createRestaurant = useCreateRestaurant();
   const [restaurant, setRestaurant] = useState<RestaurantData | null>(null);
@@ -115,28 +115,28 @@ export default function ReviewContainer() {
     router.push("/main");
   };
 
-  if (isLoading) return <ReviewStatus type="isLoading" />;
-  if (!restaurant) return <ReviewStatus type="notFound" />;
+  if (isLoading) return <CreateStatus type="isLoading" />;
+  if (!restaurant) return <CreateStatus type="notFound" />;
   return (
     <div className="min-h-screen bg-[#E6EEF5]">
       {/* 헤더 */}
-      <ReviewHeader />
+      <CreateHeader />
       <form onSubmit={handleSubmit} className="px-4 py-6 space-y-6 pb-24">
         {/* 맛집 정보 표시 */}
-        <ReviewBasicInfo restaurant={restaurant} />
+        <CreateBasicInfo restaurant={restaurant} />
         {/* 맛집에 대한 설명 */}
-        <ReviewdeScription
+        <CreatedeScription
           formData={formData}
           handleInputChange={handleInputChange}
         />
         {/* 사진 미리보기 & 등록 */}
-        <ReviewImageFile
+        <CreateImageFile
           formData={formData}
           handleFileChange={handleFileChange}
           removeImage={removeImage}
         />
         {/* 태그 입력 & 태그 추천 */}
-        <ReviewTags
+        <CreateTags
           formData={formData}
           handleInputChange={handleInputChange}
           addTag={addTag}
@@ -170,7 +170,7 @@ export default function ReviewContainer() {
           />
         </div>
         {/* 안내 메시지 */}
-        <ReviewMessage />
+        <CreateMessage />
       </form>
     </div>
   );

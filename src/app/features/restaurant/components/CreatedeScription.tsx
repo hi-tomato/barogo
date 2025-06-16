@@ -1,16 +1,16 @@
 import { FormData } from "../types";
 
-interface ReviewDescriptionProps {
+interface CreateDescriptionProps {
   formData: FormData;
   handleInputChange: (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => void;
 }
 
-export default function ReviewdeScription({
+export default function CreatedeScription({
   formData,
   handleInputChange,
-}: ReviewDescriptionProps) {
+}: CreateDescriptionProps) {
   return (
     <>
       {/* 맛집 설명 입력 */}

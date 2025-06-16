@@ -1,16 +1,16 @@
 import { FormData } from "../types";
 
-interface ReviewImageFileProps {
+interface CreateImageFileProps {
   formData: FormData;
   handleFileChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   removeImage: (index: number) => void;
 }
 
-export default function ReviewImageFile({
+export default function CreateImageFile({
   formData,
   handleFileChange,
   removeImage,
-}: ReviewImageFileProps) {
+}: CreateImageFileProps) {
   return (
     <div className="bg-white rounded-xl p-6 shadow-sm">
       <label className="block text-sm font-medium text-[#2B2B2B] mb-3">

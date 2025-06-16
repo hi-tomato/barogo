@@ -1,4 +1,4 @@
-export default function ReviewMessage() {
+export default function CreateMessage() {
   return (
     <div className="bg-blue-50 border border-blue-200 rounded-xl p-4">
       <div className="flex items-start space-x-2">

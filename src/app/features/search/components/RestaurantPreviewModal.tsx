@@ -52,7 +52,7 @@ export default function RestaurantPreviewModal({
         phone: restaurant.phone || "",
       })
     );
-    router.push(`/restaurant/${restaurant.id}`);
+    router.push(`/restaurants/create`);
   };
 
   // 바로팟 만들기 버튼 클릭
