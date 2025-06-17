@@ -59,3 +59,11 @@ export function patch<T = any>(
 ): Promise<AxiosResponse<T>> {
   return apiClient.patch<T>(url, data, config);
 }
+
+export function put<T = any>(
+  url: string,
+  data?: any,
+  config?: any
+): Promise<AxiosResponse<T>> {
+  return apiClient.put<T>(url, data, config);
+}

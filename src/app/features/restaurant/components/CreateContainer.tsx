@@ -15,7 +15,6 @@ import {
 import CreatedeScription from "./CreatedeScription";
 import { CreateRestaurantRequest } from "@/app/shared/types/restaurant";
 import { mapKaKaoCategoryToServer } from "@/app/shared/lib/kakaoCategory";
-// import { mapCategory } from "@/app/shared/lib/kakaoCategory";
 
 export default function CreateContainer() {
   const router = useRouter();
@@ -30,6 +29,7 @@ export default function CreateContainer() {
     closingTime: "21:00",
     lastOrderTime: "20:30",
   });
+  const [uploadUrls, setUploadUrls] = useState<string[]>([]);
 
   useEffect(() => {
     try {
@@ -104,7 +104,7 @@ export default function CreateContainer() {
       return phone.replace(/[-\s]/g, ""); // 하이픈과 공백 제거
     };
 
-    const photos: string[] = [];
+    const photos: string[] = uploadUrls;
     const createRestaurantData: CreateRestaurantRequest = {
       name: restaurant.name,
       category: mapKaKaoCategoryToServer(restaurant.category),
@@ -126,6 +126,10 @@ export default function CreateContainer() {
     router.push("/main");
   };
 
+  const handleImageUpload = (url: string) => {
+    setUploadUrls((prev) => [...prev, url]);
+  };
+
   if (isLoading) return <CreateStatus type="isLoading" />;
   if (!restaurant) return <CreateStatus type="notFound" />;
   return (
@@ -145,6 +149,7 @@ export default function CreateContainer() {
           formData={formData}
           handleFileChange={handleFileChange}
           removeImage={removeImage}
+          onImageUpload={handleImageUpload}
         />
         {/* 태그 입력 & 태그 추천 */}
         <CreateTags
