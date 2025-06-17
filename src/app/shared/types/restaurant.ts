@@ -32,6 +32,21 @@ export interface CreateRestaurantRequest {
   photos: string[];
 }
 
+export interface UpdateRestaurantRequest {
+  name?: string;
+  category?: string;
+  address?: string;
+  lat?: number;
+  lng?: number;
+  description?: string;
+  phoneNumber?: string;
+  openingTime?: string;
+  closingTime?: string;
+  lastOrderTime?: string;
+  tags?: string[];
+  photos?: string[];
+}
+
 export interface Review {
   id: number;
   userId: number;

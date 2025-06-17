@@ -1,22 +1,14 @@
 import { useState } from "react";
-import { FormData } from "../types";
+import { FormData, UploadedImage } from "../types";
 import { useImageUpload } from "@/app/shared/hooks/queries/useImageUpload";
 import Image from "next/image";
+import CreatedStatus from "./CreatedStatus";
 
 interface CreateImageFileProps {
   formData: FormData;
   handleFileChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   removeImage: (index: number) => void;
-  onImageUpload?: (url: string, index: number) => void; // index 추가
-}
-
-interface UploadedImage {
-  file: File;
-  url?: string;
-  uploading: boolean;
-  error?: string;
-  uploadId: string;
-  index: number; // 파일의 인덱스 추가
+  onImageUpload?: (url: string, index: number) => void;
 }
 
 export default function CreateImageFile({
@@ -28,27 +20,67 @@ export default function CreateImageFile({
   const [uploadedImages, setUploadedImages] = useState<UploadedImage[]>([]);
 
   const { uploadImage, isUploading } = useImageUpload({
+    onSuccess: (data) => {
+      console.log("✅ 업로드 성공:", data);
+      // 현재 업로드 중인 이미지를 찾아서 성공 상태로 업데이트
+      setUploadedImages((prev) => {
+        const uploadingIndex = prev.findIndex(
+          (img) => img.uploading && !img.url && !img.error
+        );
+        if (uploadingIndex !== -1) {
+          const newImages = [...prev];
+          newImages[uploadingIndex] = {
+            ...newImages[uploadingIndex],
+            url: data.url,
+            uploading: false,
+          };
+
+          // 부모 컴포넌트에 업로드된 URL 전달 (비동기로)
+          setTimeout(() => {
+            onImageUpload?.(data.url, uploadingIndex);
+          }, 0);
+
+          return newImages;
+        }
+        return prev;
+      });
+    },
+    onError: (error) => {
+      console.error("❌ 업로드 실패:", error);
+      // 현재 업로드 중인 이미지를 찾아서 에러 상태로 업데이트
+      setUploadedImages((prev) => {
+        const uploadingIndex = prev.findIndex(
+          (img) => img.uploading && !img.url && !img.error
+        );
+        if (uploadingIndex !== -1) {
+          const newImages = [...prev];
+          newImages[uploadingIndex] = {
+            ...newImages[uploadingIndex],
+            error: error.message,
+            uploading: false,
+          };
+          return newImages;
+        }
+        return prev;
+      });
+    },
     maxSize: 10, // 10MB
     allowedTypes: ["image/jpeg", "image/png", "image/webp"],
   });
 
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files || []);
-
     // 총 이미지 개수 제한 체크
     if (formData.images.length + files.length > 5) {
       alert("최대 5장까지만 업로드할 수 있습니다.");
       return;
     }
-
     // 기존 핸들러 호출 (폼 데이터 업데이트)
     handleFileChange(e);
 
     // 각 파일에 대해 업로드 상태 추가 및 업로드 시작
-    files.forEach((file, fileIndex) => {
+    files.forEach((file) => {
       const uploadId = Date.now() + Math.random().toString();
-      const imageIndex = formData.images.length + fileIndex; // 실제 배열에서의 인덱스
-
       // 업로드 상태 추가
       setUploadedImages((prev) => [
         ...prev,
@@ -56,47 +88,20 @@ export default function CreateImageFile({
           file,
           uploading: true,
           uploadId,
-          index: imageIndex,
         },
       ]);
-
       // 파일 업로드 시작
-      uploadImage(file)
-        .then((data) => {
-          // 업로드 성공 처리
-          setUploadedImages((prev) =>
-            prev.map((img) =>
-              img.uploadId === uploadId
-                ? { ...img, url: data.url, uploading: false }
-                : img
-            )
-          );
-
-          // 부모 컴포넌트에 업로드된 URL 전달
-          onImageUpload?.(data.url, imageIndex);
-        })
-        .catch((error: anhy) => {
-          // 업로드 실패 처리
-          setUploadedImages((prev) =>
-            prev.map((img) =>
-              img.uploadId === uploadId
-                ? { ...img, error: error.message, uploading: false }
-                : img
-            )
-          );
-        });
+      uploadImage(file);
     });
   };
 
   const handleRemoveImage = (index: number) => {
-    // 업로드된 이미지 상태에서도 제거
-    setUploadedImages((prev) => prev.filter((img) => img.index !== index));
-    // 부모 컴포넌트의 removeImage 호출
+    setUploadedImages((prev) => prev.filter((_, i) => i !== index));
     removeImage(index);
   };
 
   const getUploadStatus = (index: number) => {
-    const uploadedImg = uploadedImages.find((img) => img.index === index);
+    const uploadedImg = uploadedImages[index];
     if (!uploadedImg) return null;
 
     if (uploadedImg.uploading) {
@@ -109,41 +114,17 @@ export default function CreateImageFile({
     return null;
   };
 
-  const getUploadedImageData = (index: number) => {
-    return uploadedImages.find((img) => img.index === index);
-  };
-
-  const handleRetryUpload = (file: File, uploadId: string, index: number) => {
+  const handleRetryUpload = (index: number) => {
+    const uploadedImg = uploadedImages[index];
+    if (!uploadedImg) return;
     // 재시도 시 상태 초기화
     setUploadedImages((prev) =>
-      prev.map((img) =>
-        img.uploadId === uploadId
-          ? { ...img, uploading: true, error: undefined }
-          : img
+      prev.map((img, idx) =>
+        idx === index ? { ...img, uploading: true, error: undefined } : img
       )
     );
-
     // 파일 재업로드
-    uploadImage(file)
-      .then((data) => {
-        setUploadedImages((prev) =>
-          prev.map((img) =>
-            img.uploadId === uploadId
-              ? { ...img, url: data.url, uploading: false }
-              : img
-          )
-        );
-        onImageUpload?.(data.url, index);
-      })
-      .catch((error) => {
-        setUploadedImages((prev) =>
-          prev.map((img) =>
-            img.uploadId === uploadId
-              ? { ...img, error: error.message, uploading: false }
-              : img
-          )
-        );
-      });
+    uploadImage(uploadedImg.file);
   };
 
   return (
@@ -165,10 +146,7 @@ export default function CreateImageFile({
             <div className="text-3xl">📸</div>
             <div className="text-sm text-[#8A8A8A]">
               {isUploading ? (
-                <div className="flex items-center justify-center space-x-2">
-                  <div className="w-4 h-4 border-2 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
-                  <span className="text-blue-600">업로드 중...</span>
-                </div>
+                <CreatedStatus type="isUploading" />
               ) : formData.images.length >= 5 ? (
                 <span className="text-gray-500">최대 5장까지 업로드 가능</span>
               ) : (
@@ -219,7 +197,7 @@ export default function CreateImageFile({
           <div className="grid grid-cols-3 gap-3">
             {formData.images.map((file, index) => {
               const status = getUploadStatus(index);
-              const uploadedImg = getUploadedImageData(index);
+              const uploadedImg = uploadedImages[index];
 
               return (
                 <div key={`${index}-${file.name}`} className="relative group">
@@ -236,23 +214,13 @@ export default function CreateImageFile({
 
                     {/* 업로드 상태 오버레이 */}
                     {status === "uploading" && (
-                      <div className="absolute inset-0 flex items-center justify-center bg-black/30 rounded-lg">
-                        <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                      </div>
+                      <CreatedStatus type="uploading" />
                     )}
 
                     {/* 상태 아이콘 */}
                     <div className="absolute top-1 left-1">
-                      {status === "success" && (
-                        <div className="w-5 h-5 bg-green-500 rounded-full flex items-center justify-center">
-                          <span className="text-white text-xs">✓</span>
-                        </div>
-                      )}
-                      {status === "error" && (
-                        <div className="w-5 h-5 bg-red-500 rounded-full flex items-center justify-center">
-                          <span className="text-white text-xs">!</span>
-                        </div>
-                      )}
+                      {status === "success" && <CreatedStatus type="success" />}
+                      {status === "error" && <CreatedStatus type="error" />}
                     </div>
 
                     {/* 삭제 버튼 */}
@@ -281,9 +249,7 @@ export default function CreateImageFile({
                     <div className="absolute -bottom-12 left-0 right-0 text-xs text-red-500 bg-white p-2 rounded shadow-lg border z-10">
                       {uploadedImg.error}
                       <button
-                        onClick={() =>
-                          handleRetryUpload(file, uploadedImg.uploadId, index)
-                        }
+                        onClick={() => handleRetryUpload(index)}
                         className="block mt-1 text-blue-500 hover:underline"
                       >
                         다시 시도
@@ -293,18 +259,6 @@ export default function CreateImageFile({
                 </div>
               );
             })}
-          </div>
-        </div>
-      )}
-
-      {/* 업로드 진행 상황 */}
-      {isUploading && (
-        <div className="mt-4 p-3 bg-blue-50 rounded-lg">
-          <div className="flex items-center space-x-2">
-            <div className="w-4 h-4 border-2 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
-            <span className="text-sm text-blue-700">
-              이미지를 업로드하고 있습니다...
-            </span>
           </div>
         </div>
       )}

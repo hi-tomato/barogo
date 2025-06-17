@@ -2,8 +2,9 @@ import {
   CreateRestaurantRequest,
   RestaurantDetail,
   RestaurantList,
+  UpdateRestaurantRequest,
 } from "../types/restaurant";
-import { get, post } from "../api/client";
+import { del, get, patch, post } from "../api/client";
 
 export const restaurantService = {
   // TODO: 맛집 조회
@@ -26,9 +27,19 @@ export const restaurantService = {
     );
     return data;
   },
-  //TODO: 상세페이지 (수정)
-  updateRestaurant: () => {},
-
-  // TODO: 상세페이지 (삭제)
-  deleteRestaurant: () => {},
+  // TODO:맛집 수정
+  updateRestaurant: async (
+    restaurantId: string,
+    updateData: UpdateRestaurantRequest
+  ): Promise<RestaurantDetail> => {
+    const { data } = await patch<RestaurantDetail>(
+      `/restaurants/${restaurantId}`,
+      updateData
+    );
+    return data;
+  },
+  // TODO:맛집 삭제
+  deleteRestaurant: async (restaurantId: string): Promise<void> => {
+    await del(`/restaurants/${restaurantId}`);
+  },
 };

@@ -18,3 +18,11 @@ export interface FormData {
   closingTime: string;
   lastOrderTime: string;
 }
+
+export interface UploadedImage {
+  file: File;
+  url?: string;
+  uploading: boolean;
+  error?: string;
+  uploadId: string;
+}
