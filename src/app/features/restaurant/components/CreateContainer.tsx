@@ -13,12 +13,14 @@ import {
   CreateMessage,
 } from "./index";
 import CreatedeScription from "./CreatedeScription";
+import { CreateRestaurantRequest } from "@/app/shared/types/restaurant";
+import { mapKaKaoCategoryToServer } from "@/app/shared/lib/kakaoCategory";
+// import { mapCategory } from "@/app/shared/lib/kakaoCategory";
 
 export default function CreateContainer() {
   const router = useRouter();
   const createRestaurant = useCreateRestaurant();
   const [restaurant, setRestaurant] = useState<RestaurantData | null>(null);
-  console.log(restaurant);
   const [isLoading, setIsLoading] = useState(true);
   const [formData, setFormData] = useState<FormData>({
     description: "",
@@ -35,9 +37,14 @@ export default function CreateContainer() {
       if (data) {
         const restaurantData = JSON.parse(data);
         setRestaurant(restaurantData);
-      } else {
-        // 데이터가 없으면 이전 페이지로
-        router.back();
+
+        if (restaurantData.x && restaurantData.y) {
+          setFormData((prev) => ({
+            ...prev,
+            lat: parseFloat(restaurantData.y),
+            lng: parseFloat(restaurantData.x),
+          }));
+        }
       }
     } catch (error) {
       console.error("맛집 데이터 로드 실패:", error);
@@ -88,20 +95,24 @@ export default function CreateContainer() {
       alert("맛집 설명을 입력해주세요!");
       return;
     }
-    if (!restaurant?.lat || !restaurant?.lng) {
-      alert("위치 정보가 없어서 등록할 수 없습니다!");
+    if (!restaurant) {
       return;
     }
+
     // TODO: 이미지 업로드는 별도 API 호출이 필요함.
+    const cleanPhoneNumber = (phone: string) => {
+      return phone.replace(/[-\s]/g, ""); // 하이픈과 공백 제거
+    };
+
     const photos: string[] = [];
-    const createRestaurantData = {
+    const createRestaurantData: CreateRestaurantRequest = {
       name: restaurant.name,
-      category: restaurant.category,
+      category: mapKaKaoCategoryToServer(restaurant.category),
       address: restaurant.location,
-      lat: parseFloat(restaurant.lat),
-      lng: parseFloat(restaurant.lng),
+      lat: Number(restaurant.y as number),
+      lng: Number(restaurant.x as number),
       description: formData.description,
-      phoneNumber: restaurant.phone || "",
+      phoneNumber: cleanPhoneNumber(restaurant.phone || ""),
       openingTime: formData.openingTime,
       closingTime: formData.closingTime,
       lastOrderTime: formData.lastOrderTime,

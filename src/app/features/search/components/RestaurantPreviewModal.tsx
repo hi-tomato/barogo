@@ -50,6 +50,8 @@ export default function RestaurantPreviewModal({
         location: restaurant.address_name,
         category: restaurant.category_name,
         phone: restaurant.phone || "",
+        x: restaurant.x,
+        y: restaurant.y,
       })
     );
     router.push(`/restaurants/create`);

@@ -4,8 +4,10 @@ export interface RestaurantData {
   location: string;
   category: string;
   phone: string;
-  lat?: string;
-  lng?: string;
+  lat: number;
+  lng: number;
+  x?: number;
+  y?: number;
 }
 
 export interface FormData {
