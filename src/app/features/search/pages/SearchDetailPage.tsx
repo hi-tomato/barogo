@@ -9,12 +9,16 @@ import { useRestaurantDetail } from "@/app/shared/hooks/queries/useRestaurant";
 import { useParams } from "next/navigation";
 
 export default function SearchDetailPage() {
-  const params = useParams<{ restaurantId: string }>();
+  const params = useParams<{ id: string }>();
   const {
     data: restaurant,
     isLoading,
     isError,
-  } = useRestaurantDetail(params.restaurantId);
+  } = useRestaurantDetail(params.id);
+
+  console.log("🔍 URL 파라미터 ID:", params.id);
+  console.log("📊 받아온 맛집 데이터:", restaurant);
+
   if (isLoading) {
     return (
       <div className="min-h-screen bg-[#E6EEF5] flex items-center justify-center">

@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import Button from "@/app/shared/ui/Button";
 import {
   useCreateRestaurant,
-  useRestaurantDetail,
+  useRestaurantList,
 } from "@/app/shared/hooks/queries/useRestaurant";
 
 interface RestaurantPreviewModalProps {
@@ -22,20 +22,26 @@ export default function RestaurantPreviewModal({
 }: RestaurantPreviewModalProps) {
   const router = useRouter();
   const createRestaurant = useCreateRestaurant();
-  const {
-    data: restaurantDetail,
-    isLoading,
-    isError,
-  } = useRestaurantDetail(restaurant.id);
+  // 🔧 전체 맛집 리스트를 가져와서 이름으로 매칭
+  const { data: restaurantList } = useRestaurantList();
+  // 🔍 이름과 주소로 기존 맛집 찾기
+  const existingRestaurant = restaurantList?.find(
+    (item) =>
+      item.name === restaurant.place_name ||
+      (item.name.includes(restaurant.place_name.split(" ")[0]) &&
+        item.address === restaurant.address_name)
+  );
 
-  // 서버에 데이터가 있는지 확인
-  const hasServerData = restaurantDetail && !isError;
+  const hasServerData = !!existingRestaurant;
+  const isLoading = false; // 리스트 조회이므로 별도 로딩 상태
 
   // 상세보기 버튼 클릭
   const handleDetailView = () => {
-    onClose();
+    if (existingRestaurant) {
+      onClose();
+      router.push(`/restaurants/${existingRestaurant.id}/detail`);
+    }
   };
-
   // 맛집 등록 버튼 클릭
   const handleRegisterRestaurant = async () => {
     if (!restaurant.x || !restaurant.y) {
@@ -54,6 +60,7 @@ export default function RestaurantPreviewModal({
         y: restaurant.y,
       })
     );
+    onClose();
     router.push(`/restaurants/create`);
   };
 
@@ -64,6 +71,7 @@ export default function RestaurantPreviewModal({
   };
 
   if (!isOpen) return null;
+
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
       <div className="bg-white rounded-xl p-6 max-w-sm w-full">
@@ -97,52 +105,76 @@ export default function RestaurantPreviewModal({
           )}
         </div>
 
-        {/* Action Buttons */}
+        {/* Action Buttons - 조건별 렌더링 */}
         <div className="space-y-3">
-          {/* 상단: 상세보기 버튼 (서버에 데이터가 있을 때만) */}
-          {hasServerData && (
-            <button
-              onClick={handleDetailView}
-              disabled={isLoading}
-              className="w-full px-4 py-3 bg-[#1C4E80] text-white rounded-lg hover:bg-[#154066] transition-colors disabled:opacity-50 flex items-center justify-center space-x-2"
-            >
-              <span>🔍</span>
-              <span>맛집 상세보기</span>
-            </button>
+          {/* 로딩 중일 때 */}
+          {isLoading && (
+            <div className="flex space-x-3">
+              <Button
+                text="다시 선택"
+                onClick={onClose}
+                className="flex-1 px-4 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
+              />
+              <button
+                disabled
+                className="flex-1 px-4 py-3 bg-gray-300 text-gray-500 rounded-lg cursor-not-allowed"
+              >
+                확인 중...
+              </button>
+            </div>
           )}
 
-          {/* 하단: 맛집 등록 + 바로팟 만들기 버튼들 */}
-          <div className="flex space-x-3">
-            {/* 맛집 등록 버튼 (서버에 데이터가 없을 때만) */}
-            {!hasServerData && !isLoading && (
+          {/* 서버에 데이터가 있을 때 - 상세보기 + 바로팟 만들기 */}
+          {!isLoading && hasServerData && (
+            <>
+              <button
+                onClick={handleDetailView}
+                className="w-full px-4 py-3 bg-[#1C4E80] text-white rounded-lg hover:bg-[#154066] transition-colors flex items-center justify-center space-x-2"
+              >
+                <span>🔍</span>
+                <span>맛집 상세보기</span>
+              </button>
+
+              <div className="flex space-x-3">
+                <Button
+                  text="다시 선택"
+                  onClick={onClose}
+                  className="flex-1 px-4 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
+                />
+                <button
+                  onClick={handleCreateBaropot}
+                  className="flex-1 px-4 py-3 bg-gradient-to-r from-orange-400 to-red-500 text-white rounded-lg hover:shadow-md transition-all flex items-center justify-center space-x-2"
+                >
+                  <span>⚡</span>
+                  <span>바로팟 만들기</span>
+                </button>
+              </div>
+            </>
+          )}
+
+          {/* 서버에 데이터가 없을 때 - 맛집 등록  */}
+          {!isLoading && !hasServerData && (
+            <>
               <button
                 onClick={handleRegisterRestaurant}
                 disabled={createRestaurant.isPending}
-                className="flex-1 px-4 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors disabled:opacity-50 flex items-center justify-center space-x-2"
+                className="w-full px-4 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors disabled:opacity-50 flex items-center justify-center space-x-2"
               >
                 <span>📝</span>
                 <span>
-                  {createRestaurant.isPending ? "등록 중..." : "맛집 등록"}
+                  {createRestaurant.isPending ? "등록 중..." : "맛집 등록하기"}
                 </span>
               </button>
-            )}
 
-            {/* 바로팟 만들기 버튼 */}
-            <button
-              onClick={handleCreateBaropot}
-              className="flex-1 px-4 py-3 bg-gradient-to-r from-orange-400 to-red-500 text-white rounded-lg hover:shadow-md transition-all flex items-center justify-center space-x-2"
-            >
-              <span>⚡</span>
-              <span>바로팟 만들기</span>
-            </button>
-          </div>
-
-          {/* 다시 선택 버튼 */}
-          <Button
-            text="다시 선택"
-            onClick={onClose}
-            className="w-full px-4 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
-          />
+              <div className="flex space-x-3">
+                <Button
+                  text="다시 선택"
+                  onClick={onClose}
+                  className="flex-1 px-4 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
+                />
+              </div>
+            </>
+          )}
         </div>
       </div>
     </div>

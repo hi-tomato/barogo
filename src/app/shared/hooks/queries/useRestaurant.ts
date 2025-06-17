@@ -16,7 +16,8 @@ export const useCreateRestaurant = () => {
   return useMutation({
     mutationFn: (data: CreateRestaurantRequest) =>
       restaurantService.create(data),
-    onSuccess: () => {
+    onSuccess: (data) => {
+      console.log("성공적으로 데이터를 서버에 저장하였습니다.", data);
       queryClient.invalidateQueries({ queryKey: queryKeys.restaurant.list() });
     },
     onError: (error) => {
@@ -30,5 +31,14 @@ export const useRestaurantDetail = (restaurantId: string) => {
     queryKey: queryKeys.restaurant.detail(restaurantId),
     queryFn: () => restaurantService.getDetail(restaurantId),
     enabled: !!restaurantId,
+    throwOnError: false,
+    staleTime: 1000 * 60 * 5,
+    gcTime: 1000 * 60 * 10,
+    retry: (failureCount, error: any) => {
+      if (error?.response?.status === 404) {
+        return false;
+      }
+      return failureCount < 2;
+    },
   });
 };
