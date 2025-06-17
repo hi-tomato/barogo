@@ -2,7 +2,7 @@
 import RestaurantHeader from "../components/detail/RestaurantHeader";
 import RestaurantImages from "../components/detail/RestaurantImages";
 import RestaurantInfo from "../components/detail/RestaurantInfo";
-import RestaurantReviews from "../components/detail/RestaurantReviews";
+import RestaurantReviews from "../../reviews/RestaurantReviews";
 import RestaurantSection from "../components/detail/RestaurantSection";
 import RestaurantMap from "../components/detail/RestaurantMap";
 import { useRestaurantDetail } from "@/app/shared/hooks/queries/useRestaurant";

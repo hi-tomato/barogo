@@ -10,18 +10,13 @@ export const queryKeys = {
 
   restaurant: {
     all: ["restaurant"] as const,
-    lists: () => [...queryKeys.restaurant.all, "list"] as const,
-    list: () => [...queryKeys.restaurant.lists()] as const,
-    favorites: () => [...queryKeys.restaurant.all, "favorites"] as const,
-    nearby: (location: Location) =>
-      [...queryKeys.restaurant.all, "nearby", location] as const,
-    search: (query: string, lat: number, lng?: number) => [
-      ...queryKeys.restaurant.all,
-      "search",
-      { query, lat, lng },
-    ],
-    details: () => [...queryKeys.restaurant.all, "detail"] as const,
-    detail: (kakaoId: string) =>
-      [...queryKeys.restaurant.details(), kakaoId] as const,
+    list: () => [...queryKeys.restaurant.all, "list"] as const,
+    detail: (id: string) =>
+      [...queryKeys.restaurant.all, "detail", id] as const,
+    reviews: (restaurantId: string) =>
+      [...queryKeys.restaurant.all, "reviews", restaurantId] as const,
+    bookmarks: () => [...queryKeys.restaurant.all, "bookmarks"] as const,
+    search: (query: string, lat: number, lng?: number) =>
+      [...queryKeys.restaurant.all, "search", { query, lat, lng }] as const,
   },
 } as const;

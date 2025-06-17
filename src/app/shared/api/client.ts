@@ -33,7 +33,7 @@ apiClient.interceptors.request.use(
 
 export function post<T = any>(
   url: string,
-  data: any
+  data?: any
 ): Promise<AxiosResponse<T>> {
   return apiClient.post(url, data);
 }
