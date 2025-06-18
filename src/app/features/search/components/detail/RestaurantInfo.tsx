@@ -6,9 +6,7 @@ import {
   HiOutlineHeart,
   HiShare,
   HiPhone,
-  HiLocationMarker,
   HiClock,
-  HiStar,
   HiDotsVertical,
   HiPencil,
 } from "react-icons/hi";

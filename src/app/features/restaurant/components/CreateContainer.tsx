@@ -8,9 +8,7 @@ import {
   CreateStatus,
   CreateHeader,
   CreateBasicInfo,
-  CreateImageFile,
   CreateTags,
-  CreateMessage,
 } from "./index";
 import CreatedeScription from "./CreatedeScription";
 import { CreateRestaurantRequest } from "@/app/shared/types/restaurant";
@@ -166,7 +164,7 @@ export default function CreateContainer() {
           />
         </div>
         {/* 안내 메시지 */}
-        <CreateMessage />
+        <CreateStatus type="basicMessage" />
       </form>
     </div>
   );

@@ -6,6 +6,7 @@ import {
   useCreateRestaurant,
   useRestaurantList,
 } from "@/app/shared/hooks/queries/useRestaurant";
+import { RestaurantStatus } from "./Status";
 
 interface RestaurantPreviewModalProps {
   restaurant: NearbyRestaurant;
@@ -22,8 +23,11 @@ export default function RestaurantPreviewModal({
 }: RestaurantPreviewModalProps) {
   const router = useRouter();
   const createRestaurant = useCreateRestaurant();
+
   // 🔧 전체 맛집 리스트를 가져와서 이름으로 매칭
-  const { data: restaurantList } = useRestaurantList();
+  const { data: restaurantList, isLoading: isLoadingList } =
+    useRestaurantList();
+
   // 🔍 이름과 주소로 기존 맛집 찾기
   const existingRestaurant = restaurantList?.find(
     (item) =>
@@ -33,7 +37,7 @@ export default function RestaurantPreviewModal({
   );
 
   const hasServerData = !!existingRestaurant;
-  const isLoading = false; // 리스트 조회이므로 별도 로딩 상태
+  const isLoading = isLoadingList; // ⭐ 리스트 로딩 상태 사용
 
   // 상세보기 버튼 클릭
   const handleDetailView = () => {
@@ -42,6 +46,7 @@ export default function RestaurantPreviewModal({
       router.push(`/restaurants/${existingRestaurant.id}/detail`);
     }
   };
+
   // 맛집 등록 버튼 클릭
   const handleRegisterRestaurant = async () => {
     if (!restaurant.x || !restaurant.y) {
@@ -98,82 +103,31 @@ export default function RestaurantPreviewModal({
           {restaurant.phone && (
             <p className="text-sm text-gray-600">📞 {restaurant.phone}</p>
           )}
-          {restaurant.distance && (
-            <p className="text-sm text-green-600">
-              📏 현재 위치에서 약 {Math.round(parseInt(restaurant.distance))}m
-            </p>
-          )}
         </div>
 
         {/* Action Buttons - 조건별 렌더링 */}
         <div className="space-y-3">
           {/* 로딩 중일 때 */}
-          {isLoading && (
-            <div className="flex space-x-3">
-              <Button
-                text="다시 선택"
-                onClick={onClose}
-                className="flex-1 px-4 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
-              />
-              <button
-                disabled
-                className="flex-1 px-4 py-3 bg-gray-300 text-gray-500 rounded-lg cursor-not-allowed"
-              >
-                확인 중...
-              </button>
-            </div>
-          )}
+          {isLoading && <RestaurantStatus type="isLoading" onClose={onClose} />}
 
           {/* 서버에 데이터가 있을 때 - 상세보기 + 바로팟 만들기 */}
           {!isLoading && hasServerData && (
-            <>
-              <button
-                onClick={handleDetailView}
-                className="w-full px-4 py-3 bg-[#1C4E80] text-white rounded-lg hover:bg-[#154066] transition-colors flex items-center justify-center space-x-2"
-              >
-                <span>🔍</span>
-                <span>맛집 상세보기</span>
-              </button>
-
-              <div className="flex space-x-3">
-                <Button
-                  text="다시 선택"
-                  onClick={onClose}
-                  className="flex-1 px-4 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
-                />
-                <button
-                  onClick={handleCreateBaropot}
-                  className="flex-1 px-4 py-3 bg-gradient-to-r from-orange-400 to-red-500 text-white rounded-lg hover:shadow-md transition-all flex items-center justify-center space-x-2"
-                >
-                  <span>⚡</span>
-                  <span>바로팟 만들기</span>
-                </button>
-              </div>
-            </>
+            <RestaurantStatus
+              type="hasServerData"
+              onClose={onClose}
+              onDetailView={handleDetailView}
+              onCreateBaropot={handleCreateBaropot}
+            />
           )}
 
           {/* 서버에 데이터가 없을 때 - 맛집 등록  */}
           {!isLoading && !hasServerData && (
-            <>
-              <button
-                onClick={handleRegisterRestaurant}
-                disabled={createRestaurant.isPending}
-                className="w-full px-4 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors disabled:opacity-50 flex items-center justify-center space-x-2"
-              >
-                <span>📝</span>
-                <span>
-                  {createRestaurant.isPending ? "등록 중..." : "맛집 등록하기"}
-                </span>
-              </button>
-
-              <div className="flex space-x-3">
-                <Button
-                  text="다시 선택"
-                  onClick={onClose}
-                  className="flex-1 px-4 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
-                />
-              </div>
-            </>
+            <RestaurantStatus
+              type="notServerData"
+              onClose={onClose}
+              onRegisterRestaurant={handleRegisterRestaurant}
+              isRegistering={createRestaurant.isPending}
+            />
           )}
         </div>
       </div>

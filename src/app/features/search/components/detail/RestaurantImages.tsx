@@ -1,18 +1,24 @@
 "use client";
 import { useState, useRef } from "react";
 import { motion } from "framer-motion";
+import Image from "next/image";
 
-const mockImages = [
+const defaultImages = [
   "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=400&h=300&fit=crop",
-  "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=400&h=300&fit=crop",
-  "https://images.unsplash.com/photo-1551218808-94e220e084d2?w=400&h=300&fit=crop",
-  "https://images.unsplash.com/photo-1559339352-11d035aa65de?w=400&h=300&fit=crop",
-  "https://images.unsplash.com/photo-1424847651672-bf20a4b0982b?w=400&h=300&fit=crop",
 ];
 
-export default function RestaurantImages() {
+interface RestaurantImagesProps {
+  images?: string[];
+  restaurantName?: string;
+}
+
+export default function RestaurantImages({
+  images = [],
+  restaurantName = "레스토랑",
+}: RestaurantImagesProps) {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const displayImages = images.length > 0 ? images : defaultImages;
 
   const handleScroll = (): void => {
     if (!scrollContainerRef.current) return;
@@ -49,12 +55,16 @@ export default function RestaurantImages() {
           scrollBehavior: "smooth",
         }}
       >
-        {mockImages.map((image, index) => (
+        {displayImages.map((image, index) => (
           <div key={index} className="w-full flex-shrink-0 relative snap-start">
-            <img
+            <Image
               src={image}
-              alt={`레스토랑 이미지 ${index + 1}`}
-              className="w-full h-full object-cover"
+              alt={`${restaurantName} 이미지 ${index + 1}`}
+              fill
+              className="object-cover"
+              onError={() => {
+                console.log("이미지 로드 실패:", image);
+              }}
             />
             {/* 그라데이션 오버레이 */}
             <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
@@ -69,41 +79,46 @@ export default function RestaurantImages() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.3 }}
       >
-        {currentImageIndex + 1} / {mockImages.length}
+        {currentImageIndex + 1} / {displayImages.length}
       </motion.div>
 
-      {/* 썸네일 이미지 리스트 */}
-      <motion.div
-        className="px-4 py-3 bg-white"
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.2 }}
-      >
-        <div className="flex space-x-2 overflow-x-auto scrollbar-hide">
-          {mockImages.map((image, index) => (
-            <motion.button
-              key={index}
-              onClick={() => scrollToImage(index)}
-              className={`flex-shrink-0 w-16 h-16 rounded-lg overflow-hidden border-2 transition-all ${
-                index === currentImageIndex
-                  ? "border-[#1C4E80] ring-1 ring-[#1C4E80]"
-                  : "border-gray-200 hover:border-gray-300"
-              }`}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              animate={{
-                scale: index === currentImageIndex ? 1.05 : 1,
-              }}
-            >
-              <img
-                src={image}
-                alt={`썸네일 ${index + 1}`}
-                className="w-full h-full object-cover"
-              />
-            </motion.button>
-          ))}
-        </div>
-      </motion.div>
+      {displayImages.length > 1 && (
+        <motion.div
+          className="px-4 py-3 bg-white"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2 }}
+        >
+          <div className="flex space-x-2 overflow-x-auto scrollbar-hide">
+            {displayImages.map((image, index) => (
+              <motion.button
+                key={index}
+                onClick={() => scrollToImage(index)}
+                className={`flex-shrink-0 w-16 h-16 rounded-lg overflow-hidden border-2 transition-all ${
+                  index === currentImageIndex
+                    ? "border-[#1C4E80] ring-1 ring-[#1C4E80]"
+                    : "border-gray-200 hover:border-gray-300"
+                }`}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                animate={{
+                  scale: index === currentImageIndex ? 1.05 : 1,
+                }}
+              >
+                <Image
+                  src={image}
+                  alt={`썸네일 ${index + 1}`}
+                  fill
+                  className="w-full h-full object-cover"
+                  onError={(e) => {
+                    e.currentTarget.src = defaultImages[0];
+                  }}
+                />
+              </motion.button>
+            ))}
+          </div>
+        </motion.div>
+      )}
 
       <style jsx>{`
         .scrollbar-hide {

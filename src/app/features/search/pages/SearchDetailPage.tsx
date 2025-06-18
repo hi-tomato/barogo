@@ -16,9 +16,6 @@ export default function SearchDetailPage() {
     isError,
   } = useRestaurantDetail(params.id);
 
-  console.log("🔍 URL 파라미터 ID:", params.id);
-  console.log("📊 받아온 맛집 데이터:", restaurant);
-
   if (isLoading) {
     return (
       <div className="min-h-screen bg-[#E6EEF5] flex items-center justify-center">
@@ -50,7 +47,7 @@ export default function SearchDetailPage() {
   return (
     <div>
       <RestaurantHeader />
-      <RestaurantImages />
+      <RestaurantImages images={restaurant.photos} />
       <RestaurantInfo restaurant={restaurant} />
       <RestaurantReviews restaurantId={params.id} />
       <RestaurantSection />
