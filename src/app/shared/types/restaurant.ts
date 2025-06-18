@@ -91,6 +91,7 @@ export interface ReviewResponse {
   userId: number;
   userName: string;
   userEmail: string;
+  reviews?: [];
 }
 
 export interface CreateReviewResponse {

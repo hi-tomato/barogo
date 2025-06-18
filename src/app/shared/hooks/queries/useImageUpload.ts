@@ -1,5 +1,10 @@
 import { useMutation } from "@tanstack/react-query";
 import { imageUploadService } from "../../services/imageUploadService";
+import {
+  errorHandler,
+  FILE_CONFIG,
+  fileValidator,
+} from "../../lib/ImageUpload";
 
 interface UploadResponse {
   url: string;
@@ -7,8 +12,8 @@ interface UploadResponse {
 }
 
 interface UseImageUploadOptions {
-  onSuccess?: (data: UploadResponse) => void;
-  onError?: (error: Error) => void;
+  onSuccess?: (data: UploadResponse, originalFile: File) => void;
+  onError?: (error: Error, originalFile: File) => void;
   maxSize?: number;
   allowedTypes?: string[];
 }
@@ -17,49 +22,23 @@ export const useImageUpload = (options: UseImageUploadOptions = {}) => {
   const {
     onSuccess,
     onError,
-    maxSize = 10,
-    allowedTypes = ["image/jpeg", "image/png", "image/webp"],
+    maxSize = FILE_CONFIG.MAX_SIZE,
+    allowedTypes = [...FILE_CONFIG.ALLOWED_TYPES],
   } = options;
 
-  const validateFile = (file: File): string | null => {
-    // 파일 타입 검사
-    if (!allowedTypes.includes(file.type)) {
-      return `지원하지 않는 파일 형식입니다. (${allowedTypes.join(", ")})`;
-    }
-
-    // 파일 크기 검사 (MB 단위)
-    const fileSizeInMB = file.size / (1024 * 1024);
-    if (fileSizeInMB > maxSize) {
-      return `파일 크기는 ${maxSize}MB 이하여야 합니다. (현재: ${fileSizeInMB.toFixed(
-        1
-      )}MB)`;
-    }
-
-    return null;
-  };
-
-  const getExtensionFromFileName = (fileName: string): string => {
-    const extension = fileName.split(".").pop()?.toLowerCase();
-
-    // 확장자가 없거나 지원하지 않는 경우 기본값 설정
-    const supportedExtensions = ["jpg", "jpeg", "png", "webp"];
-    if (!extension || !supportedExtensions.includes(extension)) {
-      return "webp"; // 기본값
-    }
-
-    return extension === "jpeg" ? "jpg" : extension;
-  };
-
   const mutation = useMutation({
-    mutationFn: async (file: File): Promise<UploadResponse> => {
-      // 파일 유효성 검사
-      const validationError = validateFile(file);
+    mutationFn: async (
+      file: File
+    ): Promise<{ data: UploadResponse; originalFile: File }> => {
+      const validationError = fileValidator.getValidationError(file, {
+        allowedTypes,
+        maxSize,
+      });
       if (validationError) {
         throw new Error(validationError);
       }
 
-      // 확장자 추출
-      const extension = getExtensionFromFileName(file.name);
+      const extension = fileValidator.getExtension(file.name);
 
       try {
         console.log("📤 이미지 업로드 시작:", {
@@ -69,42 +48,31 @@ export const useImageUpload = (options: UseImageUploadOptions = {}) => {
           extension,
         });
 
-        // 1단계: Presigned URL 받기
+        // Presigned URL 받기
         const { presignedUrl, key, url } =
           await imageUploadService.getPresignedUrl(extension);
-
         console.log("🔗 Presigned URL 받음, S3 업로드 시작...");
 
-        // 2단계: S3에 파일 업로드
+        // S3에 파일 업로드
         await imageUploadService.uploadToS3(presignedUrl, file);
-
         console.log("✅ S3 업로드 완료:", { url, key });
 
-        return { url, key };
+        return {
+          data: { url, key },
+          originalFile: file,
+        };
       } catch (error: any) {
         console.error("❌ 이미지 업로드 실패:", error);
-
-        // 에러 메시지 개선
-        if (error.response?.status === 403) {
-          throw new Error("업로드 권한이 없습니다.");
-        } else if (error.response?.status === 400) {
-          throw new Error("잘못된 파일 형식입니다.");
-        } else if (error.response?.status >= 500) {
-          throw new Error(
-            "서버 오류가 발생했습니다. 잠시 후 다시 시도해주세요."
-          );
-        } else {
-          throw new Error("이미지 업로드에 실패했습니다. 다시 시도해주세요.");
-        }
+        throw new Error(errorHandler.getErrorMessage(error));
       }
     },
-    onSuccess: (data) => {
+    onSuccess: ({ data, originalFile }) => {
       console.log("이미지 업로드 성공:", data);
-      onSuccess?.(data);
+      onSuccess?.(data, originalFile);
     },
-    onError: (error) => {
+    onError: (error, file) => {
       console.error("이미지 업로드 에러:", error);
-      onError?.(error as Error);
+      onError?.(error as Error, file);
     },
   });
 

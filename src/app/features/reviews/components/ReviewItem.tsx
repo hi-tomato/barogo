@@ -76,8 +76,10 @@ export default function ReviewItem({
                 key={photoIndex}
                 src={photo}
                 alt={`Review photo ${photoIndex + 1}`}
-                className="w-24 h-24 object-cover rounded-lg flex-shrink-0 cursor-pointer hover:opacity-80 transition-opacity"
+                className="object-cover rounded-lg flex-shrink-0 cursor-pointer hover:opacity-80 transition-opacity"
                 onClick={() => window.open(photo, "_blank")}
+                width={24}
+                height={24}
               />
             ))}
           </div>

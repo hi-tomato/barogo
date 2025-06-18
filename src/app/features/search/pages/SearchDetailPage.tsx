@@ -52,7 +52,7 @@ export default function SearchDetailPage() {
       <RestaurantHeader />
       <RestaurantImages />
       <RestaurantInfo restaurant={restaurant} />
-      <RestaurantReviews />
+      <RestaurantReviews restaurantId={params.id} />
       <RestaurantSection />
       <RestaurantMap />
     </div>

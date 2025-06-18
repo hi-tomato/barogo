@@ -2,8 +2,7 @@ import { useState } from "react";
 import { HiStar, HiOutlineStar } from "react-icons/hi";
 import { CreateReviewRequest } from "@/app/shared/types/restaurant";
 import PhotoUploader from "./PhotoUploader";
-import { useParams } from "next/navigation";
-// import PhotoUploader from "./PhotoUploader";
+import ImageUploader from "@/app/shared/components/ImageUploader";
 
 interface ReviewFormProps {
   onSubmit: (reviewData: CreateReviewRequest) => Promise<void>;
@@ -18,12 +17,7 @@ export default function ReviewForm({
 }: ReviewFormProps) {
   const [rating, setRating] = useState(0);
   const [reviewContent, setReviewContent] = useState("");
-  const [selectedPhotos, setSelectedPhotos] = useState<File[]>([]);
-
-  const params = useParams();
-  console.log("🔧 전체 params:", params);
-  console.log("🔧 restaurantId:", params.id); // 또는 params.id
-  console.log("🔧 현재 URL:", window.location.pathname);
+  const [uploadedUrls, setUploadedUrls] = useState<string[]>([]);
 
   const handleSubmit = async () => {
     if (!rating || !reviewContent.trim()) {
@@ -31,21 +25,18 @@ export default function ReviewForm({
       return;
     }
 
+    // Server로 보낼 리뷰 데이터
     const reviewData: CreateReviewRequest = {
       rating,
       content: reviewContent.trim(),
-      photos:
-        selectedPhotos.length > 0
-          ? selectedPhotos.map((file) => URL.createObjectURL(file))
-          : [],
+      photos: uploadedUrls,
     };
-
     await onSubmit(reviewData);
 
-    // 성공 시 폼 초기화
+    // Reset
     setRating(0);
     setReviewContent("");
-    setSelectedPhotos([]);
+    setUploadedUrls([]);
   };
 
   return (
@@ -75,11 +66,6 @@ export default function ReviewForm({
                 )}
               </button>
             ))}
-            {rating > 0 && (
-              <span className="ml-3 px-2 py-1 bg-yellow-50 text-yellow-700 rounded-full text-sm font-medium">
-                {rating}점
-              </span>
-            )}
           </div>
         </div>
 
@@ -99,11 +85,11 @@ export default function ReviewForm({
         </div>
 
         {/* 사진 업로드 */}
-        <PhotoUploader
-          selectedPhotos={selectedPhotos}
-          onPhotosChange={setSelectedPhotos}
-          disabled={isSubmitting}
+        <ImageUploader
+          onImagesChange={setUploadedUrls}
+          layout="horizontal"
           maxFiles={3}
+          disabled={isSubmitting}
         />
 
         {/* 버튼들 */}
@@ -126,7 +112,7 @@ export default function ReviewForm({
                 <span>등록 중...</span>
               </div>
             ) : (
-              "🚀 리뷰 등록하기"
+              "리뷰 등록하기"
             )}
           </button>
         </div>

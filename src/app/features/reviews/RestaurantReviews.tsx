@@ -20,28 +20,34 @@ export default function RestaurantReviews({
   currentUserId = 1,
 }: RestaurantReviewsProps) {
   const [showWriteForm, setShowWriteForm] = useState(false);
-
-  // React Query 훅들
+  // 전체 리뷰 데이터를 받아오는 Query
   const {
     data: reviewsData,
     isLoading: reviewsLoading,
     error: reviewsError,
     refetch: refetchReviews,
   } = useRestaurantReviews(restaurantId);
+  console.log(reviewsData);
 
+  // 리뷰를 수정, 삭제하는 Query
   const createReviewMutation = useCreateReviews();
   const deleteReviewMutation = useDeleteReview();
 
-  // reviews 배열 추출
-  const reviews = reviewsData?.reviews || [];
+  const reviews: Review[] = (() => {
+    if (!reviewsData) return [];
+    if (Array.isArray(reviewsData.reviews)) {
+      return reviewsData.reviews;
+    }
+    if (Array.isArray(reviewsData)) {
+      return reviewsData;
+    }
+    return [];
+  })();
 
-  // 내 리뷰인지 확인
+  // TODO: 내 리뷰인지 확인
   const isMyReview = (review: Review) => review.userId === currentUserId;
 
-  // 리뷰 등록 핸들러
   const handleSubmitReview = async (reviewData: CreateReviewRequest) => {
-    console.log("🔧 handleSubmitReview restaurantId:", restaurantId);
-    console.log("🔧 handleSubmitReview reviewData:", reviewData);
     try {
       await createReviewMutation.mutateAsync({
         restaurantId,
@@ -49,13 +55,13 @@ export default function RestaurantReviews({
       });
       setShowWriteForm(false);
       alert("리뷰가 등록되었습니다! 🎉");
+      refetchReviews();
     } catch (error) {
       console.error("리뷰 등록 실패:", error);
       alert("리뷰 등록에 실패했습니다. 다시 시도해주세요.");
     }
   };
 
-  // 리뷰 삭제 핸들러
   const handleDeleteReview = async (reviewId: number) => {
     if (!confirm("정말 삭제하시겠습니까?")) return;
 
@@ -80,7 +86,6 @@ export default function RestaurantReviews({
         onToggleForm={() => setShowWriteForm(!showWriteForm)}
         isSubmitting={createReviewMutation.isPending}
       />
-
       {/* 리뷰 작성 폼 */}
       {showWriteForm && (
         <ReviewForm
@@ -89,7 +94,6 @@ export default function RestaurantReviews({
           isSubmitting={createReviewMutation.isPending}
         />
       )}
-
       {/* 리뷰 목록 */}
       <ReviewList
         reviews={reviews}

@@ -15,6 +15,7 @@ import {
 import CreatedeScription from "./CreatedeScription";
 import { CreateRestaurantRequest } from "@/app/shared/types/restaurant";
 import { mapKaKaoCategoryToServer } from "@/app/shared/lib/kakaoCategory";
+import ImageUploader from "@/app/shared/components/ImageUploader";
 
 export default function CreateContainer() {
   const router = useRouter();
@@ -64,21 +65,6 @@ export default function CreateContainer() {
     }));
   };
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = Array.from(e.target.files || []);
-    setFormData((prev) => ({
-      ...prev,
-      images: [...prev.images, ...files].slice(0, 5), // 최대 5장
-    }));
-  };
-
-  const removeImage = (index: number) => {
-    setFormData((prev) => ({
-      ...prev,
-      images: prev.images.filter((_, i) => i !== index),
-    }));
-  };
-
   const addTag = (tag: string) => {
     const currentTags = formData.tags.split(" ").filter((t) => t.length > 0);
     if (!currentTags.includes(tag)) {
@@ -98,7 +84,6 @@ export default function CreateContainer() {
     if (!restaurant) {
       return;
     }
-
     // TODO: 이미지 업로드는 별도 API 호출이 필요함.
     const cleanPhoneNumber = (phone: string) => {
       return phone.replace(/[-\s]/g, ""); // 하이픈과 공백 제거
@@ -126,10 +111,6 @@ export default function CreateContainer() {
     router.push("/main");
   };
 
-  const handleImageUpload = (url: string) => {
-    setUploadUrls((prev) => [...prev, url]);
-  };
-
   if (isLoading) return <CreateStatus type="isLoading" />;
   if (!restaurant) return <CreateStatus type="notFound" />;
   return (
@@ -145,11 +126,10 @@ export default function CreateContainer() {
           handleInputChange={handleInputChange}
         />
         {/* 사진 미리보기 & 등록 */}
-        <CreateImageFile
-          formData={formData}
-          handleFileChange={handleFileChange}
-          removeImage={removeImage}
-          onImageUpload={handleImageUpload}
+        <ImageUploader
+          onImagesChange={setUploadUrls}
+          layout="grid"
+          maxFiles={5}
         />
         {/* 태그 입력 & 태그 추천 */}
         <CreateTags

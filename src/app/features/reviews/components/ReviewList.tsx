@@ -1,6 +1,5 @@
 import { Review } from "@/app/shared/types/restaurant";
 import ReviewItem from "./ReviewItem";
-// import ReviewItem from "./ReviewItem";
 
 interface ReviewListProps {
   reviews: Review[];
@@ -22,7 +21,7 @@ export default function ReviewList({
   isDeleting,
 }: ReviewListProps) {
   const isMyReview = (review: Review) => review.userId === currentUserId;
-
+  console.log(reviews);
   if (isLoading) {
     return (
       <div className="px-4 py-6">
