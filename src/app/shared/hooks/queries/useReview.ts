@@ -102,6 +102,7 @@ export const useAddBookmark = () => {
       restaurantService.addBookmark(restaurantId),
     onSuccess: (data, restaurantId) => {
       console.log("북마크가 추가되었습니다.");
+      console.log(restaurantId);
       // 맛집 상세 정보 갱신 (북마크 상태 변경)
       queryClient.invalidateQueries({
         queryKey: queryKeys.restaurant.detail(restaurantId),

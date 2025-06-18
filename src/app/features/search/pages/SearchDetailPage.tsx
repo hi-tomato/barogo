@@ -44,6 +44,7 @@ export default function SearchDetailPage() {
       </div>
     );
   }
+
   return (
     <div>
       <RestaurantHeader />

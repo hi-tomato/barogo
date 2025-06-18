@@ -87,12 +87,13 @@ export const restaurantService = {
     await del(`/restaurants/reviews/${reviewId}`);
   },
 
-  addBookmark: async (restaurantId: string): Promise<void> => {
+  addBookmark: async (restaurantId: number): Promise<void> => {
     const { data } = await post(`/restaurants/${restaurantId}/bookmark`);
+    console.log(restaurantId);
     return data;
   },
 
-  removeBookmark: async (restaurantId: string): Promise<void> => {
+  removeBookmark: async (restaurantId: number): Promise<void> => {
     await del(`/restaurants/${restaurantId}/bookmark`);
   },
 };

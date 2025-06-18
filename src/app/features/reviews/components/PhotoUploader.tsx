@@ -1,4 +1,5 @@
 import { useImageUpload } from "@/app/shared/hooks/queries/useImageUpload";
+import Image from "next/image";
 import { useState } from "react";
 import { HiCamera, HiX } from "react-icons/hi";
 
@@ -123,10 +124,12 @@ export default function PhotoUploader({
 
           return (
             <div key={index} className="relative group">
-              <img
+              <Image
+                width={20}
+                height={20}
                 src={URL.createObjectURL(file)}
                 alt={`Preview ${index + 1}`}
-                className={`w-20 h-20 object-cover rounded-lg ${
+                className={`object-cover rounded-lg ${
                   uploadedPhoto?.uploading ? "opacity-50" : ""
                 }`}
               />

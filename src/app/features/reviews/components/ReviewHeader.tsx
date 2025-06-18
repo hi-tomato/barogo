@@ -20,7 +20,7 @@ export default function ReviewHeader({
             리뷰 ({reviewCount})
           </h2>
           <p className="text-sm text-[#8A8A8A] mt-1">
-            솔직한 후기를 남겨주세요
+            고객님의 솔직한 후기를 남겨주세요!
           </p>
         </div>
         <button
@@ -32,7 +32,7 @@ export default function ReviewHeader({
               : "bg-[#1C4E80] text-white hover:bg-[#154066]"
           }`}
         >
-          {isSubmitting ? "등록 중..." : showWriteForm ? "취소" : "✍️ 리뷰쓰기"}
+          {isSubmitting ? "등록 중..." : showWriteForm ? "취소" : "리뷰쓰기"}
         </button>
       </div>
     </div>

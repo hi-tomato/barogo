@@ -4,7 +4,6 @@ import { motion } from "framer-motion";
 import {
   HiHeart,
   HiOutlineHeart,
-  HiShare,
   HiPhone,
   HiClock,
   HiDotsVertical,
@@ -12,13 +11,18 @@ import {
 } from "react-icons/hi";
 import { RestaurantDetail } from "@/app/shared/types/restaurant";
 import Button from "@/app/shared/ui/Button";
+import {
+  useAddBookmark,
+  useRemoveBookmark,
+} from "@/app/shared/hooks/queries/useReview";
+import { BsHeartbreakFill } from "react-icons/bs";
+import { FaHeartCircleCheck, FaHeartCircleXmark } from "react-icons/fa6";
 
 interface RestaurantInfoProps {
   restaurant: RestaurantDetail;
   isBookmarked?: boolean;
   isOwner?: boolean;
   onBookmarkToggle?: () => void;
-  onShare?: () => void;
   onEdit?: () => void;
 }
 
@@ -26,12 +30,33 @@ export default function RestaurantInfo({
   restaurant,
   isBookmarked = false,
   isOwner = false,
-  onBookmarkToggle,
-  onShare,
   onEdit,
 }: RestaurantInfoProps) {
   const [showFullDescription, setShowFullDescription] = useState(false);
   const [showOwnerMenu, setShowOwnerMenu] = useState(false);
+  const [bookmarked, setBookmarked] = useState(restaurant.isBookmarked);
+
+  const addBookmarkMutation = useAddBookmark();
+  const removeBookmarkMutation = useRemoveBookmark();
+  console.log(restaurant.isBookmarked);
+
+  const handleBookmarkToggle = async () => {
+    try {
+      if (bookmarked) {
+        await removeBookmarkMutation.mutateAsync(restaurant.id.toString());
+        setBookmarked(false);
+        console.log("북마크가 제거되었습니다.");
+      } else if (!bookmarked) {
+        // 북마크 추가
+        await addBookmarkMutation.mutateAsync(restaurant.id.toString());
+        setBookmarked(true);
+        console.log("북마크가 추가되었습니다.");
+      }
+    } catch (error) {
+      console.error("북마크 처리 중 오류:", error);
+      alert("북마크 처리에 실패했습니다. 다시 시도해주세요.");
+    }
+  };
 
   const handleCall = () => {
     window.location.href = `tel:${restaurant.phoneNumber}`;
@@ -44,6 +69,8 @@ export default function RestaurantInfo({
   };
 
   const isLongDescription = restaurant.description.length > 100;
+  const isBookmarkLoading =
+    addBookmarkMutation.isPending || removeBookmarkMutation.isPending;
 
   return (
     <motion.div
@@ -86,30 +113,24 @@ export default function RestaurantInfo({
           <div className="flex items-center space-x-2 ml-4">
             {/* 북마크 버튼 */}
             <motion.button
-              onClick={onBookmarkToggle}
-              className={`p-3 rounded-full border-2 transition-all ${
+              onClick={handleBookmarkToggle}
+              disabled={isBookmarkLoading}
+              className={`p-3 rounded-full border-2 transition-all relative ${
                 isBookmarked
                   ? "bg-red-50 border-red-200 text-red-500"
                   : "bg-gray-50 border-gray-200 text-gray-400 hover:border-red-200 hover:text-red-400"
-              }`}
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.9 }}
+              } ${isBookmarkLoading ? "opacity-50 cursor-not-allowed" : ""}`}
+              whileHover={!isBookmarkLoading ? { scale: 1.1 } : {}}
+              whileTap={!isBookmarkLoading ? { scale: 0.9 } : {}}
             >
-              {isBookmarked ? (
-                <HiHeart size={20} />
+              {bookmarked ? (
+                <FaHeartCircleCheck
+                  className="cursor-pointer text-red-400"
+                  size={26}
+                />
               ) : (
-                <HiOutlineHeart size={20} />
+                <FaHeartCircleXmark className="cursor-pointer" size={26} />
               )}
-            </motion.button>
-
-            {/* 공유 버튼 */}
-            <motion.button
-              onClick={onShare}
-              className="p-3 rounded-full bg-blue-50 border-2 border-blue-200 text-blue-500 hover:bg-blue-100 transition-all"
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.9 }}
-            >
-              <HiShare size={20} />
             </motion.button>
 
             {/* 소유자 메뉴 */}
@@ -222,12 +243,12 @@ export default function RestaurantInfo({
               <div className="w-12 h-12 bg-gradient-to-br from-green-400 to-green-600 rounded-2xl flex items-center justify-center shadow-lg mb-3">
                 <HiPhone className="text-white text-lg" />
               </div>
-              <div className="font-semibold text-[#2B2B2B] text-sm mb-1">
+              <h3 className="font-semibold text-[#2B2B2B] text-sm mb-1">
                 전화
-              </div>
-              <div className="text-gray-600 text-xs truncate w-full">
+              </h3>
+              <p className="text-gray-600 text-xs truncate w-full">
                 {restaurant.phoneNumber}
-              </div>
+              </p>
             </motion.div>
 
             {/* 운영시간 */}
@@ -240,16 +261,16 @@ export default function RestaurantInfo({
               <div className="w-12 h-12 bg-gradient-to-br from-purple-400 to-purple-600 rounded-2xl flex items-center justify-center shadow-lg mb-3">
                 <HiClock className="text-white text-lg" />
               </div>
-              <div className="font-semibold text-[#2B2B2B] text-sm mb-1">
+              <h3 className="font-semibold text-[#2B2B2B] text-sm mb-1">
                 운영시간
-              </div>
-              <div className="text-gray-600 text-xs">
+              </h3>
+              <p className="text-gray-600 text-xs">
                 {restaurant.openingTime} - {restaurant.closingTime}
-              </div>
+              </p>
               <div className="mt-2">
-                <span className="px-2 py-1 bg-green-100 text-green-700 rounded-full text-xs font-medium">
+                <b className="px-2 py-1 bg-green-100 text-green-700 rounded-full text-xs font-medium">
                   영업중
-                </span>
+                </b>
               </div>
             </motion.div>
 
@@ -263,15 +284,15 @@ export default function RestaurantInfo({
               <div className="w-12 h-12 bg-gradient-to-br from-orange-400 to-orange-600 rounded-2xl flex items-center justify-center shadow-lg mb-3">
                 <span className="text-white text-lg">🕐</span>
               </div>
-              <div className="font-semibold text-[#2B2B2B] text-sm mb-1">
+              <h3 className="font-semibold text-[#2B2B2B] text-sm mb-1">
                 라스트오더
-              </div>
-              <div className="text-gray-600 text-xs">
+              </h3>
+              <p className="text-gray-600 text-xs">
                 {restaurant.lastOrderTime}
-              </div>
-              <div className="text-orange-600 text-xs font-medium mt-1">
+              </p>
+              <b className="text-orange-600 text-xs font-medium mt-1">
                 주의필요
-              </div>
+              </b>
             </motion.div>
           </div>
         </div>
