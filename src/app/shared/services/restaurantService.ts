@@ -97,4 +97,10 @@ export const restaurantService = {
   removeBookmark: async (restaurantId: number): Promise<void> => {
     await del(`/restaurants/${restaurantId}/bookmark`);
   },
+
+  getBookMarkList: async (): Promise<RestaurantList> => {
+    const { data } = await get<RestaurantList>(`/restaurants/me/bookmarks`);
+    console.log(`북마크 리스트 ${data}`);
+    return data;
+  },
 };

@@ -102,11 +102,13 @@ export default function CreateContainer() {
       tags: formData.tags.split(" ").filter((tag) => tag.trim().length > 0),
       photos: photos,
     };
-    console.log("서버로 전송할 데이터:", createRestaurantData);
 
-    await createRestaurant.mutateAsync(createRestaurantData);
-    sessionStorage.removeItem("selectedRestaurant");
-    router.push("/main");
+    createRestaurant.mutate(createRestaurantData, {
+      onSuccess: () => {
+        sessionStorage.removeItem("selectedRestaurant");
+        router.push("/main");
+      },
+    });
   };
 
   if (isLoading) return <CreateStatus type="isLoading" />;

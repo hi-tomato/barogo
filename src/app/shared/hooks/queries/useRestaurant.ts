@@ -1,7 +1,10 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { queryKeys } from "../../lib/queryKeys";
 import { restaurantService } from "../../services/restaurantService";
-import { CreateRestaurantRequest } from "../../types/restaurant";
+import {
+  CreateRestaurantRequest,
+  RestaurantList,
+} from "../../types/restaurant";
 
 export const useRestaurantList = () => {
   return useQuery({
@@ -79,5 +82,14 @@ export const useUpdateRestaurant = () => {
     onError: (error) => {
       console.error("맛집을 수정하는데 문제가 발생하였습니다." + error);
     },
+  });
+};
+
+export const useGetBookMarks = () => {
+  return useQuery<RestaurantList>({
+    queryKey: queryKeys.restaurant.bookmarks(),
+    queryFn: () => restaurantService.getBookMarkList(),
+    staleTime: 1000 * 60 * 5,
+    gcTime: 1000 * 60 * 10,
   });
 };
