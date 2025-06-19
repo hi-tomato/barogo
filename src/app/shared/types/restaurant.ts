@@ -14,6 +14,7 @@ export interface Restaurant {
   tags: string[];
   reviewCount: number;
   isBookmarked: boolean;
+  distance?: string;
 }
 
 export type RestaurantList = Restaurant[];

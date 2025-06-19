@@ -6,7 +6,7 @@ import { CreateRestaurantRequest } from "../../types/restaurant";
 export const useRestaurantList = () => {
   return useQuery({
     queryKey: queryKeys.restaurant.list(),
-    queryFn: restaurantService.getList,
+    queryFn: () => restaurantService.search(""),
   });
 };
 

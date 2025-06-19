@@ -24,20 +24,21 @@ export default function RestaurantPreviewModal({
   const router = useRouter();
   const createRestaurant = useCreateRestaurant();
 
-  // 🔧 전체 맛집 리스트를 가져와서 이름으로 매칭
   const { data: restaurantList, isLoading: isLoadingList } =
     useRestaurantList();
 
-  // 🔍 이름과 주소로 기존 맛집 찾기
+  // 🔍 이름, 주소, ID 기준 분류
   const existingRestaurant = restaurantList?.find(
     (item) =>
       item.name === restaurant.place_name ||
       (item.name.includes(restaurant.place_name.split(" ")[0]) &&
-        item.address === restaurant.address_name)
+        item.address === restaurant.address_name) ||
+      item.id === Number(restaurant.id)
   );
 
   const hasServerData = !!existingRestaurant;
-  const isLoading = isLoadingList; // ⭐ 리스트 로딩 상태 사용
+  console.log("서버 데이터 검증: ", hasServerData);
+  const isLoading = isLoadingList;
 
   // 상세보기 버튼 클릭
   const handleDetailView = () => {

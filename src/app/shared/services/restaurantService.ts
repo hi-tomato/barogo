@@ -10,8 +10,9 @@ import {
 import { del, get, patch, post } from "../api/client";
 
 export const restaurantService = {
-  getList: async (): Promise<RestaurantList> => {
-    const { data } = await get<RestaurantList>(`/restaurants`);
+  search: async (query: string): Promise<RestaurantList> => {
+    const { data } = await get<RestaurantList>(`/restaurants?query=${query}`);
+    console.log("restaurantService: ", data);
     return data;
   },
 

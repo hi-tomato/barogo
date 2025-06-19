@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { Location } from "@/app/shared/types";
 
 export const useGeolocation = () => {
@@ -6,7 +6,7 @@ export const useGeolocation = () => {
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
-  const getCurrentLocation = () => {
+  const getCurrentLocation = useCallback(() => {
     if (!navigator.geolocation) {
       setError("위치 서비스를 지원하지 않습니다");
       return;
@@ -28,7 +28,12 @@ export const useGeolocation = () => {
         setIsLoading(false);
       }
     );
-  };
+  }, []);
+
+  // 컴포넌트 마운트 시 자동으로 위치 정보 가져오기
+  useEffect(() => {
+    getCurrentLocation();
+  }, [getCurrentLocation]);
 
   return {
     location,
