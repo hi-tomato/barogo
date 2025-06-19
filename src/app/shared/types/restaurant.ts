@@ -55,7 +55,14 @@ export interface CreateRestaurantRequest {
   tags: string[];
   photos: string[];
 }
-
+export interface SearchQueries {
+  name?: string;
+  category?: string;
+  address?: string;
+  lat?: number;
+  lng?: number;
+  radius?: number;
+}
 export interface UpdateRestaurantRequest {
   name?: string;
   category?: string;

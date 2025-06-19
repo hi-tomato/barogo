@@ -4,12 +4,14 @@ import { restaurantService } from "../../services/restaurantService";
 import {
   CreateRestaurantRequest,
   RestaurantList,
+  SearchQueries,
 } from "../../types/restaurant";
 
-export const useRestaurantList = () => {
+export const useRestaurantList = (query?: SearchQueries) => {
   return useQuery({
-    queryKey: queryKeys.restaurant.list(),
-    queryFn: () => restaurantService.search(""),
+    queryKey: queryKeys.restaurant.list?.(query),
+    queryFn: () => restaurantService.search(query),
+    enabled: !!query,
   });
 };
 
@@ -17,10 +19,8 @@ export const useCreateRestaurant = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (data: CreateRestaurantRequest) =>
-      restaurantService.create(data),
-    onSuccess: (data) => {
-      console.log("성공적으로 데이터를 서버에 저장하였습니다.", data);
+    mutationFn: restaurantService.create,
+    onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: queryKeys.restaurant.list() });
     },
     onError: (error) => {

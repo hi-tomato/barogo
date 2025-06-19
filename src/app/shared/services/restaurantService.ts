@@ -5,13 +5,22 @@ import {
   RestaurantDetail,
   RestaurantList,
   ReviewResponse,
+  SearchQueries,
   UpdateRestaurantRequest,
 } from "../types/restaurant";
 import { del, get, patch, post } from "../api/client";
 
 export const restaurantService = {
-  search: async (query: string): Promise<RestaurantList> => {
-    const { data } = await get<RestaurantList>(`/restaurants?query=${query}`);
+  search: async (query?: SearchQueries): Promise<RestaurantList> => {
+    const entries = Object.entries(query!);
+    const queries = entries
+      .filter(([_, value]) => value !== "")
+      .map(([keys, value]) => `${keys}=${value}`)
+      .join("&");
+
+    const { data } = await get<RestaurantList>(
+      `/restaurants${query ? `?${queries}` : ""}`
+    );
     console.log("restaurantService: ", data);
     return data;
   },
