@@ -30,11 +30,6 @@ export default function ReviewItem({
               <span className="font-medium text-[#2B2B2B]">
                 {review.userName}
               </span>
-              {isMyReview && (
-                <span className="px-2 py-1 bg-[#1C4E80] text-white text-xs rounded-full font-medium">
-                  내 리뷰
-                </span>
-              )}
             </div>
             <div className="flex items-center space-x-2 mt-1">
               <div className="flex">

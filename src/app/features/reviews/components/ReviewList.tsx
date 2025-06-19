@@ -20,8 +20,6 @@ export default function ReviewList({
   onRetry,
   isDeleting,
 }: ReviewListProps) {
-  const isMyReview = (review: Review) => review.userId === currentUserId;
-  console.log(reviews);
   if (isLoading) {
     return (
       <div className="px-4 py-6">
@@ -68,7 +66,7 @@ export default function ReviewList({
           <ReviewItem
             key={review.id}
             review={review}
-            isMyReview={isMyReview(review)}
+            isMyReview={review.userId === currentUserId}
             onDelete={() => onDeleteReview(review.id)}
             isDeleting={isDeleting}
           />

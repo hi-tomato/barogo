@@ -64,10 +64,7 @@ export default function SearchPage() {
       })
     );
 
-    console.log(saved);
-
     router.back();
-
     setTimeout(() => {
       router.push(`/baropot/create/${restaurant.id}`);
     }, 100);

@@ -17,19 +17,19 @@ interface RestaurantReviewsProps {
 
 export default function RestaurantReviews({
   restaurantId,
-  currentUserId = 1,
+  currentUserId,
 }: RestaurantReviewsProps) {
   const [showWriteForm, setShowWriteForm] = useState(false);
-  // 전체 리뷰 데이터를 받아오는 Query
+
+  const isMyReview = (review: Review) => review.userId === currentUserId;
   const {
     data: reviewsData,
     isLoading: reviewsLoading,
     error: reviewsError,
     refetch: refetchReviews,
   } = useRestaurantReviews(restaurantId);
-  console.log(reviewsData);
 
-  // 리뷰를 수정, 삭제하는 Query
+  // 리뷰를 생성, 삭제하는 Query
   const createReviewMutation = useCreateReviews();
   const deleteReviewMutation = useDeleteReview();
 
@@ -44,9 +44,7 @@ export default function RestaurantReviews({
     return [];
   })();
 
-  // TODO: 내 리뷰인지 확인
-  const isMyReview = (review: Review) => review.userId === currentUserId;
-
+  // 전체 리뷰 데이터를 받아오는 Query
   const handleSubmitReview = async (reviewData: CreateReviewRequest) => {
     try {
       await createReviewMutation.mutateAsync({
@@ -99,7 +97,7 @@ export default function RestaurantReviews({
         reviews={reviews}
         isLoading={reviewsLoading}
         error={reviewsError}
-        currentUserId={currentUserId}
+        currentUserId={currentUserId as number}
         onDeleteReview={handleDeleteReview}
         onRetry={() => refetchReviews()}
         isDeleting={deleteReviewMutation.isPending}

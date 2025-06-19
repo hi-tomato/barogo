@@ -7,16 +7,19 @@ import RestaurantSection from "../components/detail/RestaurantSection";
 import RestaurantMap from "../components/detail/RestaurantMap";
 import { useRestaurantDetail } from "@/app/shared/hooks/queries/useRestaurant";
 import { useParams } from "next/navigation";
+import { useAuthStore } from "@/app/shared/store/useAuthStore";
 
 export default function SearchDetailPage() {
   const params = useParams<{ id: string }>();
+  const { user } = useAuthStore();
+
   const {
     data: restaurant,
-    isLoading,
+    isLoading: restaurantLoading,
     isError,
   } = useRestaurantDetail(params.id);
 
-  if (isLoading) {
+  if (restaurantLoading) {
     return (
       <div className="min-h-screen bg-[#E6EEF5] flex items-center justify-center">
         <div className="flex flex-col items-center space-y-4">
@@ -53,7 +56,7 @@ export default function SearchDetailPage() {
         restaurant={restaurant}
         isOwner={restaurant.isWrittenByMe}
       />
-      <RestaurantReviews restaurantId={params.id} />
+      <RestaurantReviews restaurantId={params.id} currentUserId={user?.id} />
       <RestaurantSection />
       <RestaurantMap />
     </div>

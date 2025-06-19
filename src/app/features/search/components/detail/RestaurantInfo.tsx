@@ -2,8 +2,6 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import {
-  HiHeart,
-  HiOutlineHeart,
   HiPhone,
   HiClock,
   HiDotsVertical,
@@ -16,7 +14,6 @@ import {
   useAddBookmark,
   useRemoveBookmark,
 } from "@/app/shared/hooks/queries/useReview";
-import { BsHeartbreakFill } from "react-icons/bs";
 import { FaHeartCircleCheck, FaHeartCircleXmark } from "react-icons/fa6";
 import { useDeleteRestaurant } from "@/app/shared/hooks/queries/useRestaurant";
 import { useRouter } from "next/navigation";
@@ -25,15 +22,12 @@ interface RestaurantInfoProps {
   restaurant: RestaurantDetail;
   isBookmarked?: boolean;
   isOwner?: boolean;
-  onBookmarkToggle?: () => void;
-  onEdit?: () => void;
 }
 
 export default function RestaurantInfo({
   restaurant,
-  isBookmarked = false,
+  isBookmarked,
   isOwner,
-  onEdit,
 }: RestaurantInfoProps) {
   const router = useRouter();
   const [showFullDescription, setShowFullDescription] = useState(false);
@@ -164,8 +158,8 @@ export default function RestaurantInfo({
                   >
                     <button
                       onClick={() => {
-                        onEdit?.();
                         setShowOwnerMenu(false);
+                        router.push(`/restaurants/edit/${restaurant.id}`);
                       }}
                       className="w-full px-4 py-3 text-left text-sm text-gray-700 hover:bg-gray-50 flex items-center space-x-3"
                     >
