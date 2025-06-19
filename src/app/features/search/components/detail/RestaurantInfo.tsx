@@ -8,6 +8,7 @@ import {
   HiClock,
   HiDotsVertical,
   HiPencil,
+  HiTrash,
 } from "react-icons/hi";
 import { RestaurantDetail } from "@/app/shared/types/restaurant";
 import Button from "@/app/shared/ui/Button";
@@ -17,6 +18,8 @@ import {
 } from "@/app/shared/hooks/queries/useReview";
 import { BsHeartbreakFill } from "react-icons/bs";
 import { FaHeartCircleCheck, FaHeartCircleXmark } from "react-icons/fa6";
+import { useDeleteRestaurant } from "@/app/shared/hooks/queries/useRestaurant";
+import { useRouter } from "next/navigation";
 
 interface RestaurantInfoProps {
   restaurant: RestaurantDetail;
@@ -29,16 +32,16 @@ interface RestaurantInfoProps {
 export default function RestaurantInfo({
   restaurant,
   isBookmarked = false,
-  isOwner = false,
+  isOwner,
   onEdit,
 }: RestaurantInfoProps) {
+  const router = useRouter();
   const [showFullDescription, setShowFullDescription] = useState(false);
   const [showOwnerMenu, setShowOwnerMenu] = useState(false);
   const [bookmarked, setBookmarked] = useState(restaurant.isBookmarked);
 
   const addBookmarkMutation = useAddBookmark();
   const removeBookmarkMutation = useRemoveBookmark();
-  console.log(restaurant.isBookmarked);
 
   const handleBookmarkToggle = async () => {
     try {
@@ -60,6 +63,14 @@ export default function RestaurantInfo({
 
   const handleCall = () => {
     window.location.href = `tel:${restaurant.phoneNumber}`;
+  };
+
+  const deleteRestaurantMutation = useDeleteRestaurant();
+  const handleDeleteDetail = () => {
+    if (confirm("해당 맛집을 삭제하시겠습니까?")) {
+      deleteRestaurantMutation.mutate(restaurant.id.toString());
+      router.push("/main");
+    }
   };
 
   const handleMapView = () => {
@@ -160,6 +171,12 @@ export default function RestaurantInfo({
                     >
                       <HiPencil size={16} />
                       <span>정보 수정</span>
+                    </button>
+                    <button
+                      className="w-full px-4 py-3 text-left text-sm text-gray-700 hover:bg-gray-50 flex items-center space-x-3"
+                      onClick={handleDeleteDetail}
+                    >
+                      <HiTrash size={16} /> <span>맛집 삭제</span>
                     </button>
                   </motion.div>
                 )}

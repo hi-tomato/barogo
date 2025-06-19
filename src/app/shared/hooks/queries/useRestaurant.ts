@@ -42,3 +42,19 @@ export const useRestaurantDetail = (restaurantId: string) => {
     },
   });
 };
+
+export const useDeleteRestaurant = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (restaurantId: string) =>
+      restaurantService.delete(restaurantId),
+    onSuccess: () => {
+      console.log("맛집을 삭제하였습니다.");
+      queryClient.invalidateQueries({ queryKey: queryKeys.restaurant.list() });
+    },
+    onError: (error) => {
+      console.error("맛집을 삭제하는데 문제가 발생하였습니다." + error);
+    },
+  });
+};

@@ -49,7 +49,10 @@ export default function SearchDetailPage() {
     <div>
       <RestaurantHeader />
       <RestaurantImages images={restaurant.photos} />
-      <RestaurantInfo restaurant={restaurant} />
+      <RestaurantInfo
+        restaurant={restaurant}
+        isOwner={restaurant.isWrittenByMe}
+      />
       <RestaurantReviews restaurantId={params.id} />
       <RestaurantSection />
       <RestaurantMap />
