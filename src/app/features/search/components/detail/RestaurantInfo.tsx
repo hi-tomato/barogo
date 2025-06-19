@@ -40,12 +40,12 @@ export default function RestaurantInfo({
   const handleBookmarkToggle = async () => {
     try {
       if (bookmarked) {
-        await removeBookmarkMutation.mutateAsync(restaurant.id.toString());
+        await removeBookmarkMutation.mutateAsync(restaurant.id);
         setBookmarked(false);
         console.log("북마크가 제거되었습니다.");
       } else if (!bookmarked) {
         // 북마크 추가
-        await addBookmarkMutation.mutateAsync(restaurant.id.toString());
+        await addBookmarkMutation.mutateAsync(restaurant.id);
         setBookmarked(true);
         console.log("북마크가 추가되었습니다.");
       }

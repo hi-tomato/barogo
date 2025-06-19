@@ -6,6 +6,7 @@ interface ReviewListProps {
   isLoading: boolean;
   error: any;
   currentUserId: number;
+  restaurantId: string; // 추가
   onDeleteReview: (reviewId: number) => void;
   onRetry: () => void;
   isDeleting: boolean;
@@ -17,6 +18,7 @@ export default function ReviewList({
   error,
   currentUserId,
   onDeleteReview,
+  restaurantId,
   onRetry,
   isDeleting,
 }: ReviewListProps) {
@@ -66,6 +68,7 @@ export default function ReviewList({
           <ReviewItem
             key={review.id}
             review={review}
+            restaurantId={restaurantId}
             isMyReview={review.userId === currentUserId}
             onDelete={() => onDeleteReview(review.id)}
             isDeleting={isDeleting}

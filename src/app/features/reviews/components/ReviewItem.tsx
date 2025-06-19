@@ -32,7 +32,7 @@ export default function ReviewItem({
   const handleEdit = async () => {
     try {
       await updateReviewMutate.mutateAsync({
-        reviewId: review.id,
+        reviewId: review.id.toString(),
         restaurantId: restaurantId,
         reviewData: newData,
       });

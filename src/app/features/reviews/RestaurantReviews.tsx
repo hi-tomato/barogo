@@ -97,6 +97,7 @@ export default function RestaurantReviews({
         isLoading={reviewsLoading}
         error={reviewsError}
         currentUserId={currentUserId as number}
+        restaurantId={restaurantId}
         onDeleteReview={handleDeleteReview}
         onRetry={() => refetchReviews()}
         isDeleting={deleteReviewMutation.isPending}

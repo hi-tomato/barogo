@@ -98,14 +98,14 @@ export const useAddBookmark = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (restaurantId: string) =>
+    mutationFn: (restaurantId: number) =>
       restaurantService.addBookmark(restaurantId),
     onSuccess: (data, restaurantId) => {
       console.log("북마크가 추가되었습니다.");
       console.log(restaurantId);
       // 맛집 상세 정보 갱신 (북마크 상태 변경)
       queryClient.invalidateQueries({
-        queryKey: queryKeys.restaurant.detail(restaurantId),
+        queryKey: queryKeys.restaurant.detail(restaurantId.toString()),
       });
       // 북마크 목록도 갱신 (있다면)
       queryClient.invalidateQueries({
@@ -122,13 +122,13 @@ export const useRemoveBookmark = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (restaurantId: string) =>
+    mutationFn: (restaurantId: number) =>
       restaurantService.removeBookmark(restaurantId),
     onSuccess: (data, restaurantId) => {
       console.log("북마크가 삭제되었습니다.");
       // 맛집 상세 정보 갱신
       queryClient.invalidateQueries({
-        queryKey: queryKeys.restaurant.detail(restaurantId),
+        queryKey: queryKeys.restaurant.detail(restaurantId.toString()),
       });
       // 북마크 목록도 갱신
       queryClient.invalidateQueries({
