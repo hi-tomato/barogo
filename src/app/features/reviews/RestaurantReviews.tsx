@@ -21,7 +21,6 @@ export default function RestaurantReviews({
 }: RestaurantReviewsProps) {
   const [showWriteForm, setShowWriteForm] = useState(false);
 
-  const isMyReview = (review: Review) => review.userId === currentUserId;
   const {
     data: reviewsData,
     isLoading: reviewsLoading,

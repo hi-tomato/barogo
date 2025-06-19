@@ -83,7 +83,7 @@ export const useUpdateReview = () => {
       queryClient.invalidateQueries({
         queryKey: queryKeys.restaurant.reviews(variables.restaurantId),
       });
-      // 맛집 상세 정보도 갱신
+      //  TODO: 맛집 상세 정보도 갱신
       queryClient.invalidateQueries({
         queryKey: queryKeys.restaurant.detail(variables.restaurantId),
       });
