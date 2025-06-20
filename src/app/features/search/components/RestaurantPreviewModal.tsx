@@ -38,7 +38,6 @@ export default function RestaurantPreviewModal({
   );
 
   const hasServerData = !!existingRestaurant;
-  console.log("서버 데이터 검증: ", hasServerData);
   const isLoading = isLoadingList;
 
   // 상세보기 버튼 클릭
@@ -73,7 +72,6 @@ export default function RestaurantPreviewModal({
 
   // 바로팟 만들기 버튼 클릭
   const handleCreateBaropot = () => {
-    console.log("바로팟 만들기로 이동");
     onConfirm(restaurant);
   };
 

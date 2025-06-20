@@ -3,14 +3,6 @@ export async function GET(request: Request) {
   const query = searchParams.get("q");
   const lat = searchParams.get("lat");
   const lng = searchParams.get("lng");
-  const category = searchParams.get("category");
-  const radius = searchParams.get("radius");
-
-  console.log("query:", query);
-  console.log("y:", lat);
-  console.log("x:", lng);
-  console.log("category:", category);
-  console.log("radius:", radius);
 
   if (!query) {
     return Response.json({ error: "검색어가 필요합니다." }, { status: 400 });
@@ -27,7 +19,6 @@ export async function GET(request: Request) {
     });
 
     const data = await response.json();
-    console.log("data: ", data);
     return Response.json(data);
   } catch (error) {
     console.error("맛집 검색 API 오류:", error);

@@ -38,14 +38,6 @@ export default function BaropotModal() {
     });
   };
 
-  const handleCreateNew = () => {
-    router.back();
-
-    setTimeout(() => {
-      router.push("/baropot/create"); // 잠시 후 페이지 이동
-    }, 100);
-  };
-
   return (
     <div className="fixed inset-0 bg-[#0000004c] flex items-center justify-center p-4 z-50">
       <div className="bg-white rounded-xl w-full max-w-2xl max-h-[85vh] overflow-hidden shadow-2xl">
@@ -65,8 +57,13 @@ export default function BaropotModal() {
         <div className="p-4 border-t border-gray-100">
           <Button
             text="새 바로팟 만들기"
-            onClick={handleCreateNew}
             className="w-full bg-blue-500 text-white py-3 rounded-lg font-medium hover:bg-blue-600 transition-colors"
+            onClick={() => {
+              router.back();
+              setTimeout(() => {
+                router.push("/baropot/create");
+              }, 100);
+            }}
           />
         </div>
       </div>

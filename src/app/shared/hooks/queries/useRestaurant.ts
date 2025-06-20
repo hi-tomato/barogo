@@ -53,7 +53,6 @@ export const useDeleteRestaurant = () => {
     mutationFn: (restaurantId: string) =>
       restaurantService.delete(restaurantId),
     onSuccess: () => {
-      console.log("맛집을 삭제하였습니다.");
       queryClient.invalidateQueries({ queryKey: queryKeys.restaurant.list() });
     },
     onError: (error) => {
@@ -74,7 +73,6 @@ export const useUpdateRestaurant = () => {
       data: UpdateRestaurantRequest;
     }) => restaurantService.update(restaurantId, data),
     onSuccess: (data, variables) => {
-      console.log("맛집을 수정하였습니다.", data);
       queryClient.invalidateQueries({
         queryKey: queryKeys.restaurant.detail(variables.restaurantId),
       });

@@ -41,13 +41,6 @@ export const useImageUpload = (options: UseImageUploadOptions = {}) => {
       const extension = fileValidator.getExtension(file.name);
 
       try {
-        console.log("📤 이미지 업로드 시작:", {
-          fileName: file.name,
-          fileType: file.type,
-          fileSize: `${(file.size / (1024 * 1024)).toFixed(2)}MB`,
-          extension,
-        });
-
         // Presigned URL 받기
         const { presignedUrl, key, url } =
           await imageUploadService.getPresignedUrl(extension);

@@ -12,7 +12,6 @@ export default function RestaurantMarker({
   restaurant,
   onClick,
 }: RestaurantMarkerProps) {
-  console.log(restaurant);
   const markerImage = getMarkerImage(restaurant);
   return (
     <>

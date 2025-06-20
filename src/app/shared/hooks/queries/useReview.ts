@@ -24,7 +24,6 @@ export const useCreateReviews = () => {
       reviewData: CreateReviewRequest;
     }) => await restaurantService.createReview(restaurantId, reviewData),
     onSuccess: (data, variables) => {
-      console.log("리뷰가 성공적으로 등록되어있습니다.", data);
       queryClient.invalidateQueries({
         queryKey: queryKeys.restaurant.reviews(variables.restaurantId),
       });
@@ -78,7 +77,6 @@ export const useUpdateReview = () => {
       reviewData: CreateReviewRequest;
     }) => restaurantService.updateReview(reviewId, reviewData),
     onSuccess: (data, variables) => {
-      console.log("리뷰가 성공적으로 수정되었습니다.", data);
       // 해당 맛집의 리뷰 목록 갱신
       queryClient.invalidateQueries({
         queryKey: queryKeys.restaurant.reviews(variables.restaurantId),
@@ -100,9 +98,7 @@ export const useAddBookmark = () => {
   return useMutation({
     mutationFn: (restaurantId: number) =>
       restaurantService.addBookmark(restaurantId),
-    onSuccess: (data, restaurantId) => {
-      console.log("북마크가 추가되었습니다.");
-      console.log(restaurantId);
+    onSuccess: (_, restaurantId) => {
       // 맛집 상세 정보 갱신 (북마크 상태 변경)
       queryClient.invalidateQueries({
         queryKey: queryKeys.restaurant.detail(restaurantId.toString()),
@@ -124,8 +120,7 @@ export const useRemoveBookmark = () => {
   return useMutation({
     mutationFn: (restaurantId: number) =>
       restaurantService.removeBookmark(restaurantId),
-    onSuccess: (data, restaurantId) => {
-      console.log("북마크가 삭제되었습니다.");
+    onSuccess: (_, restaurantId) => {
       // 맛집 상세 정보 갱신
       queryClient.invalidateQueries({
         queryKey: queryKeys.restaurant.detail(restaurantId.toString()),

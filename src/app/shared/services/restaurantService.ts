@@ -14,7 +14,6 @@ export const restaurantService = {
   search: async (query?: SearchQueries): Promise<RestaurantList> => {
     if (!query || Object.keys(query).length === 0) {
       const { data } = await get<RestaurantList>("/restaurants");
-      console.log("restaurantService: ", data);
       return data;
     }
 
@@ -104,7 +103,6 @@ export const restaurantService = {
 
   addBookmark: async (restaurantId: number): Promise<void> => {
     const { data } = await post(`/restaurants/${restaurantId}/bookmark`);
-    console.log(restaurantId);
     return data;
   },
 
@@ -114,7 +112,6 @@ export const restaurantService = {
 
   getBookMarkList: async (): Promise<RestaurantList> => {
     const { data } = await get<RestaurantList>(`/restaurants/me/bookmarks`);
-    console.log(`북마크 리스트 ${data}`);
     return data;
   },
 };

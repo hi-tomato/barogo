@@ -79,10 +79,7 @@ export function useBaropotFormLogic({
       ...(data.rules?.trim() && { rules: data.rules.trim() }),
     };
 
-    console.log("서버 전송 데이터:", submitData);
     // TODO: 실제 API 호출
-    // await baropot.create(submitData);
-
     alert("✅ 바로팟이 생성되었습니다!");
     router.push("/main");
   };

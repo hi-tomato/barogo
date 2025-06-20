@@ -13,10 +13,6 @@ export default function FavoriteRestaurantCard({
   index,
 }: FavoriteRestaurantCardProps) {
   const router = useRouter();
-  const handleDetailView = () => {
-    console.log("상세 페이지로 이동:", restaurant.id);
-    router.push(`/search/${restaurant.id}/detail`);
-  };
   return (
     <div
       key={restaurant.id}
@@ -47,7 +43,10 @@ export default function FavoriteRestaurantCard({
           </div>
         </div>
         <div className="flex items-center mt-1">
-          <Button text="🔍 상세보기" onClick={handleDetailView} />
+          <Button
+            text="🔍 상세보기"
+            onClick={() => router.push(`/search/${restaurant.id}/detail`)}
+          />
         </div>
       </div>
     </div>

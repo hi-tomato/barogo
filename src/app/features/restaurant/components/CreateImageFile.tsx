@@ -21,7 +21,6 @@ export default function CreateImageFile({
 
   const { uploadImage, isUploading } = useImageUpload({
     onSuccess: (data) => {
-      console.log("✅ 업로드 성공:", data);
       // 현재 업로드 중인 이미지를 찾아서 성공 상태로 업데이트
       setUploadedImages((prev) => {
         const uploadingIndex = prev.findIndex(

@@ -44,12 +44,10 @@ export default function RestaurantInfo({
       if (bookmarked) {
         await removeBookmarkMutation.mutateAsync(restaurant.id);
         setBookmarked(false);
-        console.log("북마크가 제거되었습니다.");
       } else if (!bookmarked) {
         // 북마크 추가
         await addBookmarkMutation.mutateAsync(restaurant.id);
         setBookmarked(true);
-        console.log("북마크가 추가되었습니다.");
       }
     } catch (error) {
       console.error("북마크 처리 중 오류:", error);

@@ -63,7 +63,7 @@ export default function RestaurantImages({
               fill
               className="object-cover"
               onError={() => {
-                console.log("이미지 로드 실패:", image);
+                console.error("이미지 로드 실패:", image);
               }}
             />
             {/* 그라데이션 오버레이 */}

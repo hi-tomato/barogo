@@ -16,7 +16,6 @@ export const mapKaKaoCategoryToServer = (kakaoCategory: string): string => {
     category.includes("족발") ||
     category.includes("보쌈")
   ) {
-    console.log("✅ KOREAN으로 매핑됨");
     return "KOREAN";
   }
 
@@ -30,7 +29,6 @@ export const mapKaKaoCategoryToServer = (kakaoCategory: string): string => {
     category.includes("마라탕") ||
     category.includes("훠궈")
   ) {
-    console.log("✅ CHINESE로 매핑됨");
     return "CHINESE";
   }
 
@@ -45,7 +43,6 @@ export const mapKaKaoCategoryToServer = (kakaoCategory: string): string => {
     category.includes("돈카츠") ||
     category.includes("사시미")
   ) {
-    console.log("✅ JAPANESE로 매핑됨");
     return "JAPANESE";
   }
 
@@ -61,7 +58,6 @@ export const mapKaKaoCategoryToServer = (kakaoCategory: string): string => {
     category.includes("햄버거") ||
     category.includes("샐러드")
   ) {
-    console.log("✅ WESTERN으로 매핑됨");
     return "WESTERN";
   }
 
@@ -75,7 +71,6 @@ export const mapKaKaoCategoryToServer = (kakaoCategory: string): string => {
     category.includes("kfc") ||
     category.includes("서브웨이")
   ) {
-    console.log("✅ FAST_FOOD로 매핑됨");
     return "FAST_FOOD";
   }
 
@@ -90,7 +85,6 @@ export const mapKaKaoCategoryToServer = (kakaoCategory: string): string => {
     category.includes("빵") ||
     category.includes("베이커리")
   ) {
-    console.log("✅ CAFE로 매핑됨");
     return "CAFE";
   }
 
@@ -105,7 +99,6 @@ export const mapKaKaoCategoryToServer = (kakaoCategory: string): string => {
     category.includes("빙수") ||
     category.includes("달달")
   ) {
-    console.log("✅ DESSERT로 매핑됨");
     return "DESSERT";
   }
 
@@ -120,7 +113,6 @@ export const mapKaKaoCategoryToServer = (kakaoCategory: string): string => {
     category.includes("포차") ||
     category.includes("칵테일")
   ) {
-    console.log("✅ BAR로 매핑됨");
     return "BAR";
   }
 
@@ -132,7 +124,6 @@ export const mapKaKaoCategoryToServer = (kakaoCategory: string): string => {
     category.includes("샐러드바") ||
     category.includes("무한리필")
   ) {
-    console.log("✅ BUFFET로 매핑됨");
     return "BUFFET";
   }
 
@@ -143,11 +134,9 @@ export const mapKaKaoCategoryToServer = (kakaoCategory: string): string => {
     category.includes("창작") ||
     category.includes("모던")
   ) {
-    console.log("✅ FUSION으로 매핑됨");
     return "FUSION";
   }
 
-  console.error("추가되지 않는, 카테고리 유형입니다");
   return "ETC";
 };
 

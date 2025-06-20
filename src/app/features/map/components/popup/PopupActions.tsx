@@ -11,14 +11,12 @@ export default function PopupActions({
   const router = useRouter();
   const handleDetailPage = () => {
     // TODO: 여기서 디테일 페이지로 이동하는 로직을 작성
-    console.log("맵 컴포넌트에서, 디테일 페이지로 이동");
     router.push(`/search/${restaurant.id}/detail`);
   };
 
   const handleBaropotPage = () => {
     // TODO: 여기서 바로팟 페이지로 이동하는 로직을 작성
     router.push(`/baropot/create/${restaurant.id}`);
-    console.log("맵 컴포넌트에서, 바로팟 생성 페이지로 이동");
   };
 
   return (

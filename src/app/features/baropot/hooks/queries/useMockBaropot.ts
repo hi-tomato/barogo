@@ -8,7 +8,6 @@ export const useBaropotList = (tab?: BaropotTab) => {
     queryKey: queryKeys.baropot.list(tab || "available"),
     queryFn: async () => {
       const result = await baropot.getList(tab || "available");
-      console.log("API 결과:", result);
       return result;
     },
     staleTime: 1000 * 60 * 5,
@@ -21,7 +20,6 @@ export const useCreateBaropot = () => {
   return useMutation({
     mutationFn: baropot.create,
     onSuccess: () => {
-      console.log("바로팟 모임을 성공적으로 생성을 완료하였습니다.");
       queryClient.invalidateQueries({ queryKey: queryKeys.baropot.lists() });
     },
     onError: (error) => {
@@ -39,7 +37,6 @@ export const useJoinBaropot = () => {
   return useMutation({
     mutationFn: baropot.join,
     onSuccess: () => {
-      console.log("바로팟 모임에 성공적으로 등록하였습니다.");
       queryClient.invalidateQueries({
         queryKey: queryKeys.baropot.lists(),
       });

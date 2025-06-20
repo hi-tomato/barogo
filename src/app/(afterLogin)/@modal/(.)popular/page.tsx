@@ -13,7 +13,6 @@ export default function FavoriteRestaurantsModal() {
   if (isPending) return <PopularStatus type="loading" />;
   if (isError) return <PopularStatus type="error" />;
   if (favorites?.length === 0) return <PopularStatus type="notFound" />;
-  console.log(favorites);
   return (
     <div className="fixed inset-0 bg-[#0000005d] flex items-center justify-center p-4 z-50">
       <div className="bg-white rounded-xl w-full max-w-md max-h-[80vh] overflow-hidden shadow-2xl">
