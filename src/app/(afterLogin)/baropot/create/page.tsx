@@ -17,7 +17,6 @@ export default function CreateBaropotPage() {
           const restaurant: RestaurantData = JSON.parse(saveData);
           if (restaurant.name && restaurant.location && restaurant.category) {
             setSelectedRestaurant(restaurant);
-            console.log("받은 맛집 데이터:", restaurant);
           } else {
             console.error("맛집 데이터가 불안전합니다");
             router.back();
@@ -26,7 +25,6 @@ export default function CreateBaropotPage() {
           sessionStorage.removeItem("selectedRestaurant");
         }
       } catch (error) {
-        console.log("선택된 맛집이 없습니다.", error);
         router.back();
       }
     };

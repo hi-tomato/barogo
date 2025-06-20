@@ -26,13 +26,11 @@ export default function SearchPage() {
   });
 
   const handleSelectRestaurant = (restaurant: NearbyRestaurant) => {
-    console.log("선택된 맛집 데이터:", restaurant);
     setSelectedRestaurant(restaurant);
     setShowPreview(true);
   };
 
   const handleConfirmSelection = (restaurant: NearbyRestaurant) => {
-    console.log("확인된 맛집 데이터:", restaurant);
     if (
       !restaurant.id ||
       !restaurant.place_name ||
@@ -52,22 +50,18 @@ export default function SearchPage() {
       console.error("맛집 정보가 불완전합니다. 다시 선택해주세요.");
       return;
     }
-    const saved = sessionStorage.setItem(
-      "selectedRestaurant",
-      JSON.stringify({
-        name: restaurant.place_name,
-        location: restaurant.address_name,
-        category: restaurant.category_name,
-        kakaoId: restaurant.id,
-        lat: restaurant.y,
-        lng: restaurant.x,
-      })
-    );
+    const baropotData = {
+      name: restaurant.place_name,
+      location: restaurant.address_name,
+      category: restaurant.category_name,
+      kakaoId: restaurant.id,
+      lat: restaurant.y,
+      lng: restaurant.x,
+    };
 
-    console.log(saved);
+    sessionStorage.setItem("selectedRestaurant", JSON.stringify(baropotData));
 
     router.back();
-
     setTimeout(() => {
       router.push(`/baropot/create/${restaurant.id}`);
     }, 100);

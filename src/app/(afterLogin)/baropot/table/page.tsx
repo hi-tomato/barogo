@@ -101,7 +101,6 @@ export default function BaropotTablePage() {
     });
 
   const handleJoinBaropot = (baropotId: number) => {
-    console.log("바로팟 참여:", baropotId);
     alert("바로팟에 참여했습니다!");
     refetch(); // 목록 새로고침
   };

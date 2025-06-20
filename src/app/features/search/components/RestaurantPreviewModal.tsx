@@ -1,9 +1,12 @@
 "use client";
-import { useRestaurantDetail } from "@/app/hooks/queries/useRestaurantDetail";
 import { NearbyRestaurant } from "@/app/shared/types";
 import { useRouter } from "next/navigation";
-import { getActionButton, getActionButtonIcon } from "../util/getActions";
 import Button from "@/app/shared/ui/Button";
+import {
+  useCreateRestaurant,
+  useRestaurantList,
+} from "@/app/shared/hooks/queries/useRestaurant";
+import { RestaurantStatus } from "./Status";
 
 interface RestaurantPreviewModalProps {
   restaurant: NearbyRestaurant;
@@ -19,29 +22,61 @@ export default function RestaurantPreviewModal({
   onConfirm,
 }: RestaurantPreviewModalProps) {
   const router = useRouter();
-  const {
-    data: restaurantDetail,
-    isLoading,
-    isError,
-  } = useRestaurantDetail(restaurant.id, isOpen);
-  const modalState = { isLoading, isError, restaurantDetail };
+  const createRestaurant = useCreateRestaurant();
 
-  const handleActions = () => {
-    // TODO: 서버에 등록된 데이터가 있을 때,
-    if (restaurantDetail && !isError) {
-      console.log(`서버에 데이터가 있습니다! 디테일 페이지로 이동함둥`);
+  const { data: restaurantList, isLoading: isLoadingList } = useRestaurantList(
+    {}
+  );
+
+  // 🔍 이름, 주소, ID 기준 분류
+  const existingRestaurant = restaurantList?.find(
+    (item) =>
+      item.name === restaurant.place_name ||
+      (item.name.includes(restaurant.place_name.split(" ")[0]) &&
+        item.address === restaurant.address_name) ||
+      item.id === Number(restaurant.id)
+  );
+
+  const hasServerData = !!existingRestaurant;
+  const isLoading = isLoadingList;
+
+  // 상세보기 버튼 클릭
+  const handleDetailView = () => {
+    if (existingRestaurant) {
       onClose();
-      router.push(`/search/${restaurant.id}/detail`);
-    } else {
-      // TODO: 서버에 등록된 데이터가 없을 때.
-      console.log(
-        `서버에 등록된 데이터가 없습니다. 바로팟 만들기 페이지로 이동합니다.`
-      );
-      onConfirm(restaurant);
+      router.push(`/restaurants/${existingRestaurant.id}/detail`);
     }
   };
 
+  // 맛집 등록 버튼 클릭
+  const handleRegisterRestaurant = async () => {
+    if (!restaurant.x || !restaurant.y) {
+      alert("위치 정보가 없어서 맛집을 등록할 수 없습니다.");
+      return;
+    }
+    sessionStorage.setItem(
+      "selectedRestaurant",
+      JSON.stringify({
+        id: restaurant.id,
+        name: restaurant.place_name,
+        location: restaurant.address_name,
+        category: restaurant.category_name,
+        phone: restaurant.phone || "",
+        x: restaurant.x,
+        y: restaurant.y,
+      })
+    );
+    onClose();
+    router.push(`/restaurants/create`);
+  };
+
+  // 바로팟 만들기 버튼 클릭
+  const handleCreateBaropot = () => {
+    onConfirm(restaurant);
+  };
+
   if (!isOpen) return null;
+
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
       <div className="bg-white rounded-xl p-6 max-w-sm w-full">
@@ -68,28 +103,32 @@ export default function RestaurantPreviewModal({
           {restaurant.phone && (
             <p className="text-sm text-gray-600">📞 {restaurant.phone}</p>
           )}
-          {restaurant.distance && (
-            <p className="text-sm text-green-600">
-              📏 현재 위치에서 약 {Math.round(parseInt(restaurant.distance))}m
-            </p>
-          )}
         </div>
 
-        {/* Action Buttons (서버에 데이터가 있는지 없는지 확인하는 btns) */}
-        <div className="flex space-x-3">
-          <Button
-            text="다시 선택"
-            onClick={onClose}
-            className="flex-1 px-4 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
-          />
-          <button
-            onClick={handleActions}
-            disabled={isLoading}
-            className="flex-1 px-4 py-3 bg-[#1C4E80] text-white rounded-lg hover:bg-[#154066] transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center space-x-2"
-          >
-            <span>{getActionButton(modalState)}</span>
-            <span>{getActionButtonIcon(modalState)}</span>
-          </button>
+        {/* Action Buttons - 조건별 렌더링 */}
+        <div className="space-y-3">
+          {/* 로딩 중일 때 */}
+          {isLoading && <RestaurantStatus type="isLoading" onClose={onClose} />}
+
+          {/* 서버에 데이터가 있을 때 - 상세보기 + 바로팟 만들기 */}
+          {!isLoading && hasServerData && (
+            <RestaurantStatus
+              type="hasServerData"
+              onClose={onClose}
+              onDetailView={handleDetailView}
+              onCreateBaropot={handleCreateBaropot}
+            />
+          )}
+
+          {/* 서버에 데이터가 없을 때 - 맛집 등록  */}
+          {!isLoading && !hasServerData && (
+            <RestaurantStatus
+              type="notServerData"
+              onClose={onClose}
+              onRegisterRestaurant={handleRegisterRestaurant}
+              isRegistering={createRestaurant.isPending}
+            />
+          )}
         </div>
       </div>
     </div>

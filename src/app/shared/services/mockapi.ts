@@ -1,5 +1,5 @@
 import { BaropotItem, BaropotTab } from "@/app/features/baropot/types/baropot";
-import { RestaurantDetail } from "@/app/features/nearby/types/restaurant";
+// import { RestaurantDetail } from "@/app/features/nearby/types/restaurant";
 
 // TODO: baropot에 관련된 useQuery Fn(Functions)를 관리하는 객체
 export const baropot = {
@@ -136,107 +136,107 @@ export const baropot = {
   },
 };
 
-export const restaurant = {
-  getFavorites: async () => {
-    await new Promise((resolve) => setTimeout(resolve, 500));
-    return [
-      {
-        id: 1,
-        name: "홀리스 타코",
-        address: "멕시칸음식 • 을지로",
-        rating: 4.6,
-        reviews: 684,
-        image: "/api/placeholder/80/80",
-      },
-      {
-        id: 2,
-        name: "석압생소금구이 용산점",
-        address: "육류,고기요리 • 신용산",
-        rating: 4.3,
-        reviews: 1048,
-        image: "/api/placeholder/80/80",
-      },
-      {
-        id: 3,
-        name: "고베스테이 신대방직영점",
-        address: "퓨젼 • 구로",
-        rating: 4.1,
-        reviews: 1425,
-        image: "/api/placeholder/80/80",
-      },
-      {
-        id: 4,
-        name: "안주마을",
-        address: "해물,생선요리 • 서촌",
-        rating: 4.5,
-        reviews: 747,
-        image: "/api/placeholder/80/80",
-      },
-    ];
-  },
+// export const restaurant = {
+//   getFavorites: async () => {
+//     await new Promise((resolve) => setTimeout(resolve, 500));
+//     return [
+//       {
+//         id: 1,
+//         name: "홀리스 타코",
+//         address: "멕시칸음식 • 을지로",
+//         rating: 4.6,
+//         reviews: 684,
+//         image: "/api/placeholder/80/80",
+//       },
+//       {
+//         id: 2,
+//         name: "석압생소금구이 용산점",
+//         address: "육류,고기요리 • 신용산",
+//         rating: 4.3,
+//         reviews: 1048,
+//         image: "/api/placeholder/80/80",
+//       },
+//       {
+//         id: 3,
+//         name: "고베스테이 신대방직영점",
+//         address: "퓨젼 • 구로",
+//         rating: 4.1,
+//         reviews: 1425,
+//         image: "/api/placeholder/80/80",
+//       },
+//       {
+//         id: 4,
+//         name: "안주마을",
+//         address: "해물,생선요리 • 서촌",
+//         rating: 4.5,
+//         reviews: 747,
+//         image: "/api/placeholder/80/80",
+//       },
+//     ];
+//   },
 
-  getRestaurantDetail: async (kakaoId: string): Promise<RestaurantDetail> => {
-    await new Promise((resolve) => setTimeout(resolve, 500));
-    const mockRestaurants: Record<string, RestaurantDetail> = {
-      // ⭐ 지도 더미 데이터와 같은 ID 사용
-      "26338954": {
-        kakaoId: "26338954",
-        name: "토마토김밥",
-        address: "서울 마포구 홍익로 20",
-        phone: "02-1234-5678",
-        category: "한식",
-        coordinates: { lat: 37.5665, lng: 126.978 },
-        id: 1,
-        description: "김밥계의 샤넬. 언제나 옳은 맛",
-        images: [
-          "https://images.unsplash.com/photo-1565299624946-b28f40a0ca4b?w=400",
-          "https://images.unsplash.com/photo-1551504734-5ee1c4a1479b?w=400",
-        ],
-        rating: 4.5,
-        reviewCount: 128,
-        tags: ["한식", "김밥", "홍대맛집"],
-        openHours: "09:00 - 22:00",
-        baropots: [
-          {
-            id: 1,
-            title: "토마토김밥 같이 드실분!",
-            restaurant: "토마토김밥",
-            location: "홍대입구역 2번 출구",
-            date: "2025-06-10",
-            time: "19:00",
-            maxPeople: 4,
-            currentPeople: 2,
-            status: "recruiting",
-            host: "김밥러버",
-            tags: ["한식", "20대", "간단식사"],
-          },
-        ],
-      },
+//   getRestaurantDetail: async (kakaoId: string): Promise<RestaurantDetail> => {
+//     await new Promise((resolve) => setTimeout(resolve, 500));
+//     const mockRestaurants: Record<string, RestaurantDetail> = {
+//       // ⭐ 지도 더미 데이터와 같은 ID 사용
+//       "26338954": {
+//         kakaoId: "26338954",
+//         name: "토마토김밥",
+//         address: "서울 마포구 홍익로 20",
+//         phone: "02-1234-5678",
+//         category: "한식",
+//         coordinates: { lat: 37.5665, lng: 126.978 },
+//         id: 1,
+//         description: "김밥계의 샤넬. 언제나 옳은 맛",
+//         images: [
+//           "https://images.unsplash.com/photo-1565299624946-b28f40a0ca4b?w=400",
+//           "https://images.unsplash.com/photo-1551504734-5ee1c4a1479b?w=400",
+//         ],
+//         rating: 4.5,
+//         reviewCount: 128,
+//         tags: ["한식", "김밥", "홍대맛집"],
+//         openHours: "09:00 - 22:00",
+//         baropots: [
+//           {
+//             id: 1,
+//             title: "토마토김밥 같이 드실분!",
+//             restaurant: "토마토김밥",
+//             location: "홍대입구역 2번 출구",
+//             date: "2025-06-10",
+//             time: "19:00",
+//             maxPeople: 4,
+//             currentPeople: 2,
+//             status: "recruiting",
+//             host: "김밥러버",
+//             tags: ["한식", "20대", "간단식사"],
+//           },
+//         ],
+//       },
 
-      "87654321": {
-        kakaoId: "87654321",
-        name: "스타벅스 홍대점",
-        address: "서울 마포구 양화로 161",
-        phone: "1522-3232",
-        category: "카페",
-        coordinates: { lat: 37.567, lng: 126.975 },
-        id: 2,
-        description: "커피 한 잔의 여유를 즐겨보세요",
-        images: [
-          "https://images.unsplash.com/photo-1565299624946-b28f40a0ca4b?w=400",
-        ],
-        rating: 4.0,
-        reviewCount: 256,
-        tags: ["카페", "커피", "스터디", "홍대"],
-        openHours: "06:00 - 24:00",
-        baropots: [],
-      },
-    };
+//       "87654321": {
+//         kakaoId: "87654321",
+//         name: "스타벅스 홍대점",
+//         address: "서울 마포구 양화로 161",
+//         phone: "1522-3232",
+//         category: "카페",
+//         coordinates: { lat: 37.567, lng: 126.975 },
+//         id: 2,
+//         description: "커피 한 잔의 여유를 즐겨보세요",
+//         images: [
+//           "https://images.unsplash.com/photo-1565299624946-b28f40a0ca4b?w=400",
+//         ],
+//         rating: 4.0,
+//         reviewCount: 256,
+//         tags: ["카페", "커피", "스터디", "홍대"],
+//         openHours: "06:00 - 24:00",
+//         baropots: [],
+//       },
+//     };
 
-    const restaurant = mockRestaurants[kakaoId];
-    if (!restaurant) {
-      throw new Error("찾을 수 없는 데이터 입니다");
-    }
-    return restaurant;
-  },
-};
+//     const restaurant = mockRestaurants[kakaoId];
+//     if (!restaurant) {
+//       throw new Error("찾을 수 없는 데이터 입니다");
+//     }
+//     return restaurant;
+//   },
+// };

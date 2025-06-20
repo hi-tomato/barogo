@@ -1,6 +1,7 @@
 "use client";
 import { BaropotItem } from "@/app/features/baropot/types/baropot";
 import { getStatusColor, getStatusText } from "../../hooks/useBaropotStatus";
+import Button from "@/app/shared/ui/Button";
 
 interface GridProps {
   baropotList: BaropotItem[];
@@ -111,19 +112,19 @@ export default function BaropotTableGrid({
               </div>
               {/* 액션 버튼 */}
               <div className="flex space-x-2">
-                <button
+                <Button
+                  text="리뷰 페이지"
                   onClick={() => onDetail(baropot.id)}
                   className="flex-1 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors text-sm font-medium"
-                >
-                  상세보기
-                </button>
-                <button
+                />
+                <Button
+                  text={
+                    baropot.status === "recruiting" ? "참여하기" : "참여불가"
+                  }
                   onClick={() => onJoin(baropot.id)}
                   disabled={baropot.status !== "recruiting"}
                   className="flex-1 py-2 bg-gradient-to-r from-orange-500 to-red-500 text-white rounded-lg hover:shadow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed text-sm font-semibold"
-                >
-                  {baropot.status === "recruiting" ? "참여하기" : "참여불가"}
-                </button>
+                />
               </div>
             </div>
           );

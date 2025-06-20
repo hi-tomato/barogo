@@ -1,4 +1,5 @@
 import { BaropotTab } from "@/app/features/baropot/types/baropot";
+import { SearchQueries } from "../types/restaurant";
 
 export const queryKeys = {
   baropot: {
@@ -10,15 +11,16 @@ export const queryKeys = {
 
   restaurant: {
     all: ["restaurant"] as const,
-    favorites: () => [...queryKeys.restaurant.all, "favorites"] as const,
-    nearby: (location: Location) =>
+    list: (query?: SearchQueries) =>
+      [...queryKeys.restaurant.all, "list", query] as const,
+    nearby: (location: { latitude: number; longitude: number }) =>
       [...queryKeys.restaurant.all, "nearby", location] as const,
-    search: (query: string, lat: number, lng?: number) => [
-      ...queryKeys.restaurant.all,
-      "search",
-      { query, lat, lng },
-    ],
-    detail: (kakaoId: string) =>
-      [...queryKeys.restaurant.all, "detail", kakaoId] as const,
+    detail: (id: string) =>
+      [...queryKeys.restaurant.all, "detail", id] as const,
+    reviews: (restaurantId: string) =>
+      [...queryKeys.restaurant.all, "reviews", restaurantId] as const,
+    bookmarks: () => [...queryKeys.restaurant.all, "bookmarks"] as const,
+    search: (query: string, lat: number, lng?: number) =>
+      [...queryKeys.restaurant.all, "search", { query, lat, lng }] as const,
   },
 } as const;

@@ -2,9 +2,9 @@ export interface FavoriteRestaurant {
   id: number;
   name: string;
   address: string;
-  rating: number;
-  reviews: number;
-  image: string;
+  rating?: number;
+  reviews?: number;
+  image?: string;
 }
 
 export interface Location {

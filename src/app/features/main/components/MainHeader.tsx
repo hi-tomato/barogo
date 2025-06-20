@@ -28,9 +28,6 @@ export default function MainHeader() {
         {/* 우측 아이콘들 */}
         <div className="flex items-center gap-2">
           <button className="p-2 text-[#2B2B2B] hover:bg-[#E6EEF5] rounded-lg transition-colors">
-            <HiBookmark size={24} />
-          </button>
-          <button className="p-2 text-[#2B2B2B] hover:bg-[#E6EEF5] rounded-lg transition-colors">
             <HiBell size={24} />
           </button>
         </div>

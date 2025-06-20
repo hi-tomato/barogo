@@ -25,7 +25,6 @@ export default function CreateBaropotForm() {
         const savedData = sessionStorage.getItem("selectedRestaurant");
         if (savedData) {
           const restaurant = JSON.parse(savedData);
-          console.log("📍 받은 데이터:", restaurant);
           setRestaurantData({
             id: restaurant.kakaoId,
             name: restaurant.name,

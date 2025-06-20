@@ -10,19 +10,13 @@ export async function GET(request: Request) {
 
   try {
     const URL = `https://dapi.kakao.com/v2/local/search/keyword.json?query=${query}&category_group_code=FD6&size=10${
-      lat && lng ? `&x=${lng}&y=${lat}&radius=5000&sort=distance` : ""
+      lat && lng ? `&x=${lng}&y=${lat}&radius=${5000}&sort=distance` : ""
     }`;
-    console.log("카카오 API URL:", URL);
-
     const response = await fetch(URL, {
       headers: {
         Authorization: `KakaoAK ${process.env.NEXT_PUBLIC_KAKAO_REST_API_KEY}`,
       },
     });
-
-    if (!response.ok) {
-      throw new Error("카카오 API 요청 실패");
-    }
 
     const data = await response.json();
     return Response.json(data);

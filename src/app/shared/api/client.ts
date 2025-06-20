@@ -33,7 +33,7 @@ apiClient.interceptors.request.use(
 
 export function post<T = any>(
   url: string,
-  data: any
+  data?: any
 ): Promise<AxiosResponse<T>> {
   return apiClient.post(url, data);
 }
@@ -58,4 +58,12 @@ export function patch<T = any>(
   config?: any
 ): Promise<AxiosResponse<T>> {
   return apiClient.patch<T>(url, data, config);
+}
+
+export function put<T = any>(
+  url: string,
+  data?: any,
+  config?: any
+): Promise<AxiosResponse<T>> {
+  return apiClient.put<T>(url, data, config);
 }
