@@ -2,16 +2,16 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { queryKeys } from "../../lib/queryKeys";
 import { restaurantService } from "../../services/restaurantService";
 import {
-  CreateRestaurantRequest,
   RestaurantList,
   SearchQueries,
+  UpdateRestaurantRequest,
 } from "../../types/restaurant";
 
 export const useRestaurantList = (query?: SearchQueries) => {
   return useQuery({
     queryKey: queryKeys.restaurant.list?.(query),
     queryFn: () => restaurantService.search(query),
-    enabled: !!query,
+    enabled: true,
   });
 };
 
@@ -71,7 +71,7 @@ export const useUpdateRestaurant = () => {
       data,
     }: {
       restaurantId: string;
-      data: CreateRestaurantRequest;
+      data: UpdateRestaurantRequest;
     }) => restaurantService.update(restaurantId, data),
     onSuccess: (data, variables) => {
       console.log("맛집을 수정하였습니다.", data);

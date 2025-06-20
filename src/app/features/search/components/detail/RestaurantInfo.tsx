@@ -17,6 +17,7 @@ import {
 import { FaHeartCircleCheck, FaHeartCircleXmark } from "react-icons/fa6";
 import { useDeleteRestaurant } from "@/app/shared/hooks/queries/useRestaurant";
 import { useRouter } from "next/navigation";
+import EditRestaurantModal from "./EditRestaurantModal";
 
 interface RestaurantInfoProps {
   restaurant: RestaurantDetail;
@@ -33,6 +34,7 @@ export default function RestaurantInfo({
   const [showFullDescription, setShowFullDescription] = useState(false);
   const [showOwnerMenu, setShowOwnerMenu] = useState(false);
   const [bookmarked, setBookmarked] = useState(restaurant.isBookmarked);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
   const addBookmarkMutation = useAddBookmark();
   const removeBookmarkMutation = useRemoveBookmark();
@@ -158,14 +160,21 @@ export default function RestaurantInfo({
                   >
                     <button
                       onClick={() => {
-                        setShowOwnerMenu(false);
-                        router.push(`/restaurants/edit/${restaurant.id}`);
+                        setShowOwnerMenu(true);
+                        setIsEditModalOpen(true);
                       }}
                       className="w-full px-4 py-3 text-left text-sm text-gray-700 hover:bg-gray-50 flex items-center space-x-3"
                     >
                       <HiPencil size={16} />
                       <span>정보 수정</span>
                     </button>
+                    {isEditModalOpen && (
+                      <EditRestaurantModal
+                        restaurant={restaurant}
+                        isOpen={isEditModalOpen}
+                        onClose={() => setIsEditModalOpen(false)}
+                      />
+                    )}
                     <button
                       className="w-full px-4 py-3 text-left text-sm text-gray-700 hover:bg-gray-50 flex items-center space-x-3"
                       onClick={handleDeleteDetail}

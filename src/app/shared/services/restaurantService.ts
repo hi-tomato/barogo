@@ -12,16 +12,21 @@ import { del, get, patch, post } from "../api/client";
 
 export const restaurantService = {
   search: async (query?: SearchQueries): Promise<RestaurantList> => {
-    const entries = Object.entries(query!);
+    if (!query || Object.keys(query).length === 0) {
+      const { data } = await get<RestaurantList>("/restaurants");
+      console.log("restaurantService: ", data);
+      return data;
+    }
+
+    const entries = Object.entries(query);
     const queries = entries
       .filter(([_, value]) => value !== "")
       .map(([keys, value]) => `${keys}=${value}`)
       .join("&");
 
     const { data } = await get<RestaurantList>(
-      `/restaurants${query ? `?${queries}` : ""}`
+      `/restaurants${queries ? `?${queries}` : ""}`
     );
-    console.log("restaurantService: ", data);
     return data;
   },
 

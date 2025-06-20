@@ -24,8 +24,9 @@ export default function RestaurantPreviewModal({
   const router = useRouter();
   const createRestaurant = useCreateRestaurant();
 
-  const { data: restaurantList, isLoading: isLoadingList } =
-    useRestaurantList();
+  const { data: restaurantList, isLoading: isLoadingList } = useRestaurantList(
+    {}
+  );
 
   // 🔍 이름, 주소, ID 기준 분류
   const existingRestaurant = restaurantList?.find(

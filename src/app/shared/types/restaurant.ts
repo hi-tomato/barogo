@@ -130,3 +130,8 @@ export interface DeleteReviewParams {
   reviewId: string;
   restaurantId: string;
 }
+
+export interface UpdateRestaurantParams {
+  restaurantId: string;
+  data: UpdateRestaurantRequest;
+}
