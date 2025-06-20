@@ -44,8 +44,13 @@ export default function FavoriteRestaurantCard({
         </div>
         <div className="flex items-center mt-1">
           <Button
-            text="🔍 상세보기"
-            onClick={() => router.push(`/search/${restaurant.id}/detail`)}
+            text="리뷰 페이지"
+            onClick={() => {
+              router.back();
+              setTimeout(() => {
+                router.push(`/restaurants/${restaurant.id}/detail`);
+              }, 300);
+            }}
           />
         </div>
       </div>
