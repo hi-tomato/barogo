@@ -79,11 +79,11 @@ export interface BaropotFormData {
   date: string;
   time: string;
   maxPeople: string;
-  contactMethod: "app" | "kakao" | "phone";
+  contactMethod: "APP_CHAT" | "KAKAO_TALK" | "PHONE_NUMBER";
   restaurantAddress?: string;
   contactInfo?: string;
   expectedCost?: string;
-  paymentMethod?: "dutch" | "host" | "discuss";
+  paymentMethod?: "DUTCH_PAY" | "HOST_PAYS" | "NEGOTIABLE";
   gender: string[];
   ageGroup: string[];
   tags: string[];

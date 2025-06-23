@@ -1,0 +1,92 @@
+import {
+  BaropotJoinedStatus,
+  ParticipantAgeGroup,
+  ParticipantGender,
+  RestaurantCategory,
+  ContactMethod,
+  PaymentMethod,
+  BaropotStatus,
+} from "./enums";
+
+export interface BaropotsQueries {
+  statusList: BaropotJoinedStatus;
+  title: string;
+  tags: string;
+  participantGenderList: ParticipantGender;
+  participantAgeGroupList: ParticipantAgeGroup;
+  restaurantName: string;
+  restaurantCategory: RestaurantCategory;
+  address: string;
+  lat: number;
+  lng: number;
+  radius: number;
+}
+
+export interface CreateBaropotRequest {
+  restaurantId: number;
+  title: string;
+  location: string;
+  maxParticipants: number;
+  date: string;
+  time: string;
+  participantGender?: ParticipantGender;
+  participantAgeGroup?: ParticipantAgeGroup;
+  contactMethod?: ContactMethod;
+  estimatedCostPerPerson?: number;
+  paymentMethod?: PaymentMethod;
+  description: string;
+  rule?: string;
+  tags: string;
+}
+
+export interface Restaurant {
+  id: number;
+  name: string;
+  category: RestaurantCategory;
+  address: string;
+  lat: string;
+  lng: string;
+  description: string;
+  phoneNumber: string;
+  openingTime: string;
+  closingTime: string;
+  lastOrderTime: string;
+}
+
+export interface Host {
+  id: number;
+  name: string;
+}
+
+export interface Participant {
+  userId: number;
+  name: string;
+  isHost: boolean;
+  joinedStatus: BaropotJoinedStatus;
+  hostMemo?: string;
+}
+
+export interface BaropotListResponse {
+  id: number;
+  createdAt: string;
+  updatedAt: string;
+  title: string;
+  status: BaropotStatus;
+  location: string;
+  maxParticipants: number;
+  date: string;
+  time: string;
+  participantGender: ParticipantGender;
+  participantAgeGroup: ParticipantAgeGroup;
+  contactMethod?: ContactMethod;
+  estimatedCostPerPerson?: number;
+  paymentMethod: PaymentMethod;
+  description: string;
+  rule?: string;
+  tags: string[];
+  restaurant: Restaurant;
+  host: Host;
+  participantCount: number;
+  pendingParticipantCount: number;
+  participants: Participant[];
+}

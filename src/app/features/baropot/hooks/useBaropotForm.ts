@@ -2,6 +2,14 @@ import { UseFormWatch, UseFormSetValue } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import { BaropotFormData } from "../types/baropot";
 import { RestaurantData } from "../../nearby/types/restaurant";
+import { useCreateBaropot } from "@/app/shared/hooks/queries/useBaropot";
+import { CreateBaropotRequest } from "@/app/shared/types/baropots";
+import {
+  ParticipantGender,
+  ParticipantAgeGroup,
+  ContactMethod,
+  PaymentMethod,
+} from "@/app/shared/types/enums";
 
 interface UseBaropotFormLogicProps {
   watch: UseFormWatch<BaropotFormData>;
@@ -22,6 +30,9 @@ export function useBaropotFormLogic({
   const watchAgeGroup = watch("ageGroup");
   const watchTags = watch("tags");
 
+  // 실제 API 훅 사용
+  const createBaropotMutation = useCreateBaropot();
+
   // 체크박스 토글 함수
   const toggleArrayField = (
     fieldName: keyof Pick<BaropotFormData, "gender" | "ageGroup" | "tags">,
@@ -36,52 +47,46 @@ export function useBaropotFormLogic({
 
   // 폼 제출 함수
   const onSubmit = async (data: BaropotFormData) => {
-    // 서버 전송용 데이터 정리
-    const submitData = {
-      // 필수 필드
-      title: data.title.trim(),
-      restaurant: data.restaurant.trim(),
-      meetingLocation: data.meetingLocation.trim(),
-      date: data.date,
-      time: data.time,
-      maxPeople: parseInt(data.maxPeople),
-      hostId: "user123", // TODO: 실제 로그인 사용자 ID
-      contactMethod: data.contactMethod,
+    try {
+      // API 스키마에 맞는 데이터 변환
+      const submitData: CreateBaropotRequest = {
+        restaurantId: restaurantData?.id ? parseInt(restaurantData.id) : 1, // 임시 ID
+        title: data.title.trim(),
+        location: data.meetingLocation.trim(),
+        maxParticipants: parseInt(data.maxPeople),
+        date: data.date,
+        time: data.time,
+        description: data.description?.trim() || "",
+        tags: data.tags.join(","),
 
-      // ⭐ 레스토랑 좌표 정보 추가
-      restaurantCoordinates:
-        restaurantData?.lat && restaurantData?.lng
-          ? {
-              lat: parseFloat(restaurantData.lat),
-              lng: parseFloat(restaurantData.lng),
-              kakaoId: restaurantData.kakaoId || restaurantData.id,
-            }
-          : null,
+        // 선택적 필드들
+        ...(data.gender.length > 0 && {
+          participantGender: data.gender[0] as ParticipantGender,
+        }),
+        ...(data.ageGroup.length > 0 && {
+          participantAgeGroup: data.ageGroup[0] as ParticipantAgeGroup,
+        }),
+        ...(data.contactMethod && {
+          contactMethod: data.contactMethod as ContactMethod,
+        }),
+        ...(data.expectedCost?.trim() && {
+          estimatedCostPerPerson: parseInt(data.expectedCost),
+        }),
+        ...(data.paymentMethod && {
+          paymentMethod: data.paymentMethod as PaymentMethod,
+        }),
+        ...(data.rules?.trim() && { rule: data.rules.trim() }),
+      };
 
-      // 시스템 필드
-      status: "recruiting" as const,
-      currentPeople: 1,
-      createdAt: new Date(),
+      // 실제 API 호출
+      await createBaropotMutation.mutateAsync(submitData);
 
-      // 선택 필드 (값이 있을 때만 포함)
-      ...(data.description?.trim() && { description: data.description.trim() }),
-      ...(data.expectedCost?.trim() && {
-        expectedCost: data.expectedCost.trim(),
-      }),
-      ...(data.contactInfo?.trim() && { contactInfo: data.contactInfo.trim() }),
-      ...(data.restaurantAddress?.trim() && {
-        restaurantAddress: data.restaurantAddress.trim(),
-      }),
-      ...(data.paymentMethod && { paymentMethod: data.paymentMethod }),
-      ...(data.gender.length > 0 && { gender: data.gender }),
-      ...(data.ageGroup.length > 0 && { ageGroup: data.ageGroup }),
-      ...(data.tags.length > 0 && { tags: data.tags }),
-      ...(data.rules?.trim() && { rules: data.rules.trim() }),
-    };
-
-    // TODO: 실제 API 호출
-    alert("✅ 바로팟이 생성되었습니다!");
-    router.push("/main");
+      alert("✅ 바로팟이 생성되었습니다!");
+      router.push("/baropot");
+    } catch (error) {
+      console.error("바로팟 생성 실패:", error);
+      alert("❌ 바로팟 생성에 실패했습니다. 다시 시도해주세요.");
+    }
   };
 
   return {
@@ -91,18 +96,18 @@ export function useBaropotFormLogic({
     watchTags,
     toggleArrayField,
     onSubmit,
+    isSubmitting: createBaropotMutation.isPending,
   };
 }
 
-// utils/baropot.ts - 폼 관련 유틸리티 함수들
 export const CONTACT_METHODS = [
-  { value: "app", label: "앱 내 채팅", icon: "💬" },
-  { value: "kakao", label: "카카오톡", icon: "🟡" },
-  { value: "phone", label: "전화번호", icon: "📞" },
+  { value: "APP_CHAT", label: "앱 내 채팅", icon: "💬" },
+  { value: "KAKAO_TALK", label: "카카오톡", icon: "🟡" },
+  { value: "PHONE_NUMBER", label: "전화번호", icon: "📞" },
 ] as const;
 
 export const PAYMENT_METHODS = [
-  { value: "dutch", label: "더치페이", icon: "💰" },
-  { value: "host", label: "호스트가", icon: "🎁" },
-  { value: "discuss", label: "현장에서 상의", icon: "🤝" },
+  { value: "DUTCH_PAY", label: "더치페이", icon: "💰" },
+  { value: "HOST_PAYS", label: "호스트가", icon: "🎁" },
+  { value: "NEGOTIABLE", label: "현장에서 상의", icon: "🤝" },
 ];
