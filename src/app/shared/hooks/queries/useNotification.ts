@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
-import { getAccessToken } from "../../lib/authToken";
+import { getAccessToken } from "@/app/shared/lib/authToken";
 import { notificationsServices } from "../../services/notificationsServices";
-import { Notification } from "../../types/notification";
+import { Notification } from "@/app/shared/types/notification";
 
 export const useNotification = () => {
   const [unreadCount, setUnreadCount] = useState(0);
