@@ -90,3 +90,7 @@ export interface BaropotListResponse {
   pendingParticipantCount: number;
   participants: Participant[];
 }
+
+export interface JoinBaropotRequest {
+  joinMessage: string;
+}

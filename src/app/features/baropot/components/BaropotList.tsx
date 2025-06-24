@@ -7,6 +7,7 @@ interface BaropotListProps {
   error: Error | null;
   onRefresh?: () => void;
   onJoin?: (id: number) => void;
+  isJoining?: boolean;
 }
 
 export default function BaropotList({

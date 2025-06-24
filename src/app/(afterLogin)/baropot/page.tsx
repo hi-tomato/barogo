@@ -2,10 +2,10 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { HiPlus } from "react-icons/hi";
-import { useBaropotList } from "@/app/features/baropot/hooks/queries/useMockBaropot";
 import BaropotTabs from "@/app/features/baropot/components/BaropotTabs";
 import BaropotList from "@/app/features/baropot/components/BaropotList";
 import { BaropotTab } from "@/app/features/baropot/types/baropot";
+import { useGetBaropotList } from "@/app/shared/hooks/queries/useBaropot";
 
 export default function BaropotMainPage() {
   const [activeTab, setActiveTab] = useState<BaropotTab>("available");
@@ -14,7 +14,7 @@ export default function BaropotMainPage() {
     isLoading,
     error,
     refetch,
-  } = useBaropotList(activeTab);
+  } = useGetBaropotList();
   const router = useRouter();
 
   const handleJoin = () => {

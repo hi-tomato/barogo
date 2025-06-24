@@ -4,9 +4,11 @@ import {
   BaropotsQueries,
   CreateBaropotRequest,
   BaropotListResponse,
+  JoinBaropotRequest,
 } from "@/app/shared/types/baropots";
 
 export const baropotService = {
+  /** 유저가 참여할 수 있는 바로팟 목록 조회 */
   getList: async (queries?: BaropotsQueries) => {
     if (!queries) {
       const { data } = await get<BaropotListResponse[]>(`/baropots`);
@@ -25,8 +27,17 @@ export const baropotService = {
       return data;
     }
   },
+  /** 바로팟 생성 */
   createBaropot: async (baropotData: CreateBaropotRequest) => {
     const { data } = await post<BaropotListResponse>(`/baropots`, baropotData);
+    return data;
+  },
+  /** 유저 전용: 바로팟 참여 */
+  joinBaropot: async (baropotId: number, message: JoinBaropotRequest) => {
+    const { data } = await post<BaropotListResponse>(
+      `/baropots/${baropotId}/participants`,
+      message
+    );
     return data;
   },
 };

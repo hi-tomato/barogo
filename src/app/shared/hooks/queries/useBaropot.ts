@@ -4,6 +4,7 @@ import { baropotService } from "@/app/shared/services/baropotService";
 import {
   CreateBaropotRequest,
   BaropotsQueries,
+  JoinBaropotRequest,
 } from "@/app/shared/types/baropots";
 
 export const useGetBaropotList = (queries?: BaropotsQueries) => {
@@ -26,6 +27,28 @@ export const useCreateBaropot = () => {
     },
     onError: (error) => {
       console.error("바로팟을 생성하는데 문제가 발생하였음", error);
+    },
+  });
+};
+
+export const useJoinBaropot = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({
+      baropotId,
+      message,
+    }: {
+      baropotId: number;
+      message: JoinBaropotRequest;
+    }) => baropotService.joinBaropot(baropotId, message),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: queryKeys.baropot.lists(),
+      });
+    },
+    onError: (error) => {
+      console.error("바로팟에 참여하는데 문제가 발생하였음", error);
     },
   });
 };
