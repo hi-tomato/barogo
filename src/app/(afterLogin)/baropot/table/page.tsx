@@ -1,11 +1,19 @@
 "use client";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { useBaropotList } from "@/app/features/baropot/hooks/queries/useMockBaropot";
 import BaropotTableHeader from "@/app/features/baropot/components/table/BaropotTableHeader";
 import BaropotTableStats from "@/app/features/baropot/components/table/BaropotTableStats";
 import BaropotTableFilters from "@/app/features/baropot/components/table/BaropotTableFilters";
 import BaropotTableGrid from "@/app/features/baropot/components/table/BaropotTableGrid";
+import { useGetBaropotList } from "@/app/shared/hooks/queries/useBaropot";
+import { BaropotListResponse } from "@/app/shared/types/baropots";
+import {
+  BaropotStatus,
+  ParticipantAgeGroup,
+  ParticipantGender,
+  PaymentMethod,
+  RestaurantCategory,
+} from "@/app/shared/types/enums";
 
 type FilterType = "all" | "recruiting" | "full" | "closed";
 type SortType = "latest" | "deadline" | "popular" | "distance";
@@ -21,61 +29,70 @@ export default function BaropotTablePage() {
     isLoading,
     error,
     refetch,
-  } = useBaropotList("available");
+  } = useGetBaropotList();
 
-  const allBaropots = [
-    ...baropotList,
+  // 더미 데이터를 BaropotListResponse 타입에 맞게 수정
+  const dummyBaropots: BaropotListResponse[] = [
     {
       id: 10,
+      createdAt: "2025-01-26T10:00:00Z",
+      updatedAt: "2025-01-26T10:00:00Z",
       title: "강남 스시 오마카세",
-      restaurant: "스시 젠",
+      status: BaropotStatus.FULL,
       location: "강남역 1번 출구",
+      maxParticipants: 6,
       date: "2025-06-14",
       time: "19:30",
-      maxPeople: 6,
-      currentPeople: 6,
-      status: "full" as const,
-      host: "스시러버",
+      participantGender: ParticipantGender.ANY,
+      participantAgeGroup: ParticipantAgeGroup.ANY,
+      paymentMethod: PaymentMethod.DUTCH_PAY,
+      description: "스시 젠에서 오마카세를 즐겨보세요",
       tags: ["일식", "30대", "오마카세"],
-    },
-    {
-      id: 11,
-      title: "이태원 펍 투어",
-      restaurant: "맥켄지 펍",
-      location: "이태원역 3번 출구",
-      date: "2025-06-15",
-      time: "21:00",
-      maxPeople: 8,
-      currentPeople: 3,
-      status: "recruiting" as const,
-      host: "맥주킹",
-      tags: ["술집", "20대", "외국인"],
-    },
-    {
-      id: 12,
-      title: "종료된 바로팟",
-      restaurant: "종료된 맛집",
-      location: "어딘가",
-      date: "2025-06-10",
-      time: "18:00",
-      maxPeople: 4,
-      currentPeople: 4,
-      status: "closed" as const,
-      host: "종료자",
-      tags: ["종료"],
+      restaurant: {
+        id: 1,
+        name: "스시 젠",
+        category: RestaurantCategory.JAPANESE,
+        address: "강남역 1번 출구",
+        lat: "37.498095",
+        lng: "127.027610",
+        description: "고급 스시집",
+        phoneNumber: "02-1234-5678",
+        openingTime: "11:00",
+        closingTime: "22:00",
+        lastOrderTime: "21:00",
+      },
+      host: {
+        id: 1,
+        name: "스시러버",
+      },
+      participantCount: 6,
+      pendingParticipantCount: 0,
+      participants: [],
     },
   ];
 
+  // 실제 데이터와 더미 데이터 합치기
+  const allBaropots = [...baropotList, ...dummyBaropots];
+
   const filteredAndSortedBaropots = allBaropots
     .filter((baropot) => {
-      // 상태 필터
-      if (filter !== "all" && baropot.status !== filter) return false;
+      // 상태 필터 - enum 값에 맞게 수정
+      if (filter !== "all") {
+        const statusMap = {
+          recruiting: BaropotStatus.OPEN,
+          full: BaropotStatus.FULL,
+          closed: BaropotStatus.COMPLETED,
+        };
+        if (baropot.status !== statusMap[filter]) return false;
+      }
 
       // 검색 필터
       if (
         searchQuery &&
         !baropot.title.toLowerCase().includes(searchQuery.toLowerCase()) &&
-        !baropot.restaurant.toLowerCase().includes(searchQuery.toLowerCase())
+        !baropot.restaurant.name
+          .toLowerCase()
+          .includes(searchQuery.toLowerCase())
       ) {
         return false;
       }
@@ -90,13 +107,15 @@ export default function BaropotTablePage() {
             new Date(`${b.date} ${b.time}`).getTime()
           );
         case "popular":
-          return b.currentPeople - a.currentPeople;
+          return b.participantCount - a.participantCount;
         case "distance":
           // TODO: 실제 거리 계산 로직
           return 0;
         case "latest":
         default:
-          return b.id - a.id;
+          return (
+            new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+          );
       }
     });
 

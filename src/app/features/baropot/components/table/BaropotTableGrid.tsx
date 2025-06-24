@@ -1,10 +1,10 @@
 "use client";
-import { BaropotItem } from "@/app/features/baropot/types/baropot";
 import { getStatusColor, getStatusText } from "../../hooks/useBaropotStatus";
 import Button from "@/app/shared/ui/Button";
+import { BaropotListResponse } from "@/app/shared/types/baropots";
 
 interface GridProps {
-  baropotList: BaropotItem[];
+  baropotList: BaropotListResponse[];
   onJoin: (id: number) => void;
   onDetail: (id: number) => void;
 }
@@ -18,7 +18,7 @@ export default function BaropotTableGrid({
     return (
       <div className="mx-4 mt-4">
         <div className="bg-white rounded-xl p-12 text-center shadow-sm border border-gray-100">
-          <div className="text-6xl mb-4">🔍</div>
+          <div className="text-6xl mb-4">��</div>
           <h3 className="text-lg font-semibold text-gray-700 mb-2">
             조건에 맞는 바로팟이 없어요
           </h3>
@@ -31,11 +31,11 @@ export default function BaropotTableGrid({
 
   return (
     <div className="mx-4 mt-4 pb-6">
-      <div className="grid gird-cols-1 md: grid-cols-2 lg:gird-cols-3 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {baropotList.map((baropot) => {
           const progressPercentage =
-            (baropot.currentPeople / baropot.maxPeople) * 100;
-          const isUrgent = progressPercentage <= 75;
+            (baropot.participantCount / baropot.maxParticipants) * 100;
+          const isUrgent = progressPercentage >= 75; // 75% 이상일 때 긴급
 
           return (
             <div
@@ -64,7 +64,7 @@ export default function BaropotTableGrid({
                   </div>
                   <div className="text-right">
                     <div className="text-sm font-bold text-gray-900 mb-1">
-                      {baropot.currentPeople}/{baropot.maxPeople}명
+                      {baropot.participantCount}/{baropot.maxParticipants}명
                     </div>
                     <div className="w-16 bg-gray-200 rounded-full h-2">
                       <div
@@ -91,7 +91,11 @@ export default function BaropotTableGrid({
                 </div>
                 <div className="flex items-center">
                   <span className="w-4 h-4 mr-2">👤</span>
-                  <span className="truncate">{baropot.host}</span>
+                  <span className="truncate">{baropot.host.name}</span>
+                </div>
+                <div className="flex items-center">
+                  <span className="w-4 h-4 mr-2">🍽️</span>
+                  <span className="truncate">{baropot.restaurant.name}</span>
                 </div>
               </div>
               {/* 태그 */}
@@ -113,16 +117,14 @@ export default function BaropotTableGrid({
               {/* 액션 버튼 */}
               <div className="flex space-x-2">
                 <Button
-                  text="리뷰 페이지"
+                  text="상세보기"
                   onClick={() => onDetail(baropot.id)}
                   className="flex-1 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors text-sm font-medium"
                 />
                 <Button
-                  text={
-                    baropot.status === "recruiting" ? "참여하기" : "참여불가"
-                  }
+                  text={baropot.status === "OPEN" ? "참여하기" : "참여불가"}
                   onClick={() => onJoin(baropot.id)}
-                  disabled={baropot.status !== "recruiting"}
+                  disabled={baropot.status !== "OPEN"}
                   className="flex-1 py-2 bg-gradient-to-r from-orange-500 to-red-500 text-white rounded-lg hover:shadow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed text-sm font-semibold"
                 />
               </div>

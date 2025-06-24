@@ -1,7 +1,8 @@
-import { BaropotItem } from "@/app/features/baropot/types/baropot";
+import { BaropotListResponse } from "@/app/shared/types/baropots";
+import { BaropotStatus } from "@/app/shared/types/enums";
 
 interface BaropotTableStatsProps {
-  baropotList: BaropotItem[];
+  baropotList: BaropotListResponse[];
 }
 
 export default function BaropotTableStats({
@@ -9,9 +10,11 @@ export default function BaropotTableStats({
 }: BaropotTableStatsProps) {
   const stats = {
     total: baropotList.length,
-    recruiting: baropotList.filter((b) => b.status === "recruiting").length,
-    full: baropotList.filter((b) => b.status === "full").length,
-    closed: baropotList.filter((b) => b.status === "closed").length,
+    recruiting: baropotList.filter((b) => b.status === BaropotStatus.OPEN)
+      .length,
+    full: baropotList.filter((b) => b.status === BaropotStatus.FULL).length,
+    closed: baropotList.filter((b) => b.status === BaropotStatus.COMPLETED)
+      .length,
   };
 
   return (
