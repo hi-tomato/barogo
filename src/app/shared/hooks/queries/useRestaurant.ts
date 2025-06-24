@@ -20,11 +20,15 @@ export const useCreateRestaurant = () => {
 
   return useMutation({
     mutationFn: restaurantService.create,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: queryKeys.restaurant.list() });
+    onSuccess: (response) => {
+      console.log("맛집 등록 성공! 서버 ID:", response.id);
+
+      queryClient.invalidateQueries({
+        queryKey: queryKeys.restaurant.all,
+      });
     },
     onError: (error) => {
-      console.error(error);
+      console.error("맛집 등록 실패:", error);
     },
   });
 };
