@@ -44,21 +44,14 @@ export const RestaurantStatus = ({
               onClick={onDetailView}
               className="w-full px-4 py-3 bg-[#1C4E80] text-white rounded-lg hover:bg-[#154066] transition-colors flex items-center justify-center space-x-2"
             >
-              <span>🔍</span>
-              <span>맛집 상세보기</span>
+              <span>상세페이지</span>
             </button>
 
             <div className="flex space-x-3">
-              <Button
-                text="다시 선택"
-                onClick={onClose}
-                className="flex-1 px-4 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
-              />
               <button
                 onClick={onCreateBaropot}
                 className="flex-1 px-4 py-3 bg-gradient-to-r from-orange-400 to-red-500 text-white rounded-lg hover:shadow-md transition-all flex items-center justify-center space-x-2"
               >
-                <span>⚡</span>
                 <span>바로팟 만들기</span>
               </button>
             </div>
@@ -83,6 +76,13 @@ export const RestaurantStatus = ({
                 onClick={onClose}
                 className="flex-1 px-4 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
               />
+              <button
+                onClick={onCreateBaropot}
+                className="flex-1 px-4 py-3 bg-gradient-to-r from-orange-400 to-red-500 text-white rounded-lg hover:shadow-md transition-all flex items-center justify-center space-x-2"
+              >
+                <span>⚡</span>
+                <span>바로팟 만들기</span>
+              </button>
             </div>
           </>
         );

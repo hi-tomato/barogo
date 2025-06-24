@@ -7,6 +7,7 @@ import {
   useRestaurantList,
 } from "@/app/shared/hooks/queries/useRestaurant";
 import { RestaurantStatus } from "./Status";
+// import { mapKaKaoCategoryToServer } from "@/app/shared/lib/kakaoCategory";
 
 interface RestaurantPreviewModalProps {
   restaurant: NearbyRestaurant;
@@ -24,17 +25,15 @@ export default function RestaurantPreviewModal({
   const router = useRouter();
   const createRestaurant = useCreateRestaurant();
 
-  const { data: restaurantList, isLoading: isLoadingList } = useRestaurantList(
-    {}
-  );
+  const { data: restaurantList, isLoading: isLoadingList } = useRestaurantList({
+    name: restaurant.place_name,
+    address: restaurant.address_name,
+  });
 
-  // 🔍 이름, 주소, ID 기준 분류
   const existingRestaurant = restaurantList?.find(
     (item) =>
-      item.name === restaurant.place_name ||
-      (item.name.includes(restaurant.place_name.split(" ")[0]) &&
-        item.address === restaurant.address_name) ||
-      item.id === Number(restaurant.id)
+      item.name === restaurant.place_name &&
+      item.address === restaurant.address_name
   );
 
   const hasServerData = !!existingRestaurant;
@@ -54,17 +53,21 @@ export default function RestaurantPreviewModal({
       alert("위치 정보가 없어서 맛집을 등록할 수 없습니다.");
       return;
     }
+
+    const restaurantInfo = {
+      id: restaurant.id,
+      name: restaurant.place_name,
+      location: restaurant.address_name,
+      category: restaurant.category_name,
+      phone: restaurant.phone || "",
+      x: restaurant.x,
+      y: restaurant.y,
+      kakaoId: restaurant.id,
+    };
+
     sessionStorage.setItem(
       "selectedRestaurant",
-      JSON.stringify({
-        id: restaurant.id,
-        name: restaurant.place_name,
-        location: restaurant.address_name,
-        category: restaurant.category_name,
-        phone: restaurant.phone || "",
-        x: restaurant.x,
-        y: restaurant.y,
-      })
+      JSON.stringify(restaurantInfo)
     );
     onClose();
     router.push(`/restaurants/create`);
@@ -120,12 +123,13 @@ export default function RestaurantPreviewModal({
             />
           )}
 
-          {/* 서버에 데이터가 없을 때 - 맛집 등록  */}
+          {/* 서버에 데이터가 없을 때 - 맛집 등록 + 바로팟 만들기 */}
           {!isLoading && !hasServerData && (
             <RestaurantStatus
               type="notServerData"
               onClose={onClose}
               onRegisterRestaurant={handleRegisterRestaurant}
+              onCreateBaropot={handleCreateBaropot}
               isRegistering={createRestaurant.isPending}
             />
           )}

@@ -1,5 +1,6 @@
 import {
   CreateRestaurantRequest,
+  CreateRestaurantResponse,
   CreateReviewRequest,
   CreateReviewResponse,
   RestaurantDetail,
@@ -31,8 +32,8 @@ export const restaurantService = {
 
   create: async (
     restaurantData: CreateRestaurantRequest
-  ): Promise<RestaurantDetail> => {
-    const { data } = await post<RestaurantDetail>(
+  ): Promise<CreateRestaurantResponse> => {
+    const { data } = await post<CreateRestaurantResponse>(
       `/restaurants`,
       restaurantData
     );

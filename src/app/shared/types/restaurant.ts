@@ -15,6 +15,7 @@ export interface Restaurant {
   reviewCount: number;
   isBookmarked: boolean;
   distance?: string;
+  kakaoId?: string;
 }
 
 export type RestaurantList = Restaurant[];
@@ -43,6 +44,7 @@ export interface RestaurantDetail {
 // 레스토랑 생성/수정
 export interface CreateRestaurantRequest {
   name: string;
+  kakaoId?: string;
   category: string;
   address: string;
   lat: number;
@@ -55,6 +57,24 @@ export interface CreateRestaurantRequest {
   tags: string[];
   photos: string[];
 }
+export interface CreateRestaurantResponse {
+  id: number;
+  name: string;
+  createdAt: string;
+  updatedAt: string;
+  category: string;
+  address: string;
+  lat: number;
+  lng: number;
+  description: string;
+  phoneNumber: string;
+  openingTime: string;
+  closingTime: string;
+  lastOrderTime: string;
+  photos?: string[];
+  tags?: string[];
+}
+
 export interface SearchQueries {
   name?: string;
   category?: string;
@@ -62,6 +82,7 @@ export interface SearchQueries {
   lat?: number;
   lng?: number;
   radius?: number;
+  kakaoId?: string;
 }
 export interface UpdateRestaurantRequest {
   name?: string;
