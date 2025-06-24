@@ -2,10 +2,11 @@ import {
   getStatusColor,
   getStatusText,
 } from "@/app/features/baropot/hooks/useBaropotStatus";
-import { BaropotItem } from "@/app/features/baropot/types/baropot";
+import { BaropotListResponse } from "@/app/shared/types/baropots";
+import { BaropotStatus } from "@/app/shared/types/enums";
 
 interface BaropotItemProps {
-  baropot: BaropotItem;
+  baropot: BaropotListResponse;
   onJoin?: (id: number) => void;
 }
 
@@ -25,17 +26,19 @@ export default function BaropotItems({ baropot, onJoin }: BaropotItemProps) {
               {getStatusText(baropot.status)}
             </span>
           </div>
-          <p className="text-sm text-gray-600">@{baropot.restaurant}</p>
+          <p className="text-sm text-gray-600">@{baropot.restaurant.name}</p>
         </div>
         <div className="text-right">
           <div className="text-sm font-medium text-gray-900">
-            {baropot.currentPeople}/{baropot.maxPeople}명
+            {baropot.participantCount}/{baropot.maxParticipants}명
           </div>
           <div className="w-16 bg-gray-200 rounded-full h-2 mt-1">
             <div
               className="bg-blue-500 h-2 rounded-full"
               style={{
-                width: `${(baropot.currentPeople / baropot.maxPeople) * 100}%`,
+                width: `${
+                  (baropot.participantCount / baropot.maxParticipants) * 100
+                }%`,
               }}
             />
           </div>
@@ -54,7 +57,7 @@ export default function BaropotItems({ baropot, onJoin }: BaropotItemProps) {
         </div>
         <div className="flex items-center text-sm text-gray-600">
           <span className="w-4 h-4 mr-2">👤</span>
-          호스트: {baropot.host}
+          호스트: {baropot.host.name}
         </div>
       </div>
 
@@ -73,13 +76,13 @@ export default function BaropotItems({ baropot, onJoin }: BaropotItemProps) {
         <button
           onClick={() => onJoin?.(baropot.id)}
           className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-            baropot.status === "recruiting"
+            baropot.status === BaropotStatus.OPEN
               ? "bg-blue-500 text-white hover:bg-blue-600"
               : "bg-gray-200 text-gray-500 cursor-not-allowed"
           }`}
-          disabled={baropot.status !== "recruiting"}
+          disabled={baropot.status !== BaropotStatus.OPEN}
         >
-          {baropot.status === "recruiting" ? "참여하기" : "참여불가"}
+          {baropot.status === BaropotStatus.OPEN ? "참여하기" : "참여불가"}
         </button>
       </div>
     </div>

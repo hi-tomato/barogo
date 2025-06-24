@@ -6,7 +6,7 @@ import {
   BaropotsQueries,
 } from "@/app/shared/types/baropots";
 
-export const useBaropot = (queries?: BaropotsQueries) => {
+export const useGetBaropotList = (queries?: BaropotsQueries) => {
   return useQuery({
     queryKey: queryKeys.baropot.list(queries),
     queryFn: () => baropotService.getList(queries),

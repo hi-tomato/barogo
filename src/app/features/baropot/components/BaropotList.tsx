@@ -1,8 +1,8 @@
+import { BaropotListResponse } from "@/app/shared/types/baropots";
 import BaropotItem from "./BaropotItems";
-import { BaropotItem as BaropotItemType } from "@/app/features/baropot/types/baropot";
 
 interface BaropotListProps {
-  baropotList: BaropotItemType[];
+  baropotList: BaropotListResponse[];
   isLoading: boolean;
   error: Error | null;
   onRefresh?: () => void;
