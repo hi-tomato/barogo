@@ -20,9 +20,9 @@ export const useCreateBaropot = () => {
     mutationFn: (baropotData: CreateBaropotRequest) =>
       baropotService.createBaropot(baropotData),
     onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: queryKeys.baropot.lists(),
-      });
+      // queryClient.invalidateQueries({
+      //   queryKey: queryKeys.baropot.lists(),
+      // });
     },
     onError: (error) => {
       console.error("바로팟을 생성하는데 문제가 발생하였음", error);

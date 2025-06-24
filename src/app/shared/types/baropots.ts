@@ -36,7 +36,7 @@ export interface CreateBaropotRequest {
   paymentMethod?: PaymentMethod;
   description: string;
   rule?: string;
-  tags: string;
+  tags: string[];
 }
 
 export interface Restaurant {

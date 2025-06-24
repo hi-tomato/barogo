@@ -2,17 +2,13 @@
 import { useEffect } from "react";
 import { useGeolocation } from "@/app/shared/hooks/useGeolocation";
 import { useMockNearby } from "@/app/features/nearby/hooks/queries/useMockNearby";
-import { useBaropotStore } from "../../baropot/store/useBaropotStore";
-
 import RestaurantList from "@/app/features/nearby/modal/RestaurantList";
 import NearbyStatus from "@/app/features/nearby/modal/NearbyStatus";
 import NearbyHeader from "@/app/features/nearby/modal/NearbyHeader";
 import { useLocationStore } from "../../map/store/useUserLocation";
-import { NearbyRestaurant } from "@/app/shared/types";
 
 export default function NearbyModal() {
   const { saveLocationFromGeolocation } = useLocationStore();
-  const { setSelectedRestaurant } = useBaropotStore();
 
   // 현재 위치를 받아오는 Hooks
   const {
@@ -36,22 +32,6 @@ export default function NearbyModal() {
 
   const isLoading = locationLoading || restaurantsLoading;
   const error = locationError || restaurantsError?.message;
-
-  const handleCreateBaropot = (restaurant: NearbyRestaurant) => {
-    // TODO: 바로팟 만들기 로직
-    setSelectedRestaurant(restaurant);
-    sessionStorage.setItem(
-      "selectedRestaurant",
-      JSON.stringify({
-        id: restaurant.id,
-        name: restaurant.place_name,
-        location: restaurant.address_name,
-        category: restaurant.category_name,
-        phone: restaurant.phone || "",
-      })
-    );
-    window.location.href = `/baropot/create/${restaurant.id}`;
-  };
 
   return (
     <div className="fixed inset-0 bg-[#0000004c] flex items-center justify-center p-4 z-50">
@@ -79,10 +59,8 @@ export default function NearbyModal() {
             <NearbyStatus type="notFound" />
           )}
 
-          <RestaurantList
-            restaurants={restaurants}
-            onCreateBaropot={handleCreateBaropot}
-          />
+          {/* onCreateBaropot props 제거 */}
+          <RestaurantList restaurants={restaurants} />
         </div>
       </div>
     </div>
