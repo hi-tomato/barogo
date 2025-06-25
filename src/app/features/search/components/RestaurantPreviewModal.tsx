@@ -7,7 +7,7 @@ import {
   useRestaurantList,
 } from "@/app/shared/hooks/queries/useRestaurant";
 import { RestaurantStatus } from "./Status";
-// import { mapKaKaoCategoryToServer } from "@/app/shared/lib/kakaoCategory";
+import { mapKaKaoCategoryToServer } from "@/app/shared/lib/kakaoCategory";
 
 interface RestaurantPreviewModalProps {
   restaurant: NearbyRestaurant;
@@ -24,7 +24,7 @@ export default function RestaurantPreviewModal({
 }: RestaurantPreviewModalProps) {
   const router = useRouter();
   const createRestaurant = useCreateRestaurant();
-
+  // TODO: 서버에 있는지 없는지를 queryParams으로 검사하기
   const { data: restaurantList, isLoading: isLoadingList } = useRestaurantList({
     name: restaurant.place_name,
     address: restaurant.address_name,
@@ -39,7 +39,7 @@ export default function RestaurantPreviewModal({
   const hasServerData = !!existingRestaurant;
   const isLoading = isLoadingList;
 
-  // 상세보기 버튼 클릭
+  // 상세 페이지
   const handleDetailView = () => {
     if (existingRestaurant) {
       onClose();
@@ -58,7 +58,7 @@ export default function RestaurantPreviewModal({
       id: restaurant.id,
       name: restaurant.place_name,
       location: restaurant.address_name,
-      category: restaurant.category_name,
+      category: mapKaKaoCategoryToServer(restaurant.category_name),
       phone: restaurant.phone || "",
       x: restaurant.x,
       y: restaurant.y,
@@ -73,7 +73,7 @@ export default function RestaurantPreviewModal({
     router.push(`/restaurants/create`);
   };
 
-  // 바로팟 만들기 버튼 클릭
+  // TODO: 서버에 받은 ID를 파람으로 전송하여서, 바로팟 생성하기
   const handleCreateBaropot = () => {
     onConfirm(restaurant);
   };

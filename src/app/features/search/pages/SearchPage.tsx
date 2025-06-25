@@ -8,6 +8,7 @@ import SearchResults from "@/app/features/search/components/SearchResults";
 
 import { useGeolocation } from "@/app/shared/hooks/useGeolocation";
 import { useRestaurantSearch } from "@/app/features/search/hooks/useSearch";
+import { useRestaurantList } from "@/app/shared/hooks/queries/useRestaurant";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { NearbyRestaurant } from "@/app/shared/types";
@@ -19,17 +20,20 @@ export default function SearchPage() {
     useState<NearbyRestaurant | null>(null);
 
   const { location } = useGeolocation();
-
   const { query, setQuery, result, loading, error } = useRestaurantSearch({
     lat: location?.latitude,
     lng: location?.longitude,
   });
+
+  // 서버에 등록된 맛집 목록 조회
+  const { data: restaurantList } = useRestaurantList({});
 
   const handleSelectRestaurant = (restaurant: NearbyRestaurant) => {
     setSelectedRestaurant(restaurant);
     setShowPreview(true);
   };
 
+  // 서버에 등록된 맛집 ID 확인 및 처리
   const handleConfirmSelection = (restaurant: NearbyRestaurant) => {
     if (
       !restaurant.id ||
@@ -50,21 +54,50 @@ export default function SearchPage() {
       console.error("맛집 정보가 불완전합니다. 다시 선택해주세요.");
       return;
     }
-    const baropotData = {
-      name: restaurant.place_name,
-      location: restaurant.address_name,
-      category: restaurant.category_name,
-      kakaoId: restaurant.id,
-      lat: restaurant.y,
-      lng: restaurant.x,
-    };
 
-    sessionStorage.setItem("selectedRestaurant", JSON.stringify(baropotData));
+    // 서버에 등록된 맛집인지 확인
+    const existingRestaurant = restaurantList?.find(
+      (item) =>
+        item.name === restaurant.place_name ||
+        (item.name.includes(restaurant.place_name.split(" ")[0]) &&
+          item.address === restaurant.address_name) ||
+        item.id === Number(restaurant.id)
+    );
 
-    router.back();
-    setTimeout(() => {
-      router.push(`/baropot/create/${restaurant.id}`);
-    }, 100);
+    if (existingRestaurant) {
+      // 이미 등록된 맛집인 경우 - 바로팟 생성 페이지로 이동
+      const baropotData = {
+        restaurantId: existingRestaurant.id, // 서버에 등록된 ID 사용
+        name: existingRestaurant.name,
+        location: existingRestaurant.address,
+        category: existingRestaurant.category,
+      };
+      sessionStorage.setItem("selectedRestaurant", JSON.stringify(baropotData));
+
+      router.back();
+      setTimeout(() => {
+        router.push(`/baropot/create/${existingRestaurant.id}`);
+      }, 100);
+    } else {
+      // 등록되지 않은 맛집인 경우 - 맛집 등록 페이지로 이동
+      const restaurantData = {
+        name: restaurant.place_name,
+        location: restaurant.address_name,
+        category: restaurant.category_name,
+        kakaoId: restaurant.id,
+        lat: restaurant.y,
+        lng: restaurant.x,
+      };
+      sessionStorage.setItem(
+        "selectedRestaurant",
+        JSON.stringify(restaurantData)
+      );
+
+      router.back();
+      setTimeout(() => {
+        router.push(`/restaurants/create`);
+      }, 100);
+    }
   };
 
   const handleSearchClick = (searchTerm: string) => {

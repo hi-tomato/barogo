@@ -12,6 +12,7 @@ import DetailedInfoSection from "@/app/features/baropot/components/create/Detail
 import { useBaropotFormLogic } from "@/app/features/baropot/hooks/useBaropotForm";
 import { BaropotFormData } from "@/app/features/baropot/types/baropot";
 import { RestaurantData } from "@/app/features/nearby/types/restaurant";
+import { ContactMethod, PaymentMethod } from "@/app/shared/types/enums";
 
 export default function CreateBaropotPage() {
   const router = useRouter();
@@ -30,14 +31,15 @@ export default function CreateBaropotPage() {
       restaurant: "",
       restaurantAddress: "",
       maxPeople: "2",
-      contactMethod: "app",
-      paymentMethod: "dutch",
+      contactMethod: ContactMethod.APP_CHAT,
+      paymentMethod: PaymentMethod.DUTCH_PAY,
       gender: [],
       ageGroup: [],
       tags: [],
     },
   });
 
+  // TODO: 선택된 레스토랑이 서버에서 받아온 데이터가 맞는지 확인
   const {
     watchContactMethod,
     watchGender,
@@ -45,7 +47,12 @@ export default function CreateBaropotPage() {
     watchTags,
     toggleArrayField,
     onSubmit,
-  } = useBaropotFormLogic({ watch, setValue, router });
+  } = useBaropotFormLogic({
+    watch,
+    setValue,
+    router,
+    restaurantData: selectedRestaurant,
+  });
 
   const handleRestaurantSelect = (restaurant: RestaurantData | null) => {
     setSelectedRestaurant(restaurant);

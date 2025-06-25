@@ -11,13 +11,20 @@ import { useBaropotFormLogic } from "@/app/features/baropot/hooks/useBaropotForm
 import { BaropotFormData } from "@/app/features/baropot/types/baropot";
 import { useEffect, useState } from "react";
 import { RestaurantData } from "@/app/features/nearby/types/restaurant";
+import {
+  ContactMethod,
+  ParticipantAgeGroup,
+  ParticipantGender,
+  PaymentMethod,
+} from "@/app/shared/types/enums";
+import { mapKaKaoCategoryToServer } from "@/app/shared/lib/kakaoCategory";
 
 export default function CreateBaropotForm() {
   const router = useRouter();
+  const [loading, setLoading] = useState(true);
   const [restaurantData, setRestaurantData] = useState<RestaurantData | null>(
     null
   );
-  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const getCurrentData = () => {
@@ -29,7 +36,7 @@ export default function CreateBaropotForm() {
             id: restaurant.kakaoId,
             name: restaurant.name,
             location: restaurant.location,
-            category: restaurant.category,
+            category: mapKaKaoCategoryToServer(restaurant.category),
             phone: restaurant.phone || "",
             lat: restaurant.lat,
             lng: restaurant.lng,
@@ -48,6 +55,7 @@ export default function CreateBaropotForm() {
     getCurrentData();
   }, [router]);
 
+  // TODO: 서버에 보내는 형식은 이게 맞음
   const {
     register,
     handleSubmit,
@@ -57,13 +65,13 @@ export default function CreateBaropotForm() {
     formState: { errors, isSubmitting },
   } = useForm<BaropotFormData>({
     defaultValues: {
-      restaurant: restaurantData?.name || "",
-      restaurantAddress: restaurantData?.location || "",
-      maxPeople: "2",
-      contactMethod: "app",
-      paymentMethod: "dutch",
-      gender: [],
-      ageGroup: [],
+      restaurant: "",
+      restaurantAddress: "",
+      maxPeople: "4",
+      contactMethod: ContactMethod.APP_CHAT,
+      paymentMethod: PaymentMethod.DUTCH_PAY,
+      gender: [ParticipantGender.ANY],
+      ageGroup: [ParticipantAgeGroup.ANY],
       tags: [],
     },
   });
