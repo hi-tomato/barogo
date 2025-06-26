@@ -19,7 +19,9 @@ export default function BasicInfoSection({
         <div className="bg-gradient-to-r from-orange-50 to-red-50 border border-orange-200 rounded-xl p-4">
           <div className="flex items-center space-x-2 mb-2">
             <span className="text-orange-600">🎯</span>
-            <h3 className="font-semibold text-orange-800">선택된 맛집</h3>
+            <h3 className="font-semibold text-orange-800">
+              {restaurantData.name}
+            </h3>
           </div>
           <p className="font-medium text-gray-900">{restaurantData.name}</p>
           <p className="text-sm text-gray-600">{restaurantData.location}</p>

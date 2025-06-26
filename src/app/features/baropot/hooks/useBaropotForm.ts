@@ -47,8 +47,8 @@ export function useBaropotFormLogic({
   const onSubmit = async (data: BaropotFormData) => {
     // 서버에 보내는 restaurantID 값
     const restaurantId = (() => {
-      if (params.id) {
-        const id = Number(params.id);
+      if (params.restaurantId) {
+        const id = Number(params.restaurantId);
         console.log("🔗 URL 파라미터에서 restaurantId 가져옴:", id);
         return id;
       }

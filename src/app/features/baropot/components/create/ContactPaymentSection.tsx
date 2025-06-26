@@ -4,6 +4,7 @@ import {
   Control,
   UseFormRegister,
   FieldErrors,
+  UseFormSetValue,
 } from "react-hook-form";
 
 interface ContactPaymentSectionProps {
@@ -11,6 +12,7 @@ interface ContactPaymentSectionProps {
   register: UseFormRegister<BaropotFormData>;
   errors: FieldErrors<BaropotFormData>;
   watchContactMethod: string;
+  setValue: UseFormSetValue<BaropotFormData>;
 }
 
 export default function ContactPaymentSection({
@@ -18,6 +20,7 @@ export default function ContactPaymentSection({
   register,
   errors,
   watchContactMethod,
+  setValue,
 }: ContactPaymentSectionProps) {
   return (
     <div className="bg-white rounded-xl p-4 shadow-sm space-y-4">

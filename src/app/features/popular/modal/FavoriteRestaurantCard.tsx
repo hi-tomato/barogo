@@ -48,7 +48,7 @@ export default function FavoriteRestaurantCard({
             onClick={() => {
               router.back();
               setTimeout(() => {
-                router.push(`/restaurants/${restaurant.id}/detail`);
+                router.push(`/restaurants/${restaurant.id}`);
               }, 300);
             }}
           />

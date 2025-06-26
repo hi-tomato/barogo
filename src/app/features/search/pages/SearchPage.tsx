@@ -76,7 +76,7 @@ export default function SearchPage() {
 
       router.back();
       setTimeout(() => {
-        router.push(`/baropot/create/${existingRestaurant.id}`);
+        router.push(`/restaurants/${existingRestaurant.id}/baropot/create`);
       }, 100);
     } else {
       // 등록되지 않은 맛집인 경우 - 맛집 등록 페이지로 이동

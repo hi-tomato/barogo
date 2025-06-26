@@ -43,7 +43,7 @@ export default function RestaurantPreviewModal({
   const handleDetailView = () => {
     if (existingRestaurant) {
       onClose();
-      router.push(`/restaurants/${existingRestaurant.id}/detail`);
+      router.push(`/restaurants/${existingRestaurant.id}`);
     }
   };
 

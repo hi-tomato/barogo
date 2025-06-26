@@ -124,7 +124,11 @@ export default function RestaurantList({
         "selectedRestaurant",
         JSON.stringify(restaurantData)
       );
-      router.push("/restaurants/create");
+
+      router.back();
+      setTimeout(() => {
+        router.push("/restaurants/create");
+      }, 300);
     }
   };
 
@@ -139,7 +143,7 @@ export default function RestaurantList({
       };
 
       sessionStorage.setItem("baropotData", JSON.stringify(baropotData));
-      router.push("/baropot/create");
+      router.push(`/restaurants/${existingRestaurant.id}/baropot/create`);
     } else {
       alert("먼저 맛집을 등록해주세요!");
     }

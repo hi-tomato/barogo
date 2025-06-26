@@ -72,7 +72,7 @@ export default function BaropotModal() {
             onClick={() => {
               router.back();
               setTimeout(() => {
-                router.push("/baropot/create");
+                router.push("/restaurants");
               }, 100);
             }}
           />

@@ -37,7 +37,7 @@ export default function BaropotMainPage() {
             바로팟
           </h1>
           <button
-            onClick={() => router.push("/baropot/create")}
+            onClick={() => router.push("/restaurants")}
             className="p-2 text-[#1C4E80] hover:bg-blue-50 rounded-lg"
           >
             <HiPlus size={24} />
@@ -71,7 +71,7 @@ export default function BaropotMainPage() {
 
       {/* 플로팅 버튼 */}
       <button
-        onClick={() => router.push("/baropot/create")}
+        onClick={() => router.push("/restaurants")}
         className="fixed bottom-24 right-4 bg-[#1C4E80] text-white w-14 h-14 rounded-full shadow-lg flex items-center justify-center hover:shadow-xl transition-all z-30"
       >
         <HiPlus size={24} />

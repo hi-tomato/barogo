@@ -1,6 +1,12 @@
+import { UseFormRegister, FieldErrors, UseFormSetValue } from "react-hook-form";
+import { BaropotFormData } from "../../types/baropot";
+
 interface ParticipantConditionsSectionProps {
+  register: UseFormRegister<BaropotFormData>;
+  errors: FieldErrors<BaropotFormData>;
   watchGender: string[];
   watchAgeGroup: string[];
+  setValue: UseFormSetValue<BaropotFormData>;
   toggleArrayField: (
     field: "gender" | "ageGroup" | "tags",
     value: string
@@ -8,8 +14,11 @@ interface ParticipantConditionsSectionProps {
 }
 
 export default function ParticipantConditionsSection({
+  register,
+  errors,
   watchGender,
   watchAgeGroup,
+  setValue,
   toggleArrayField,
 }: ParticipantConditionsSectionProps) {
   const Genders = ["남자", "여자", "무관"] as const;

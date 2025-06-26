@@ -16,7 +16,7 @@ export default function PopupActions({
 
   const handleBaropotPage = () => {
     // TODO: 여기서 바로팟 페이지로 이동하는 로직을 작성
-    router.push(`/baropot/create/${restaurant.id}`);
+    router.push(`/restaurants/${restaurant.id}/baropot/create`);
   };
 
   return (

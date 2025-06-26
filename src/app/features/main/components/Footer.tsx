@@ -12,7 +12,7 @@ export default function BottomTabBar() {
       id: "baropot",
       icon: HiLightningBolt,
       label: "바로팟 생성",
-      path: "/baropot/new/create",
+      path: "/restaurants",
     },
     { id: "mypage", icon: HiUser, label: "마이", path: "/mypage" },
   ];
