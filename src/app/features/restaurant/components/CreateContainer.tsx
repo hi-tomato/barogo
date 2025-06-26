@@ -12,7 +12,6 @@ import {
 } from "./index";
 import CreatedeScription from "./CreatedeScription";
 import { CreateRestaurantRequest } from "@/app/shared/types/restaurant";
-import { mapKaKaoCategoryToServer } from "@/app/shared/lib/kakaoCategory";
 import ImageUploader from "@/app/shared/components/ImageUploader";
 
 export default function CreateContainer() {
@@ -90,7 +89,7 @@ export default function CreateContainer() {
     const photos: string[] = uploadUrls;
     const createRestaurantData: CreateRestaurantRequest = {
       name: restaurant.name,
-      category: mapKaKaoCategoryToServer(restaurant.category),
+      category: restaurant.category,
       address: restaurant.location,
       lat: Number(restaurant.y as number),
       lng: Number(restaurant.x as number),
