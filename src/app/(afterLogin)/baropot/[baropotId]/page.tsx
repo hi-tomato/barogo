@@ -1,5 +1,5 @@
 "use client";
-import { useParams, useRouter } from "next/navigation";
+import { useParams } from "next/navigation";
 import { useGetBaropotDetail } from "@/app/shared/hooks/queries/useBaropot";
 import BaropotDetailHeader from "@/app/features/baropot/components/detail/BaropotDetailHeader";
 import BaropotDetailContent from "@/app/features/baropot/components/detail/BaropotDetailContent";

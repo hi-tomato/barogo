@@ -5,6 +5,7 @@ import {
   CreateBaropotRequest,
   BaropotsQueries,
   JoinBaropotRequest,
+  BaropotEditRequest,
 } from "@/app/shared/types/baropots";
 
 export const useGetBaropotList = (queries?: BaropotsQueries) => {
@@ -51,5 +52,23 @@ export const useGetBaropotDetail = (baropotId: number) => {
   return useQuery({
     queryKey: queryKeys.baropot.detail(baropotId),
     queryFn: () => baropotService.getDetail(baropotId),
+  });
+};
+
+export const useGetBaropotEdit = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({
+      baropotId,
+      baropotData,
+    }: {
+      baropotId: number;
+      baropotData: BaropotEditRequest;
+    }) => baropotService.updateBaropot(baropotId, baropotData),
+    onSuccess: (_, variables) => {
+      queryClient.invalidateQueries({
+        queryKey: queryKeys.baropot.detail(variables.baropotId),
+      });
+    },
   });
 };
