@@ -1,7 +1,7 @@
 "use client";
 
 interface ButtonProps {
-  text: string;
+  children: React.ReactNode;
   size?: "sm" | "md" | "lg";
   disabled?: boolean;
   type?: "button" | "submit" | "reset";
@@ -11,7 +11,7 @@ interface ButtonProps {
 }
 
 export default function Button({
-  text,
+  children,
   type,
   disabled,
   onClick,
@@ -26,7 +26,7 @@ export default function Button({
       className={className}
     >
       {icon && icon}
-      {text}
+      {children}
     </button>
   );
 }
