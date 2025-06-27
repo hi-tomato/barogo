@@ -1,4 +1,6 @@
 import { Restaurant } from "@/app/shared/types/map";
+import { RestaurantCategory } from "@/app/shared/types/enums";
+import { getCategoryDisplayName } from "@/app/shared/lib/kakaoCategory";
 
 const baropotMarkerImage = {
   src: "https://cdn1.iconfinder.com/data/icons/camping-65/500/bonfire-256.png",
@@ -20,10 +22,7 @@ export const getMarkerImage = (restaurant: Restaurant) => {
 
 export const categories = [
   "전체",
-  "한식",
-  "중식",
-  "일식",
-  "양식",
-  "카페",
-  "술집",
+  ...Object.values(RestaurantCategory).map((category) =>
+    getCategoryDisplayName(category)
+  ),
 ] as const;

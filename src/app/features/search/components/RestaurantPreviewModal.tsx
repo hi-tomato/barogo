@@ -7,7 +7,6 @@ import {
   useRestaurantList,
 } from "@/app/shared/hooks/queries/useRestaurant";
 import { RestaurantStatus } from "./Status";
-import { mapKaKaoCategoryToServer } from "@/app/shared/lib/kakaoCategory";
 
 interface RestaurantPreviewModalProps {
   restaurant: NearbyRestaurant;
@@ -58,7 +57,7 @@ export default function RestaurantPreviewModal({
       id: restaurant.id,
       name: restaurant.place_name,
       location: restaurant.address_name,
-      category: mapKaKaoCategoryToServer(restaurant.category_name),
+      category: "", // 사용자가 직접 선택하도록 빈 값으로 설정
       phone: restaurant.phone || "",
       x: restaurant.x,
       y: restaurant.y,
