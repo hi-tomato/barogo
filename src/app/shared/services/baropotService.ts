@@ -5,6 +5,7 @@ import {
   CreateBaropotRequest,
   BaropotListResponse,
   JoinBaropotRequest,
+  BaropotDetailResponse,
 } from "@/app/shared/types/baropots";
 
 export const baropotService = {
@@ -38,6 +39,11 @@ export const baropotService = {
       `/baropots/${baropotId}/participants`,
       message
     );
+    return data;
+  },
+  /** 바로팟 상세 조회 */
+  getDetail: async (baropotId: number) => {
+    const { data } = await get<BaropotDetailResponse>(`/baropots/${baropotId}`);
     return data;
   },
 };
