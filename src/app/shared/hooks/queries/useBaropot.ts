@@ -16,15 +16,9 @@ export const useGetBaropotList = (queries?: BaropotsQueries) => {
 };
 
 export const useCreateBaropot = () => {
-  const queryClient = useQueryClient();
   return useMutation({
     mutationFn: (baropotData: CreateBaropotRequest) =>
       baropotService.createBaropot(baropotData),
-    onSuccess: () => {
-      // queryClient.invalidateQueries({
-      //   queryKey: queryKeys.baropot.lists(),
-      // });
-    },
     onError: (error) => {
       console.error("바로팟을 생성하는데 문제가 발생하였음", error);
     },
@@ -50,5 +44,12 @@ export const useJoinBaropot = () => {
     onError: (error) => {
       console.error("바로팟에 참여하는데 문제가 발생하였음", error);
     },
+  });
+};
+
+export const useGetBaropotDetail = (baropotId: number) => {
+  return useQuery({
+    queryKey: queryKeys.baropot.detail(baropotId),
+    queryFn: () => baropotService.getDetail(baropotId),
   });
 };

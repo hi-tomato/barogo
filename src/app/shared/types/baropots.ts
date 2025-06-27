@@ -94,3 +94,29 @@ export interface BaropotListResponse {
 export interface JoinBaropotRequest {
   joinMessage: string;
 }
+
+/** 200OK : BaropotDetailResponse */
+export interface BaropotDetailResponse {
+  id: number;
+  createdAt: string;
+  updatedAt: string;
+  title: string;
+  status: BaropotStatus;
+  location: string;
+  maxParticipants: number;
+  date: string;
+  time: string;
+  participantGender: ParticipantGender;
+  participantAgeGroup: ParticipantAgeGroup;
+  contactMethod: ContactMethod;
+  estimatedCostPerPerson: number;
+  paymentMethod: PaymentMethod;
+  description: string;
+  rule: string;
+  tags: string[];
+  restaurant: Restaurant;
+  host: Host;
+  participantCount: number;
+  pendingParticipantCount: number;
+  participants: Participant[];
+}

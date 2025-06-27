@@ -110,9 +110,14 @@ export default function CreateContainer() {
     };
 
     createRestaurant.mutate(createRestaurantData, {
-      onSuccess: () => {
+      onSuccess: (response) => {
+        console.log("맛집 생성 성공:", response);
         sessionStorage.removeItem("selectedRestaurant");
         router.push("/main");
+      },
+      onError: (error) => {
+        console.error("맛집 생성 실패:", error);
+        alert("맛집 등록에 실패했습니다. 다시 시도해주세요.");
       },
     });
   };
