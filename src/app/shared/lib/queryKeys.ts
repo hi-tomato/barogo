@@ -9,6 +9,7 @@ export const queryKeys = {
     list: (queries?: BaropotsQueries) =>
       [...queryKeys.baropot.lists(), queries] as const,
     detail: (id: number) => [...queryKeys.baropot.all, "detail", id] as const,
+    edit: (id: number) => [...queryKeys.baropot.all, "edit", id] as const,
   },
 
   restaurant: {

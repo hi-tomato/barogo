@@ -120,3 +120,20 @@ export interface BaropotDetailResponse {
   pendingParticipantCount: number;
   participants: Participant[];
 }
+
+/** 200OK : BaropotEditRequest */
+export interface BaropotEditRequest {
+  title: string;
+  location: string;
+  maxParticipants: number;
+  date: string;
+  time: string;
+  participantGender: ParticipantGender;
+  participantAgeGroup: ParticipantAgeGroup;
+  contactMethod: ContactMethod;
+  estimatedCostPerPerson: number;
+  paymentMethod: PaymentMethod;
+  description: string;
+  rule: string;
+  tags: string[];
+}

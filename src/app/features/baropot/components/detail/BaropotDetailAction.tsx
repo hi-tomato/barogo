@@ -11,9 +11,15 @@ export default function BaropotDetailAction({
   const router = useRouter();
   const params = useParams();
   const baropotId = Number(params.baropotId);
+
+  const handleJoinBaropot = () => {
+    // TODO: 바로팟 참가 로직
+    alert("바로팟에 참가했습니다!");
+  };
+
   return (
     <motion.div
-      className="fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-sm border-t border-[#E6EEF5] p-4"
+      className="fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-sm border-t border-[#E6EEF5] p-4 z-50"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.3 }}
@@ -26,10 +32,7 @@ export default function BaropotDetailAction({
           ✏️ 수정하기
         </button>
         <button
-          onClick={() => {
-            // TODO: 바로팟 참가 로직
-            alert("바로팟에 참가했습니다!");
-          }}
+          onClick={handleJoinBaropot}
           disabled={baropot.status !== "OPEN"}
           className="flex-1 py-4 bg-gradient-to-r from-[#1C4E80] to-[#2563eb] text-white rounded-2xl font-semibold hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
         >

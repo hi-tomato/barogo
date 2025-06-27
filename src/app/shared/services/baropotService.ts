@@ -1,4 +1,4 @@
-import { get, post } from "../api/client";
+import { get, patch, post } from "../api/client";
 
 import {
   BaropotsQueries,
@@ -6,6 +6,7 @@ import {
   BaropotListResponse,
   JoinBaropotRequest,
   BaropotDetailResponse,
+  BaropotEditRequest,
 } from "@/app/shared/types/baropots";
 
 export const baropotService = {
@@ -44,6 +45,14 @@ export const baropotService = {
   /** 바로팟 상세 조회 */
   getDetail: async (baropotId: number) => {
     const { data } = await get<BaropotDetailResponse>(`/baropots/${baropotId}`);
+    return data;
+  },
+  /** 바로팟 내용 수정 */
+  updateBaropot: async (baropotId: number, baropotData: BaropotEditRequest) => {
+    const { data } = await patch<BaropotDetailResponse>(
+      `/baropots/${baropotId}`,
+      baropotData
+    );
     return data;
   },
 };

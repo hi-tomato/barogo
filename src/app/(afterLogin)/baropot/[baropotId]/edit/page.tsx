@@ -1,14 +1,19 @@
 "use client";
 import { useParams, useRouter } from "next/navigation";
-import { useGetBaropotDetail } from "@/app/shared/hooks/queries/useBaropot";
+import {
+  useGetBaropotDetail,
+  useGetBaropotEdit,
+} from "@/app/shared/hooks/queries/useBaropot";
 import { useState, useEffect } from "react";
+import { BaropotDetailResponse } from "@/app/shared/types/baropots";
 
 export default function BaropotEditPage() {
-  const params = useParams<{ baropotId: string }>();
+  const params = useParams();
   const router = useRouter();
-  const baropotId = params.baropotId;
+  const baropotId = Number(params.baropotId);
 
-  const { data: baropot, isLoading, isError } = useGetBaropotDetail(baropotId);
+  const { data: baropot, isError } = useGetBaropotDetail(baropotId);
+  const updateBaropotMutation = useGetBaropotEdit();
 
   const [formData, setFormData] = useState({
     title: "",
@@ -34,38 +39,12 @@ export default function BaropotEditPage() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     // TODO: 수정 로직 구현
-    alert("수정되었습니다!");
+    updateBaropotMutation.mutate({
+      baropotId,
+      baropotData: formData,
+    });
     router.push(`/baropot/${baropotId}`);
   };
-
-  if (isLoading) {
-    return (
-      <div className="min-h-screen bg-[#E6EEF5] flex items-center justify-center">
-        <div className="flex flex-col items-center space-y-4">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#1C4E80]"></div>
-          <p className="text-[#1C4E80]">바로팟 정보를 불러오고 있습니다...</p>
-        </div>
-      </div>
-    );
-  }
-
-  if (isError || !baropot) {
-    return (
-      <div className="min-h-screen bg-[#E6EEF5] flex items-center justify-center">
-        <div className="text-center space-y-4">
-          <p className="text-red-500 text-lg">
-            바로팟 정보를 불러올 수 없습니다.
-          </p>
-          <button
-            onClick={() => window.location.reload()}
-            className="px-4 py-2 bg-[#1C4E80] text-white rounded-lg hover:bg-[#154066] transition-colors"
-          >
-            다시 시도
-          </button>
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div className="min-h-screen bg-[#E6EEF5]">
@@ -81,12 +60,6 @@ export default function BaropotEditPage() {
           <h1 className="flex-1 text-center text-lg font-semibold text-[#2B2B2B]">
             바로팟 수정
           </h1>
-          <button
-            onClick={handleSubmit}
-            className="p-2 text-[#1C4E80] hover:bg-blue-50 rounded-lg"
-          >
-            저장
-          </button>
         </div>
       </div>
 
