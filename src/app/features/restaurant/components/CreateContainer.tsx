@@ -26,6 +26,7 @@ export default function CreateContainer() {
     openingTime: "09:00",
     closingTime: "21:00",
     lastOrderTime: "20:30",
+    category: "",
   });
   const [uploadUrls, setUploadUrls] = useState<string[]>([]);
 
@@ -53,7 +54,9 @@ export default function CreateContainer() {
   }, [router]);
 
   const handleInputChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >
   ) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
@@ -78,6 +81,10 @@ export default function CreateContainer() {
       alert("맛집 설명을 입력해주세요!");
       return;
     }
+    if (!formData.category) {
+      alert("카테고리를 선택해주세요!");
+      return;
+    }
     if (!restaurant) {
       return;
     }
@@ -89,7 +96,7 @@ export default function CreateContainer() {
     const photos: string[] = uploadUrls;
     const createRestaurantData: CreateRestaurantRequest = {
       name: restaurant.name,
-      category: restaurant.category,
+      category: formData.category,
       address: restaurant.location,
       lat: Number(restaurant.y as number),
       lng: Number(restaurant.x as number),
@@ -141,7 +148,9 @@ export default function CreateContainer() {
           <button
             type="submit"
             disabled={
-              createRestaurant.isPending || !formData.description.trim()
+              createRestaurant.isPending ||
+              !formData.description.trim() ||
+              !formData.category
             }
             className="w-full bg-gradient-to-r from-[#1C4E80] to-[#2563eb] text-white font-semibold py-4 rounded-xl hover:shadow-lg transition-all duration-200 flex items-center justify-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed"
           >

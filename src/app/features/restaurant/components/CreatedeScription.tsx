@@ -1,9 +1,14 @@
+import { HiPlus } from "react-icons/hi";
 import { FormData } from "../types";
+import { RestaurantCategory } from "@/app/shared/types/enums";
+import { getCategoryDisplayName } from "@/app/shared/lib/kakaoCategory";
 
 interface CreateDescriptionProps {
   formData: FormData;
   handleInputChange: (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >
   ) => void;
 }
 
@@ -76,6 +81,30 @@ export default function CreatedeScription({
               required
               className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1C4E80] focus:border-transparent"
             />
+          </div>
+        </div>
+      </div>
+      {/* 카테고리 입력 */}
+      <div className="bg-white rounded-xl p-6 shadow-sm">
+        <h3 className="font-semibold text-[#2B2B2B] mb-4 border-b border-gray-100 pb-2">
+          🍽️ 카테고리
+        </h3>
+        <div className="space-y-4">
+          <div>
+            <select
+              name="category"
+              id="category"
+              value={formData.category}
+              onChange={handleInputChange}
+              className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1C4E80] focus:border-transparent"
+            >
+              <option value="">카테고리를 선택해주세요</option>
+              {Object.values(RestaurantCategory).map((category) => (
+                <option key={category} value={category}>
+                  {getCategoryDisplayName(category)}
+                </option>
+              ))}
+            </select>
           </div>
         </div>
       </div>

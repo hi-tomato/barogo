@@ -17,6 +17,7 @@ export interface FormData {
   openingTime: string;
   closingTime: string;
   lastOrderTime: string;
+  category: string;
 }
 
 export interface UploadedImage {
