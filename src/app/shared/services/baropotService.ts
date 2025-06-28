@@ -7,6 +7,8 @@ import {
   JoinBaropotRequest,
   BaropotDetailResponse,
   BaropotEditRequest,
+  UpdateBaropotStatusRequest,
+  ManageParticipantRequest,
 } from "@/app/shared/types/baropots";
 
 export const baropotService = {
@@ -52,6 +54,28 @@ export const baropotService = {
     const { data } = await patch<BaropotDetailResponse>(
       `/baropots/${baropotId}`,
       baropotData
+    );
+    return data;
+  },
+  /** (Host) 바로팟 참가 요청 처리  */
+  mangeParticipant: async (
+    baropotId: number,
+    baropotData: ManageParticipantRequest
+  ) => {
+    const { data } = await patch<BaropotDetailResponse>(
+      `/baropots/${baropotId}/participants`,
+      baropotData
+    );
+    return data;
+  },
+  /** (Host) 바로팟 상태 변경 */
+  updateStatus: async (
+    baropotId: number,
+    statusData: UpdateBaropotStatusRequest
+  ) => {
+    const { data } = await patch<BaropotDetailResponse>(
+      `/baropots/${baropotId}/status`,
+      statusData
     );
     return data;
   },
