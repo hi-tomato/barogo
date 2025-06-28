@@ -8,6 +8,7 @@ interface ButtonProps {
   onClick?: (() => void) | (() => Promise<void>);
   icon?: React.ReactNode;
   className?: string;
+  text?: string;
 }
 
 export default function Button({
@@ -17,6 +18,7 @@ export default function Button({
   onClick,
   icon,
   className,
+  text,
 }: ButtonProps) {
   return (
     <button
@@ -26,6 +28,7 @@ export default function Button({
       className={className}
     >
       {icon && icon}
+      {text && text}
       {children}
     </button>
   );

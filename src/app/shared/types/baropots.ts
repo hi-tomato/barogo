@@ -54,8 +54,8 @@ export interface Restaurant {
 }
 
 export interface Host {
-  id: number;
   name: string;
+  userId: number;
 }
 
 export interface Participant {
