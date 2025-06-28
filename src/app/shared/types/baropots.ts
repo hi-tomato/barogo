@@ -137,3 +137,15 @@ export interface BaropotEditRequest {
   rule: string;
   tags: string[];
 }
+
+/** (Host): 참가자 요청 처리 */
+export interface ManageParticipantRequest {
+  participantUserId: number;
+  joinedStatus: BaropotJoinedStatus;
+  hostMemo: string;
+}
+
+/** (Host): 바로팟 상태 변경 */
+export interface UpdateBaropotStatusRequest {
+  status: BaropotStatus;
+}

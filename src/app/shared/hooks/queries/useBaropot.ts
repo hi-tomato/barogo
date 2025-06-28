@@ -6,7 +6,9 @@ import {
   BaropotsQueries,
   JoinBaropotRequest,
   BaropotEditRequest,
+  ManageParticipantRequest,
 } from "@/app/shared/types/baropots";
+import { BaropotStatus } from "../../types/enums";
 
 export const useGetBaropotList = (queries?: BaropotsQueries) => {
   return useQuery({
@@ -65,6 +67,44 @@ export const useGetBaropotEdit = () => {
       baropotId: number;
       baropotData: BaropotEditRequest;
     }) => baropotService.updateBaropot(baropotId, baropotData),
+    onSuccess: (_, variables) => {
+      queryClient.invalidateQueries({
+        queryKey: queryKeys.baropot.detail(variables.baropotId),
+      });
+    },
+  });
+};
+
+export const useManageParticipant = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({
+      baropotId,
+      participantData,
+    }: {
+      baropotId: number;
+      participantData: ManageParticipantRequest;
+    }) => baropotService.mangeParticipant(baropotId, participantData),
+    onSuccess: (_, variables) => {
+      queryClient.invalidateQueries({
+        queryKey: queryKeys.baropot.detail(variables.baropotId),
+      });
+    },
+  });
+};
+
+export const useUpdateBaropotStatus = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({
+      baropotId,
+      status,
+    }: {
+      baropotId: number;
+      status: BaropotStatus;
+    }) => baropotService.updateStatus(baropotId, { status }),
     onSuccess: (_, variables) => {
       queryClient.invalidateQueries({
         queryKey: queryKeys.baropot.detail(variables.baropotId),
