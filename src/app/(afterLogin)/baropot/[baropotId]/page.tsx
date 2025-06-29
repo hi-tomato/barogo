@@ -5,7 +5,7 @@ import BaropotDetailHeader from "@/app/features/baropot/components/detail/Baropo
 import BaropotDetailContent from "@/app/features/baropot/components/detail/BaropotDetailContent";
 import BaropotDetailAction from "@/app/features/baropot/components/detail/BaropotDetailAction";
 import BaropotStatus from "@/app/features/baropot/components/detail/BaropotStatus";
-import HostManagementPanel from "@/app/features/baropot/components/detail/HostManagementPanel";
+import HostManagementPanel from "@/app/features/baropot/components/host/HostManagementPanel";
 import { useAuthStore } from "@/app/shared/store/useAuthStore";
 
 export default function BaropotDetailPage() {
