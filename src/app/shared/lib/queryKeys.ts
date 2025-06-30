@@ -1,4 +1,3 @@
-import { BaropotTab } from "@/app/features/baropot/types/baropot";
 import { SearchQueries } from "../types/restaurant";
 import { BaropotsQueries } from "../types/baropots";
 

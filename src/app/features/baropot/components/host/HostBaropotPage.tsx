@@ -1,12 +1,27 @@
 "use client";
 import React, { useState } from "react";
 import { motion } from "framer-motion";
-import { useGetHostBaropotList } from "@/app/shared/hooks/queries/useBaropot";
+import {
+  useGetBaropotDetail,
+  useGetHostBaropotList,
+} from "@/app/shared/hooks/queries/useBaropot";
 import { BaropotsQueries } from "@/app/shared/types/baropots";
 import { containerVariants, itemVariants } from "@/app/shared/lib/animation";
 import { statusOptions } from "@/app/shared/lib/baropotOptions";
+import { BaropotStatus, baropotStatusKorean } from "@/app/shared/types/enums";
+import { useAuthStore } from "@/app/shared/store/useAuthStore";
+import HostManagementPanel from "./HostManagementPanel";
 
 export default function HostBaropotPage() {
+  const { user } = useAuthStore();
+  const [selectedBaropotId, setSelectedBaropotId] = useState<number | null>(
+    null
+  );
+
+  const { data: selectedBaropotDetail } = useGetBaropotDetail(
+    selectedBaropotId || 0
+  );
+
   const [queries, setQueries] = useState<BaropotsQueries>(
     {} as BaropotsQueries
   );
@@ -39,6 +54,11 @@ export default function HostBaropotPage() {
         {statusOption.label}
       </span>
     );
+  };
+
+  // 모달 닫기 함수
+  const handleCloseModal = () => {
+    setSelectedBaropotId(null);
   };
 
   if (error) {
@@ -95,11 +115,11 @@ export default function HostBaropotPage() {
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1C4E80] focus:border-transparent"
               >
                 <option value="">전체</option>
-                <option value="OPEN">모집중</option>
-                <option value="FULL">모집완료</option>
-                <option value="IN_PROGRESS">진행중</option>
-                <option value="COMPLETED">완료</option>
-                <option value="CANCELLED">취소</option>
+                {Object.values(BaropotStatus).map((status) => (
+                  <option key={status} value={status}>
+                    {baropotStatusKorean[status as BaropotStatus]}
+                  </option>
+                ))}
               </select>
             </div>
 
@@ -231,8 +251,7 @@ export default function HostBaropotPage() {
                       className="flex-1 px-4 py-2 bg-[#1C4E80] text-white rounded-lg hover:bg-blue-700 transition-colors"
                       onClick={(e) => {
                         e.stopPropagation();
-                        // TODO: 관리 페이지로 이동
-                        console.log("바로팟 관리:", baropot.id);
+                        setSelectedBaropotId(baropot.id);
                       }}
                     >
                       관리하기
@@ -267,6 +286,16 @@ export default function HostBaropotPage() {
           )}
         </motion.div>
       </div>
+
+      {/* 호스트 관리 모달 */}
+      {selectedBaropotDetail && (
+        <HostManagementPanel
+          baropot={selectedBaropotDetail}
+          currentUserId={user?.id || 0}
+          isOpen={!!selectedBaropotId}
+          onClose={handleCloseModal}
+        />
+      )}
     </div>
   );
 }

@@ -145,7 +145,7 @@ export interface ManageParticipantRequest {
   hostMemo: string;
 }
 
-/** (Host): 바로팟 상태 변경 */
+/**(Host): 바로팟 상태 변경 */
 export interface UpdateBaropotStatusRequest {
-  status: BaropotStatus;
+  status: "IN_PROGRESS" | "COMPLETED" | "CANCELLED";
 }
