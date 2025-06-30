@@ -112,3 +112,10 @@ export const useUpdateBaropotStatus = () => {
     },
   });
 };
+
+export const useGetHostBaropotList = (queries?: BaropotsQueries) => {
+  return useQuery({
+    queryKey: queryKeys.baropot.hostList(queries),
+    queryFn: () => baropotService.getHostList(queries),
+  });
+};
