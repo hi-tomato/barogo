@@ -1,6 +1,19 @@
 import { motion } from "framer-motion";
 import { HiCheckCircle, HiXCircle } from "react-icons/hi";
 
+interface ParticipantCardProps {
+  participant: any;
+  index: number;
+  type: "pending" | "approved";
+  hostMemo?: string;
+  onMemoChange?: (userId: number, memo: string) => void;
+  onApprove?: (userId: number) => void;
+  onReject?: (userId: number) => void;
+  onRemove?: (userId: number) => void;
+  isPending: boolean;
+  formatTime: (date: string) => string;
+  baropotCreatedAt: string;
+}
 export function ParticipantCard({
   participant,
   index,
@@ -13,19 +26,7 @@ export function ParticipantCard({
   isPending,
   formatTime,
   baropotCreatedAt,
-}: {
-  participant: any;
-  index: number;
-  type: "pending" | "approved";
-  hostMemo?: string;
-  onMemoChange?: (userId: number, memo: string) => void;
-  onApprove?: (userId: number) => void;
-  onReject?: (userId: number) => void;
-  onRemove?: (userId: number) => void;
-  isPending: boolean;
-  formatTime: (date: string) => string;
-  baropotCreatedAt: string;
-}) {
+}: ParticipantCardProps) {
   const isPendingType = type === "pending";
   return (
     <motion.div

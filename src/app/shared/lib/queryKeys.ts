@@ -10,6 +10,8 @@ export const queryKeys = {
       [...queryKeys.baropot.lists(), queries] as const,
     detail: (id: number) => [...queryKeys.baropot.all, "detail", id] as const,
     edit: (id: number) => [...queryKeys.baropot.all, "edit", id] as const,
+    hostList: (queries?: BaropotsQueries) =>
+      [...queryKeys.baropot.all, "host", queries] as const,
   },
 
   restaurant: {

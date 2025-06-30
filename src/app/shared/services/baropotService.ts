@@ -79,4 +79,26 @@ export const baropotService = {
     );
     return data;
   },
+  /** (Host) 바로팟 전체 목록 리스트 조회 */
+  getHostList: async (queries?: BaropotsQueries) => {
+    if (!queries) {
+      const { data } = await get<BaropotListResponse[]>(`/baropots/me`);
+      return data;
+    }
+    if (queries) {
+      const entries = Object.entries(queries);
+      const queryString = entries
+        .filter(
+          ([_, value]) =>
+            value !== "" && value != null && value !== undefined && value !== 0
+        )
+        .map(([key, value]) => `${key}=${encodeURIComponent(value)}`)
+        .join("&");
+
+      const { data } = await get<BaropotListResponse[]>(
+        `/baropots/me?${queryString}`
+      );
+      return data;
+    }
+  },
 };
