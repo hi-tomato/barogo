@@ -103,8 +103,8 @@ export const useUpdateBaropotStatus = () => {
       status,
     }: {
       baropotId: number;
-      status: BaropotStatus;
-    }) => baropotService.updateStatus(baropotId, { status }),
+      status: { status: BaropotStatus };
+    }) => baropotService.updateStatus(baropotId, status),
     onSuccess: (_, variables) => {
       queryClient.invalidateQueries({
         queryKey: queryKeys.baropot.detail(variables.baropotId),

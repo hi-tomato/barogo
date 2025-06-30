@@ -7,9 +7,9 @@ import {
   JoinBaropotRequest,
   BaropotDetailResponse,
   BaropotEditRequest,
-  UpdateBaropotStatusRequest,
   ManageParticipantRequest,
 } from "@/app/shared/types/baropots";
+import { BaropotStatus } from "../types/enums";
 
 export const baropotService = {
   /** 유저가 참여할 수 있는 바로팟 목록 조회 */
@@ -71,7 +71,7 @@ export const baropotService = {
   /** (Host) 바로팟 상태 변경 */
   updateStatus: async (
     baropotId: number,
-    statusData: UpdateBaropotStatusRequest
+    statusData: { status: BaropotStatus }
   ) => {
     const { data } = await patch<BaropotDetailResponse>(
       `/baropots/${baropotId}/status`,
@@ -81,24 +81,32 @@ export const baropotService = {
   },
   /** (Host) 바로팟 전체 목록 리스트 조회 */
   getHostList: async (queries?: BaropotsQueries) => {
-    if (!queries) {
-      const { data } = await get<BaropotListResponse[]>(`/baropots/me`);
-      return data;
-    }
-    if (queries) {
-      const entries = Object.entries(queries);
-      const queryString = entries
-        .filter(
-          ([_, value]) =>
-            value !== "" && value != null && value !== undefined && value !== 0
-        )
-        .map(([key, value]) => `${key}=${encodeURIComponent(value)}`)
-        .join("&");
+    const baseUrl = `/baropots/me`;
 
-      const { data } = await get<BaropotListResponse[]>(
-        `/baropots/me?${queryString}`
-      );
-      return data;
-    }
+    const queryString = queries
+      ? Object.entries(queries)
+          .filter(
+            ([_, value]) =>
+              value !== "" &&
+              value != null &&
+              value !== undefined &&
+              value !== 0
+          )
+          .map(([key, value]) => {
+            if (key === "statusList") {
+              return `${key}[]=${encodeURIComponent(value)}`;
+            }
+            return `${key}=${encodeURIComponent(value)}`;
+          })
+          .join("&")
+      : "";
+
+    const url =
+      queries && Object.keys(queries).length > 0 && queryString
+        ? `${baseUrl}?${queryString}`
+        : baseUrl;
+
+    const { data } = await get<BaropotListResponse[]>(url);
+    return data;
   },
 };

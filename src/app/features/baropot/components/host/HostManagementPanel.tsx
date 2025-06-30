@@ -15,11 +15,15 @@ import { HostParticipantList } from "./HostParticipantList";
 interface HostManagementPanelProps {
   baropot: BaropotDetailResponse;
   currentUserId: number;
+  isOpen?: boolean;
+  onClose?: () => void;
 }
 
 export default function HostManagementPanel({
   baropot,
   currentUserId,
+  isOpen,
+  onClose,
 }: HostManagementPanelProps) {
   const [isPanelOpen, setIsPanelOpen] = useState(false);
   const [activeTab, setActiveTab] = useState("pending");
@@ -29,6 +33,16 @@ export default function HostManagementPanel({
   const updateBaropotStatusMutation = useUpdateBaropotStatus();
 
   const isHost = currentUserId === baropot.host.userId;
+
+  // 외부에서 제어하는 경우와 내부에서 제어하는 경우를 구분
+  const isModalOpen = isOpen !== undefined ? isOpen : isPanelOpen;
+  const handleClose = () => {
+    if (onClose) {
+      onClose();
+    } else {
+      setIsPanelOpen(false);
+    }
+  };
 
   const pendingParticipants = baropot.participants.filter(
     (p) => p.joinedStatus === BaropotJoinedStatus.PENDING
@@ -110,11 +124,11 @@ export default function HostManagementPanel({
 
   const handleStatusChange = (newStatus: BaropotStatus) => {
     if (newStatus === baropot.status) return;
-
+    console.log(newStatus);
     try {
       updateBaropotStatusMutation.mutate({
         baropotId: baropot.id,
-        status: newStatus,
+        status: { status: newStatus },
       });
     } catch (error) {
       console.error("바로팟 상태 변경 실패", error);
@@ -145,10 +159,13 @@ export default function HostManagementPanel({
 
   return (
     <>
-      <HostManagementButton onClick={() => setIsPanelOpen(true)} />
+      {/* 외부에서 제어하지 않는 경우에만 버튼 표시 */}
+      {isOpen === undefined && (
+        <HostManagementButton onClick={() => setIsPanelOpen(true)} />
+      )}
 
       <AnimatePresence>
-        {isPanelOpen && (
+        {isModalOpen && (
           <>
             {/* 백드롭 */}
             <motion.div
@@ -156,7 +173,7 @@ export default function HostManagementPanel({
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              onClick={() => setIsPanelOpen(false)}
+              onClick={handleClose}
             />
 
             {/* 슬라이드 패널 */}
@@ -168,7 +185,7 @@ export default function HostManagementPanel({
               transition={{ type: "spring", stiffness: 300, damping: 30 }}
             >
               <div className="bg-[#E6EEF5] rounded-t-3xl shadow-2xl overflow-hidden">
-                <PanelHeader onClose={() => setIsPanelOpen(false)} />
+                <PanelHeader onClose={handleClose} />
 
                 <div className="overflow-y-auto max-h-[70vh] pb-6">
                   <div className="px-6 py-6 space-y-6">

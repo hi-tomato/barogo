@@ -45,24 +45,8 @@ export default function BaropotDetailContent({
                 </p>
               </div>
             </div>
-
-            <motion.span
-              className={`relative px-6 py-3 rounded-2xl text-sm font-bold shadow-md ${
-                baropot.status === "OPEN"
-                  ? "bg-gradient-to-r from-emerald-400 to-green-500 text-white"
-                  : "bg-gradient-to-r from-gray-300 to-gray-400 text-gray-700"
-              }`}
-              whileHover={{ scale: 1.05 }}
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: 0.4 }}
-            >
-              {baropot.status === "OPEN" ? "🟢 모집중" : "⭕ 마감"}
-              <div className="absolute inset-0 bg-white/20 rounded-2xl opacity-0 hover:opacity-100 transition-opacity" />
-            </motion.span>
           </div>
 
-          {/* 참가자 현황 - 더욱 화려하게 */}
           <motion.div
             className="bg-gradient-to-r from-[#E6EEF5] via-[#EEF2FF] to-[#E6EEF5] rounded-3xl p-8 mb-8 relative overflow-hidden"
             initial={{ opacity: 0, scale: 0.95 }}
