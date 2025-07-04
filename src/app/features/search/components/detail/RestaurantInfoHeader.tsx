@@ -1,21 +1,15 @@
 "use client";
-import { useState } from "react";
-import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
-import { HiArrowLeft } from "react-icons/hi";
-import Button from "@/app/shared/ui/Button";
 import { RestaurantDetail } from "@/app/shared/types/restaurant";
+import Button from "@/app/shared/ui/Button";
 
-interface RestaurantHeaderProps {
+interface RestaurantInfoHeaderProps {
   restaurant: RestaurantDetail;
 }
 
-export default function RestaurantHeader({
+export default function RestaurantInfoHeader({
   restaurant,
-}: RestaurantHeaderProps) {
-  const router = useRouter();
-  const [showMenu, setShowMenu] = useState(false);
-
+}: RestaurantInfoHeaderProps) {
   return (
     <div className="px-4 py-6">
       <div className="flex items-start justify-between mb-4">
