@@ -1,5 +1,5 @@
 "use client";
-import Button from "@/app/shared/ui/Button";
+import { Button } from "@/app/shared/ui";
 import { useRouter } from "next/navigation";
 
 interface CreateFormActionsProps {
@@ -17,28 +17,24 @@ export default function CreateFormActions({
 
   return (
     <div className="space-y-3">
-      <button
+      <Button
         type="submit"
         disabled={isPending || !isFormValid}
         onClick={onSubmit}
-        className="w-full bg-gradient-to-r from-[#1C4E80] to-[#2563eb] text-white font-semibold py-4 rounded-xl hover:shadow-lg transition-all duration-200 flex items-center justify-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed"
+        variant="primary"
+        size="lg"
+        fullWidth
+        loading={isPending}
       >
-        {isPending ? (
-          <>
-            <div className="animate-spin w-5 h-5 border-2 border-white border-t-transparent rounded-full" />
-            <span>등록 중...</span>
-          </>
-        ) : (
-          <>
-            <span>맛집 등록하기</span>
-          </>
-        )}
-      </button>
+        {isPending ? "등록 중..." : "맛집 등록하기"}
+      </Button>
 
       <Button
         onClick={() => router.back()}
         disabled={isPending}
-        className="w-full border border-gray-300 text-gray-700 font-medium py-4 rounded-xl hover:bg-gray-50 transition-colors disabled:opacity-50"
+        variant="outline"
+        size="lg"
+        fullWidth
       >
         취소
       </Button>

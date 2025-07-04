@@ -1,7 +1,7 @@
 "use client";
 import { motion } from "framer-motion";
 import { RestaurantDetail } from "@/app/shared/types/restaurant";
-import Button from "@/app/shared/ui/Button";
+import { Button } from "@/app/shared/ui";
 
 interface RestaurantInfoHeaderProps {
   restaurant: RestaurantDetail;
@@ -32,7 +32,11 @@ export default function RestaurantInfoHeader({
               <div className="text-gray-600 text-sm leading-relaxed truncate">
                 {restaurant.address}
               </div>
-              <Button className="text-[#1C4E80] text-sm font-medium mt-1">
+              <Button
+                variant="ghost"
+                size="sm"
+                className="text-[#1C4E80] text-sm font-medium mt-1"
+              >
                 지도보기 →
               </Button>
             </div>

@@ -1,5 +1,6 @@
 import { BaropotDetailResponse } from "@/app/shared/types/baropots";
 import { motion } from "framer-motion";
+import { Card } from "@/app/shared/ui";
 
 interface BaropotTagsCardProps {
   baropot: BaropotDetailResponse;
@@ -11,11 +12,12 @@ export default function BaropotTagsCard({ baropot }: BaropotTagsCardProps) {
   }
 
   return (
-    <motion.div
-      className="mt-6 bg-gradient-to-br from-white to-[#F8FAFC] rounded-3xl p-8 shadow-lg border border-white/80"
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: 0.6 }}
+    <Card
+      variant="gradient"
+      size="lg"
+      padding="lg"
+      className="mt-6"
+      animate={true}
     >
       <div className="flex items-center space-x-4 mb-6">
         <div className="w-14 h-14 bg-gradient-to-r from-[#10B981] to-[#06B6D4] rounded-2xl flex items-center justify-center shadow-lg">
@@ -37,6 +39,6 @@ export default function BaropotTagsCard({ baropot }: BaropotTagsCardProps) {
           </motion.span>
         ))}
       </div>
-    </motion.div>
+    </Card>
   );
 }

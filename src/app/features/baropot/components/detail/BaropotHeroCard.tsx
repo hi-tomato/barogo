@@ -1,6 +1,7 @@
 import { BaropotDetailResponse } from "@/app/shared/types/baropots";
 import { motion } from "framer-motion";
 import { HiClock, HiLocationMarker } from "react-icons/hi";
+import { Card } from "@/app/shared/ui";
 
 interface BaropotHeroCardProps {
   baropot: BaropotDetailResponse;
@@ -8,11 +9,12 @@ interface BaropotHeroCardProps {
 
 export default function BaropotHeroCard({ baropot }: BaropotHeroCardProps) {
   return (
-    <motion.div
-      className="mt-6 bg-gradient-to-br from-white to-[#F8FAFC] rounded-3xl p-8 shadow-lg border border-white/80 backdrop-blur-sm relative overflow-hidden"
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: 0.2 }}
+    <Card
+      variant="gradient"
+      size="lg"
+      padding="lg"
+      className="mt-6 relative overflow-hidden"
+      animate={true}
     >
       {/* 배경 장식 */}
       <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-[#1C4E80]/5 to-[#C6A46A]/5 rounded-full -translate-y-16 translate-x-16" />
@@ -109,6 +111,6 @@ export default function BaropotHeroCard({ baropot }: BaropotHeroCardProps) {
           </motion.div>
         </div>
       </div>
-    </motion.div>
+    </Card>
   );
 }

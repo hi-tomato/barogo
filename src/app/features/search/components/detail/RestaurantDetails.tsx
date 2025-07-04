@@ -2,6 +2,7 @@
 import { motion } from "framer-motion";
 import { RestaurantDetail } from "@/app/shared/types/restaurant";
 import { HiPhone, HiClock, HiTag } from "react-icons/hi";
+import { Card } from "@/app/shared/ui";
 
 interface RestaurantDetailsProps {
   restaurant: RestaurantDetail;
@@ -30,11 +31,12 @@ export default function RestaurantDetails({
   return (
     <div className="px-4 py-6 space-y-6">
       {/* 카테고리 */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.5 }}
-        className="flex items-center space-x-3 p-4 bg-gradient-to-r from-[#E6EEF5] to-[#EEF2FF] rounded-2xl"
+      <Card
+        variant="default"
+        size="md"
+        padding="sm"
+        className="flex items-center space-x-3"
+        animate={true}
       >
         <div className="w-12 h-12 bg-gradient-to-r from-[#1C4E80] to-[#2563eb] rounded-xl flex items-center justify-center">
           <HiTag className="text-white" size={20} />
@@ -45,7 +47,7 @@ export default function RestaurantDetails({
             {restaurant.category || "정보 없음"}
           </p>
         </div>
-      </motion.div>
+      </Card>
 
       {/* 전화번호 */}
       <motion.div

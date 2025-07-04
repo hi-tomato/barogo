@@ -1,6 +1,7 @@
 import { BaropotDetailResponse } from "@/app/shared/types/baropots";
 import { motion } from "framer-motion";
 import { HiUsers } from "react-icons/hi";
+import { Card } from "@/app/shared/ui";
 
 interface BaropotConditionsCardProps {
   baropot: BaropotDetailResponse;
@@ -20,11 +21,12 @@ export default function BaropotConditionsCard({
   ];
 
   return (
-    <motion.div
-      className="mt-6 bg-gradient-to-br from-white to-[#F8FAFC] rounded-3xl p-8 shadow-lg border border-white/80"
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: 0.5 }}
+    <Card
+      variant="gradient"
+      size="lg"
+      padding="lg"
+      className="mt-6"
+      animate={true}
     >
       <div className="flex items-center space-x-4 mb-8">
         <div className="w-14 h-14 bg-gradient-to-r from-[#EC4899] to-[#F97316] rounded-2xl flex items-center justify-center shadow-lg">
@@ -53,6 +55,6 @@ export default function BaropotConditionsCard({
           </motion.div>
         ))}
       </div>
-    </motion.div>
+    </Card>
   );
 }
