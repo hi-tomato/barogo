@@ -1,6 +1,5 @@
 "use client";
 import KaKaoContainer from "@/app/features/map/components/KaKaoContainer";
-import { RestaurantMap } from "@/app/shared/types";
 import { useRouter } from "next/navigation";
 
 export default function KakaoMapView() {
@@ -20,66 +19,3 @@ export default function KakaoMapView() {
     </div>
   );
 }
-
-export const dummyRestaurants: RestaurantMap[] = [
-  {
-    id: 26338954,
-    name: "토마토김밥",
-    lat: 37.5665,
-    lng: 126.978,
-    description: "김밥계의 샤넬. 언제나 옳은 맛",
-    category: "한식",
-    hasBaropot: true,
-    baropotCount: 2,
-    rating: 4.5,
-    reviewCount: 128,
-  },
-  {
-    id: 12345678,
-    name: "마라탕의 전설",
-    lat: 37.5655,
-    lng: 126.976,
-    description: "중독주의! 얼얼한 마라의 세계",
-    category: "중식",
-    hasBaropot: true,
-    baropotCount: 1,
-    rating: 4.2,
-    reviewCount: 89,
-  },
-  {
-    id: 87654321,
-    name: "스타벅스 홍대점",
-    lat: 37.567,
-    lng: 126.975,
-    description: "커피 한 잔의 여유를 즐겨보세요",
-    category: "카페",
-    hasBaropot: false,
-    baropotCount: 0,
-    rating: 4.0,
-    reviewCount: 256,
-  },
-  {
-    id: 11111111,
-    name: "스시 오마카세",
-    lat: 37.5645,
-    lng: 126.98,
-    description: "신선한 스시를 합리적인 가격에",
-    category: "일식",
-    hasBaropot: true,
-    baropotCount: 3,
-    rating: 4.8,
-    reviewCount: 67,
-  },
-  {
-    id: 22222222,
-    name: "파스타 레스토랑",
-    lat: 37.568,
-    lng: 126.972,
-    description: "정통 이탈리안 파스타 전문점",
-    category: "양식",
-    hasBaropot: false,
-    baropotCount: 0,
-    rating: 4.3,
-    reviewCount: 143,
-  },
-];

@@ -2,15 +2,15 @@
 import { Map } from "react-kakao-maps-sdk";
 import RestaurantMarker from "./RestaurantMarker";
 import UserLocationMarker from "./UserLocationMarker";
-import { RestaurantMap } from "@/app/shared/types";
+import { Restaurant } from "@/app/shared/types/restaurant";
 import { useLocationStore } from "../store/useUserLocation";
 import RestaurantPopup from "./RestaurantPopup";
 
 interface KakaoMapViewProps {
-  restaurants: RestaurantMap[];
-  selectedRestaurant: RestaurantMap | null;
+  restaurants: Restaurant[];
+  selectedRestaurant: Restaurant | null;
   onClosePopup: () => void;
-  onRestaurantSelect: (restaurant: RestaurantMap) => void;
+  onRestaurantSelect: (restaurant: Restaurant) => void;
 }
 
 export default function KakaoMapView({

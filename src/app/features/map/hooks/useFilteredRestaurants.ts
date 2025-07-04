@@ -1,8 +1,8 @@
 import { useMemo } from "react";
-import { RestaurantMap } from "@/app/shared/types";
+import { Restaurant } from "@/app/shared/types/restaurant";
 
 export function useFilteredRestaurants(
-  restaurants: RestaurantMap[],
+  restaurants: Restaurant[],
   categoryFilter: string
 ) {
   return useMemo(() => {

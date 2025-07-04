@@ -1,10 +1,10 @@
 import { CustomOverlayMap } from "react-kakao-maps-sdk";
 import Button from "@/app/shared/ui/Button";
-import { RestaurantMap } from "@/app/shared/types";
+import { Restaurant } from "@/app/shared/types/restaurant";
 import PopupContainer from "./popup/PopupContainer";
 
 interface RestaurantPopupProps {
-  restaurant: RestaurantMap;
+  restaurant: Restaurant;
   onClose: () => void;
 }
 

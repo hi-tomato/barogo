@@ -16,6 +16,10 @@ export interface Restaurant {
   isBookmarked: boolean;
   distance?: string;
   kakaoId?: string;
+  // 지도용 필드들
+  hasBaropot?: boolean;
+  baropotCount?: number;
+  rating?: number;
 }
 
 export type RestaurantList = Restaurant[];

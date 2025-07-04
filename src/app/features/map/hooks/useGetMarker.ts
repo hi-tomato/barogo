@@ -1,4 +1,4 @@
-import { RestaurantMap } from "@/app/shared/types";
+import { Restaurant } from "@/app/shared/types/restaurant";
 import { RestaurantCategory } from "@/app/shared/types/enums";
 import { getCategoryDisplayName } from "@/app/shared/lib/kakaoCategory";
 
@@ -15,7 +15,7 @@ const normalMarkerImage = {
 };
 
 // 마커 이미지 선택 함수
-export const getMarkerImage = (restaurant: RestaurantMap) => {
+export const getMarkerImage = (restaurant: Restaurant) => {
   if (restaurant.hasBaropot) return baropotMarkerImage;
   return normalMarkerImage;
 };

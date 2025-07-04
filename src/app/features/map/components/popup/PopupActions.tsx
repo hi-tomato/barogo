@@ -1,12 +1,12 @@
 "use client";
-import { RestaurantMap } from "@/app/shared/types";
+import { Restaurant } from "@/app/shared/types/restaurant";
 import Button from "@/app/shared/ui/Button";
 import { useRouter } from "next/navigation";
 
 export default function PopupActions({
   restaurant,
 }: {
-  restaurant: RestaurantMap;
+  restaurant: Restaurant;
 }) {
   const router = useRouter();
   const handleDetailPage = () => {

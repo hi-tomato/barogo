@@ -1,10 +1,10 @@
 import { getMarkerImage } from "@/app/features/map/hooks/useGetMarker";
-import { RestaurantMap } from "@/app/shared/types";
+import { Restaurant } from "@/app/shared/types/restaurant";
 
 import { MapMarker } from "react-kakao-maps-sdk";
 
 interface RestaurantMarkerProps {
-  restaurant: RestaurantMap;
+  restaurant: Restaurant;
   onClick: () => void;
 }
 

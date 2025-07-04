@@ -1,12 +1,12 @@
 import PopupContents from "./PopupContents";
 import PopupHeader from "./PopupHeader";
 import PopupActions from "./PopupActions";
-import { RestaurantMap } from "@/app/shared/types";
+import { Restaurant } from "@/app/shared/types/restaurant";
 
 export default function PopupContainer({
   restaurant,
 }: {
-  restaurant: RestaurantMap;
+  restaurant: Restaurant;
 }) {
   return (
     <>
