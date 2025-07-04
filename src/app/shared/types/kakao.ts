@@ -32,13 +32,3 @@ export interface FavoriteRestaurant {
   reviews: number;
   image: string;
 }
-
-export interface NearbyRestaurant {
-  id: string;
-  place_name: string;
-  address_name: string;
-  phone: string;
-  category_name: string;
-  distance: string;
-  place_url: string;
-}

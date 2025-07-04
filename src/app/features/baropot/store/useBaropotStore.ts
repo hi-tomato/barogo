@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { NearbyRestaurant } from "@/app/types";
+import { NearbyRestaurant } from "@/app/shared/types";
 
 interface BaropotStore {
   selectedRestaurant: NearbyRestaurant | null;

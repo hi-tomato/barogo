@@ -1,3 +1,5 @@
+import { Restaurant } from "./restaurant";
+
 export interface FavoriteRestaurant {
   id: number;
   name: string;
@@ -6,6 +8,17 @@ export interface FavoriteRestaurant {
   reviews?: number;
   image?: string;
 }
+
+// 지도용 확장 타입
+export type RestaurantMap = Pick<
+  Restaurant,
+  "id" | "name" | "lat" | "lng" | "description" | "category"
+> & {
+  hasBaropot: boolean;
+  baropotCount: number;
+  rating: number;
+  reviewCount: number;
+};
 
 export interface Location {
   latitude: number;

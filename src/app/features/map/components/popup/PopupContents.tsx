@@ -1,9 +1,9 @@
-import { Restaurant } from "@/app/shared/types/map";
+import { RestaurantMap } from "@/app/shared/types";
 
 export default function PopupContents({
   restaurant,
 }: {
-  restaurant: Restaurant;
+  restaurant: RestaurantMap;
 }) {
   return (
     <>

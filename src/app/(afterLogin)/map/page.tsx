@@ -1,6 +1,6 @@
 "use client";
 import KaKaoContainer from "@/app/features/map/components/KaKaoContainer";
-import { Restaurant } from "@/app/shared/types/map";
+import { RestaurantMap } from "@/app/shared/types";
 import { useRouter } from "next/navigation";
 
 export default function KakaoMapView() {
@@ -21,9 +21,9 @@ export default function KakaoMapView() {
   );
 }
 
-export const dummyRestaurants: Restaurant[] = [
+export const dummyRestaurants: RestaurantMap[] = [
   {
-    id: "26338954",
+    id: 26338954,
     name: "토마토김밥",
     lat: 37.5665,
     lng: 126.978,
@@ -35,7 +35,7 @@ export const dummyRestaurants: Restaurant[] = [
     reviewCount: 128,
   },
   {
-    id: "12345678", // ⭐ kakaoId 형식
+    id: 12345678,
     name: "마라탕의 전설",
     lat: 37.5655,
     lng: 126.976,
@@ -47,7 +47,7 @@ export const dummyRestaurants: Restaurant[] = [
     reviewCount: 89,
   },
   {
-    id: "87654321", // ⭐ kakaoId 형식
+    id: 87654321,
     name: "스타벅스 홍대점",
     lat: 37.567,
     lng: 126.975,
@@ -59,7 +59,7 @@ export const dummyRestaurants: Restaurant[] = [
     reviewCount: 256,
   },
   {
-    id: "11111111", // ⭐ kakaoId 형식
+    id: 11111111,
     name: "스시 오마카세",
     lat: 37.5645,
     lng: 126.98,
@@ -71,7 +71,7 @@ export const dummyRestaurants: Restaurant[] = [
     reviewCount: 67,
   },
   {
-    id: "22222222", // ⭐ kakaoId 형식
+    id: 22222222,
     name: "파스타 레스토랑",
     lat: 37.568,
     lng: 126.972,

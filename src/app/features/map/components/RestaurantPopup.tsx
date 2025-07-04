@@ -1,10 +1,10 @@
 import { CustomOverlayMap } from "react-kakao-maps-sdk";
 import Button from "@/app/shared/ui/Button";
-import { Restaurant } from "@/app/shared/types/map";
+import { RestaurantMap } from "@/app/shared/types";
 import PopupContainer from "./popup/PopupContainer";
 
 interface RestaurantPopupProps {
-  restaurant: Restaurant;
+  restaurant: RestaurantMap;
   onClose: () => void;
 }
 
@@ -17,10 +17,11 @@ export default function RestaurantPopup({
       <div className="relative w-[250px] bg-white rounded-xl shadow-xl border border-gray-200 p-4 text-sm">
         <PopupContainer restaurant={restaurant} />
         <Button
-          text="X"
           onClick={onClose}
           className="absolute top-2 right-2 text-gray-400 hover:text-gray-600 w-6 h-6 flex items-center justify-center"
-        />
+        >
+          X
+        </Button>
       </div>
     </CustomOverlayMap>
   );

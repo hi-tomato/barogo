@@ -1,12 +1,12 @@
 "use client";
-import { Restaurant } from "@/app/shared/types/map";
+import { RestaurantMap } from "@/app/shared/types";
 import Button from "@/app/shared/ui/Button";
 import { useRouter } from "next/navigation";
 
 export default function PopupActions({
   restaurant,
 }: {
-  restaurant: Restaurant;
+  restaurant: RestaurantMap;
 }) {
   const router = useRouter();
   const handleDetailPage = () => {
@@ -22,16 +22,18 @@ export default function PopupActions({
   return (
     <div className="flex gap-2">
       <Button
-        text="상세보기"
         onClick={handleDetailPage}
         className="flex-1 text-center bg-gray-100 text-gray-700 text-xs py-2 rounded-lg hover:bg-gray-200 transition"
-      />
+      >
+        상세보기
+      </Button>
       {restaurant.hasBaropot && (
         <Button
-          text="바로팟 참여 🔥"
           onClick={handleBaropotPage}
           className="flex-1 text-center bg-gradient-to-r from-orange-400 to-red-500 text-white text-xs py-2 rounded-lg hover:shadow-md transition"
-        />
+        >
+          바로팟 참여 🔥
+        </Button>
       )}
     </div>
   );

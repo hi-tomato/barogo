@@ -7,6 +7,7 @@ import {
   PaymentMethod,
   BaropotStatus,
 } from "./enums";
+import { Restaurant } from "./restaurant";
 
 export interface BaropotsQueries {
   statusList: BaropotJoinedStatus;
@@ -37,20 +38,6 @@ export interface CreateBaropotRequest {
   description: string;
   rule?: string;
   tags: string[];
-}
-
-export interface Restaurant {
-  id: number;
-  name: string;
-  category: RestaurantCategory;
-  address: string;
-  lat: string;
-  lng: string;
-  description: string;
-  phoneNumber: string;
-  openingTime: string;
-  closingTime: string;
-  lastOrderTime: string;
 }
 
 export interface Host {

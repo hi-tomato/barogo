@@ -1,9 +1,9 @@
-import { Restaurant } from "@/app/shared/types/map";
+import { RestaurantMap } from "@/app/shared/types";
 
 export default function PopupHeader({
   restaurant,
 }: {
-  restaurant: Restaurant;
+  restaurant: RestaurantMap;
 }) {
   return (
     <div className="flex items-start justify-between mb-2">

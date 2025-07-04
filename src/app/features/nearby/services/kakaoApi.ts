@@ -1,4 +1,4 @@
-import { Location, NearbyRestaurant } from "@/app/types";
+import { Location, NearbyRestaurant } from "@/app/shared/types";
 
 export const kakaoApiService = {
   getNearbyRestaurants: async (
