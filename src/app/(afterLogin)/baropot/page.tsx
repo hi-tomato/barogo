@@ -6,6 +6,7 @@ import BaropotTabs from "@/app/features/baropot/components/BaropotTabs";
 import BaropotList from "@/app/features/baropot/components/BaropotList";
 import { BaropotTab } from "@/app/features/baropot/types/baropot";
 import { useGetBaropotList } from "@/app/shared/hooks/queries/useBaropot";
+import { Header } from "@/app/shared/ui";
 
 export default function BaropotMainPage() {
   const [activeTab, setActiveTab] = useState<BaropotTab>("available");
@@ -25,25 +26,17 @@ export default function BaropotMainPage() {
   return (
     <div className="min-h-screen bg-[#E6EEF5]">
       {/* 헤더 */}
-      <div className="bg-white sticky top-0 z-40 border-b border-gray-200">
-        <div className="flex items-center px-4 py-3">
-          <button
-            onClick={() => router.back()}
-            className="p-2 text-gray-600 hover:bg-gray-100 rounded-lg"
-          >
-            ←
-          </button>
-          <h1 className="flex-1 text-center text-lg font-semibold text-[#2B2B2B]">
-            바로팟
-          </h1>
+      <Header
+        title="바로팟"
+        rightContent={
           <button
             onClick={() => router.push("/restaurants")}
-            className="p-2 text-[#1C4E80] hover:bg-blue-50 rounded-lg"
+            className="p-2 text-[#1C4E80] hover:bg-blue-50 rounded-lg transition-colors"
           >
             <HiPlus size={24} />
           </button>
-        </div>
-      </div>
+        }
+      />
 
       {/* 상단 배너 */}
       <div className="bg-gradient-to-r from-[#1C4E80] to-[#2563eb] mx-4 mt-4 rounded-xl p-6 text-white">
