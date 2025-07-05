@@ -1,8 +1,8 @@
-import { useUpdateRestaurant } from "@/app/shared/hooks/queries/useRestaurant";
-import { RestaurantDetail } from "@/app/shared/types/restaurant";
-import Button from "@/app/shared/ui/Button";
-import React, { useState } from "react";
-import { HiClock, HiPencil, HiX } from "react-icons/hi";
+import { useUpdateRestaurant } from '@/app/shared/hooks/queries/useRestaurant';
+import { RestaurantDetail } from '@/app/shared/types/restaurant';
+import { Button, Input } from '@/app/shared/ui';
+import React, { useState } from 'react';
+import { HiClock, HiPencil, HiX } from 'react-icons/hi';
 
 interface EditRestaurantModalProps {
   restaurant: RestaurantDetail;
@@ -16,26 +16,26 @@ export default function EditRestaurantModal({
   onClose,
 }: EditRestaurantModalProps) {
   const updateRestaurant = useUpdateRestaurant();
-  const [newTag, setNewTag] = useState("");
+  const [newTag, setNewTag] = useState('');
 
   const [formData, setFormData] = useState({
-    description: restaurant.description || "",
+    description: restaurant.description || '',
     photos: restaurant.photos || [],
-    openingTime: restaurant.openingTime || "",
-    closingTime: restaurant.closingTime || "",
-    lastOrderTime: restaurant.lastOrderTime || "",
+    openingTime: restaurant.openingTime || '',
+    closingTime: restaurant.closingTime || '',
+    lastOrderTime: restaurant.lastOrderTime || '',
     tags: restaurant.restaurantToRestaurantTags || [],
   });
   const handleInput = (field: string, value: string) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
   };
   const handleAddTag = () => {
-    if (newTag.trim() === "") return;
+    if (newTag.trim() === '') return;
     setFormData((prev) => ({
       ...prev,
       tags: [...prev.tags, newTag],
     }));
-    setNewTag("");
+    setNewTag('');
   };
   const handleRemoveTag = (tagToRemove: string) => {
     setFormData((prev) => ({
@@ -57,24 +57,24 @@ export default function EditRestaurantModal({
         },
         {
           onSuccess: () => {
-            alert("맛집 정보가 수정되었습니다.");
+            alert('맛집 정보가 수정되었습니다.');
             onClose();
           },
         }
       );
     } catch (error) {
-      console.error("Error updating restaurant:", error);
+      console.error('Error updating restaurant:', error);
     }
   };
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
-      <div className="bg-white rounded-xl w-full max-w-2xl max-h-[90vh] overflow-hidden shadow-2xl">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
+      <div className="max-h-[90vh] w-full max-w-2xl overflow-hidden rounded-xl bg-white shadow-2xl">
         {/* 헤더 */}
-        <div className="flex justify-between items-center p-6 border-b border-gray-100">
+        <div className="flex items-center justify-between border-b border-gray-100 p-6">
           <div className="flex items-center space-x-3">
-            <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg flex items-center justify-center">
-              <HiPencil className="text-white text-lg" />
+            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-br from-blue-500 to-blue-600">
+              <HiPencil className="text-lg text-white" />
             </div>
             <div>
               <h2 className="text-xl font-semibold text-gray-900">
@@ -85,98 +85,79 @@ export default function EditRestaurantModal({
           </div>
           <button
             onClick={onClose}
-            className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-100 text-gray-400 hover:text-gray-600 transition-colors"
+            className="flex h-8 w-8 items-center justify-center rounded-full text-gray-400 transition-colors hover:bg-gray-100 hover:text-gray-600"
           >
             <HiX className="text-xl" />
           </button>
         </div>
 
         {/* 폼 */}
-        <form onSubmit={handleSubmit} className="overflow-y-auto max-h-[70vh]">
-          <div className="p-6 space-y-6">
+        <form onSubmit={handleSubmit} className="max-h-[70vh] overflow-y-auto">
+          <div className="space-y-6 p-6">
             {/* 설명 섹션 */}
             <div className="space-y-4">
-              <h3 className="text-lg font-medium text-gray-900 border-b border-gray-100 pb-2">
+              <h3 className="border-b border-gray-100 pb-2 text-lg font-medium text-gray-900">
                 📝 맛집 설명
               </h3>
               <textarea
                 value={formData.description}
-                onChange={(e) => handleInput("description", e.target.value)}
+                onChange={(e) => handleInput('description', e.target.value)}
                 rows={4}
-                className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
+                className="w-full resize-none rounded-lg border border-gray-200 px-4 py-3 focus:border-transparent focus:ring-2 focus:ring-blue-500 focus:outline-none"
                 placeholder="맛집에 대한 설명을 입력하세요"
               />
             </div>
 
             {/* 영업시간 섹션 */}
             <div className="space-y-4">
-              <h3 className="text-lg font-medium text-gray-900 border-b border-gray-100 pb-2">
-                <HiClock className="inline mr-2" />
+              <h3 className="border-b border-gray-100 pb-2 text-lg font-medium text-gray-900">
+                <HiClock className="mr-2 inline" />
                 영업시간
               </h3>
 
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    오픈 시간
-                  </label>
-                  <input
-                    type="time"
-                    value={formData.openingTime}
-                    onChange={(e) => handleInput("openingTime", e.target.value)}
-                    className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    마감 시간
-                  </label>
-                  <input
-                    type="time"
-                    value={formData.closingTime}
-                    onChange={(e) => handleInput("closingTime", e.target.value)}
-                    className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    마지막 주문
-                  </label>
-                  <input
-                    type="time"
-                    value={formData.lastOrderTime}
-                    onChange={(e) =>
-                      handleInput("lastOrderTime", e.target.value)
-                    }
-                    className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  />
-                </div>
+              <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+                <Input
+                  type="time"
+                  value={formData.openingTime}
+                  onChange={(e) => handleInput('openingTime', e.target.value)}
+                  label="오픈 시간"
+                />
+                <Input
+                  type="time"
+                  value={formData.closingTime}
+                  onChange={(e) => handleInput('closingTime', e.target.value)}
+                  label="마감 시간"
+                />
+                <Input
+                  type="time"
+                  value={formData.lastOrderTime}
+                  onChange={(e) => handleInput('lastOrderTime', e.target.value)}
+                  label="마지막 주문"
+                />
               </div>
             </div>
 
             {/* 태그 섹션 */}
             <div className="space-y-4">
-              <h3 className="text-lg font-medium text-gray-900 border-b border-gray-100 pb-2">
+              <h3 className="border-b border-gray-100 pb-2 text-lg font-medium text-gray-900">
                 🏷️ 태그
               </h3>
 
               <div className="flex space-x-2">
-                <input
+                <Input
                   type="text"
                   value={newTag}
                   onChange={(e) => setNewTag(e.target.value)}
                   onKeyPress={(e) =>
-                    e.key === "Enter" && (e.preventDefault(), handleAddTag())
+                    e.key === 'Enter' && (e.preventDefault(), handleAddTag())
                   }
-                  className="flex-1 px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   placeholder="태그를 입력하세요"
+                  fullWidth={false}
                 />
                 <button
                   type="button"
                   onClick={handleAddTag}
-                  className="px-4 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
+                  className="rounded-lg bg-blue-500 px-4 py-3 text-white transition-colors hover:bg-blue-600"
                 >
                   추가
                 </button>
@@ -188,7 +169,7 @@ export default function EditRestaurantModal({
                   {formData.tags.map((tag, index) => (
                     <span
                       key={index}
-                      className="inline-flex items-center px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm"
+                      className="inline-flex items-center rounded-full bg-blue-100 px-3 py-1 text-sm text-blue-800"
                     >
                       {tag}
                       <button
@@ -206,21 +187,21 @@ export default function EditRestaurantModal({
           </div>
 
           {/* 액션 버튼 */}
-          <div className="p-6 border-t border-gray-100 bg-gray-50">
+          <div className="border-t border-gray-100 bg-gray-50 p-6">
             <div className="flex space-x-3">
               <Button
                 text="취소"
                 onClick={onClose}
-                className="flex-1 px-4 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
+                className="flex-1 rounded-lg border border-gray-300 px-4 py-3 text-gray-700 transition-colors hover:bg-gray-50"
               />
               <button
                 type="submit"
                 disabled={updateRestaurant.isPending}
-                className="flex-1 px-4 py-3 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-lg hover:shadow-md transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center space-x-2"
+                className="flex flex-1 items-center justify-center space-x-2 rounded-lg bg-gradient-to-r from-blue-500 to-blue-600 px-4 py-3 text-white transition-all hover:shadow-md disabled:cursor-not-allowed disabled:opacity-50"
               >
                 {updateRestaurant.isPending ? (
                   <>
-                    <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                    <div className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent"></div>
                     <span>수정 중...</span>
                   </>
                 ) : (

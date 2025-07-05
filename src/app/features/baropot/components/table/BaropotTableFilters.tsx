@@ -1,7 +1,7 @@
-import Button from "@/app/shared/ui/Button";
+import { Button, Input } from '@/app/shared/ui';
 
-type FilterType = "all" | "recruiting" | "full" | "closed";
-type SortType = "latest" | "deadline" | "popular" | "distance";
+type FilterType = 'all' | 'recruiting' | 'full' | 'closed';
+type SortType = 'latest' | 'deadline' | 'popular' | 'distance';
 
 interface FiltersProps {
   filter: FilterType;
@@ -26,20 +26,17 @@ export default function BaropotTableFilters({
   filteredCount,
 }: FiltersProps) {
   return (
-    <div className="bg-white mx-4 mt-4 rounded-xl p-4 shadow-sm border border-gray-100 space-y-4">
+    <div className="mx-4 mt-4 space-y-4 rounded-xl border border-gray-100 bg-white p-4 shadow-sm">
       {/* SearchBar */}
-      <div className="relative">
-        <input
-          type="text"
-          value={searchQuery}
-          onChange={(e) => onSearchChange(e.target.value)}
-          placeholder="바로팟 제목이나 맛집명으로 검색해보세요!"
-          className="w-full px-4 py-3 pl-4 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-        />
-        <label className="absolute right-3 top-3 text-grey-400">🔍</label>
-      </div>
+      <Input
+        type="text"
+        value={searchQuery}
+        onChange={(e) => onSearchChange(e.target.value)}
+        placeholder="바로팟 제목이나 맛집명으로 검색해보세요!"
+        rightIcon={<span>🔍</span>}
+      />
       {/* FilteredList */}
-      <div className="flex flex-col sm:flex-row gap-4">
+      <div className="flex flex-col gap-4 sm:flex-row">
         <div className="flex-1">
           <div className="flex flex-wrap gap-2">
             {Filters.map((options) => (
@@ -47,10 +44,10 @@ export default function BaropotTableFilters({
                 text={options.label}
                 key={options.id}
                 onClick={() => onFilterChange(options.id)}
-                className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
+                className={`rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
                   filter === options.id
                     ? `${options.color} text-white`
-                    : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                    : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
                 }`}
               />
             ))}
@@ -78,15 +75,15 @@ export default function BaropotTableFilters({
 }
 
 const Filters = [
-  { id: "all", label: "전체", color: "bg-gray-500" },
-  { id: "recruiting", label: "모집중", color: "bg-blue-500" },
-  { id: "full", label: "모집완료", color: "bg-orange-500" },
-  { id: "closed", label: "종료", color: "bg-gray-400" },
+  { id: 'all', label: '전체', color: 'bg-gray-500' },
+  { id: 'recruiting', label: '모집중', color: 'bg-blue-500' },
+  { id: 'full', label: '모집완료', color: 'bg-orange-500' },
+  { id: 'closed', label: '종료', color: 'bg-gray-400' },
 ] as const;
 
 const sorts = [
-  { id: "latest", label: "최신순" },
-  { id: "deadline", label: "마감임박순" },
-  { id: "popular", label: "인기순" },
+  { id: 'latest', label: '최신순' },
+  { id: 'deadline', label: '마감임박순' },
+  { id: 'popular', label: '인기순' },
   // ...(hideDistanceSort ? [] : [{ id: "distance", label: "거리순" }]),
 ] as const;

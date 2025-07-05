@@ -1,4 +1,5 @@
-import { FormData } from "../types";
+import { FormData } from '../types';
+import { Input } from '@/app/shared/ui';
 
 interface CreateTagsProps {
   formData: FormData;
@@ -9,16 +10,16 @@ interface CreateTagsProps {
 }
 
 const RECOMMENDED_TAGS = [
-  "#데이트코스",
-  "#가성비",
-  "#분위기좋은",
-  "#혼밥추천",
-  "#회식장소",
-  "#깔끔한",
-  "#인스타감성",
-  "#조용한",
-  "#넓은공간",
-  "#주차가능",
+  '#데이트코스',
+  '#가성비',
+  '#분위기좋은',
+  '#혼밥추천',
+  '#회식장소',
+  '#깔끔한',
+  '#인스타감성',
+  '#조용한',
+  '#넓은공간',
+  '#주차가능',
 ];
 
 export default function CreateTags({
@@ -28,7 +29,7 @@ export default function CreateTags({
 }: CreateTagsProps) {
   // 현재 입력된 태그들을 배열로 변환
   const currentTags = formData.tags
-    .split(" ")
+    .split(' ')
     .filter((tag) => tag.trim().length > 0);
 
   // 태그가 이미 추가되었는지 확인
@@ -37,35 +38,34 @@ export default function CreateTags({
   };
 
   return (
-    <div className="bg-white rounded-xl p-6 shadow-sm">
-      <label className="block text-sm font-medium text-[#2B2B2B] mb-3">
+    <div className="rounded-xl bg-white p-6 shadow-sm">
+      <label className="mb-3 block text-sm font-medium text-[#2B2B2B]">
         분위기 태그
       </label>
 
       {/* 태그 입력 */}
-      <input
+      <Input
         type="text"
         name="tags"
         value={formData.tags}
         onChange={handleInputChange}
         placeholder="#데이트코스 #가성비 #분위기좋은"
-        className="w-full px-4 py-3 border border-gray-200 rounded-lg placeholder:text-[#8A8A8A] focus:outline-none focus:ring-2 focus:ring-[#1C4E80] focus:border-transparent"
       />
-      <p className="text-xs text-[#8A8A8A] mt-2 mb-3">
+      <p className="mt-2 mb-3 text-xs text-[#8A8A8A]">
         💡 #을 붙여서 태그를 입력해주세요 (공백으로 구분)
       </p>
 
       {/* 현재 입력된 태그들 표시 */}
       {currentTags.length > 0 && (
         <div className="mb-4">
-          <p className="text-xs text-[#2B2B2B] mb-2 font-medium">
+          <p className="mb-2 text-xs font-medium text-[#2B2B2B]">
             선택된 태그:
           </p>
           <div className="flex flex-wrap gap-2">
             {currentTags.map((tag, index) => (
               <span
                 key={index}
-                className="px-3 py-1 bg-[#1C4E80] text-white rounded-full text-xs flex items-center space-x-1"
+                className="flex items-center space-x-1 rounded-full bg-[#1C4E80] px-3 py-1 text-xs text-white"
               >
                 <span>{tag}</span>
                 <button
@@ -73,12 +73,12 @@ export default function CreateTags({
                   onClick={() => {
                     const newTags = currentTags
                       .filter((t) => t !== tag)
-                      .join(" ");
+                      .join(' ');
                     handleInputChange({
-                      target: { name: "tags", value: newTags },
+                      target: { name: 'tags', value: newTags },
                     } as React.ChangeEvent<HTMLInputElement>);
                   }}
-                  className="ml-1 hover:bg-red-500 rounded-full w-4 h-4 flex items-center justify-center"
+                  className="ml-1 flex h-4 w-4 items-center justify-center rounded-full hover:bg-red-500"
                   title="태그 삭제"
                 >
                   ×
@@ -91,7 +91,7 @@ export default function CreateTags({
 
       {/* 추천 태그 */}
       <div>
-        <p className="text-xs text-[#8A8A8A] mb-2">
+        <p className="mb-2 text-xs text-[#8A8A8A]">
           추천 태그 (클릭해서 추가):
         </p>
         <div className="flex flex-wrap gap-2">
@@ -101,30 +101,30 @@ export default function CreateTags({
               type="button"
               onClick={() => addTag(tag)}
               disabled={isTagAdded(tag)}
-              className={`px-3 py-1 rounded-full text-xs transition-colors ${
+              className={`rounded-full px-3 py-1 text-xs transition-colors ${
                 isTagAdded(tag)
-                  ? "bg-gray-200 text-gray-400 cursor-not-allowed"
-                  : "bg-[#E6EEF5] text-[#1C4E80] hover:bg-[#1C4E80] hover:text-white"
+                  ? 'cursor-not-allowed bg-gray-200 text-gray-400'
+                  : 'bg-[#E6EEF5] text-[#1C4E80] hover:bg-[#1C4E80] hover:text-white'
               }`}
               title={
                 isTagAdded(tag)
-                  ? "이미 추가된 태그입니다"
-                  : "클릭해서 태그 추가"
+                  ? '이미 추가된 태그입니다'
+                  : '클릭해서 태그 추가'
               }
             >
               {tag}
-              {isTagAdded(tag) && " ✓"}
+              {isTagAdded(tag) && ' ✓'}
             </button>
           ))}
         </div>
       </div>
 
       {/* 태그 입력 가이드 */}
-      <div className="mt-4 text-xs text-[#8A8A8A] bg-gray-50 p-3 rounded-lg">
+      <div className="mt-4 rounded-lg bg-gray-50 p-3 text-xs text-[#8A8A8A]">
         <p className="mb-1">
           🏷️ <strong>태그 작성 가이드:</strong>
         </p>
-        <ul className="space-y-1 list-disc list-inside">
+        <ul className="list-inside list-disc space-y-1">
           <li>맛집의 분위기나 특징을 나타내는 키워드를 입력하세요</li>
           <li>다른 사용자들이 검색할 때 도움이 되는 태그를 선택해주세요</li>
           <li>최대 10개까지 태그를 추가할 수 있습니다</li>

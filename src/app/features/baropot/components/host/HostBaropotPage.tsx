@@ -1,16 +1,17 @@
-"use client";
-import React, { useState } from "react";
-import { motion } from "framer-motion";
+'use client';
+import React, { useState } from 'react';
+import { motion } from 'framer-motion';
 import {
   useGetBaropotDetail,
   useGetHostBaropotList,
-} from "@/app/shared/hooks/queries/useBaropot";
-import { BaropotsQueries } from "@/app/shared/types/baropots";
-import { containerVariants, itemVariants } from "@/app/shared/lib/animation";
-import { statusOptions } from "@/app/shared/lib/baropotOptions";
-import { BaropotStatus, baropotStatusKorean } from "@/app/shared/types/enums";
-import { useAuthStore } from "@/app/shared/store/useAuthStore";
-import HostManagementPanel from "./HostManagementPanel";
+} from '@/app/shared/hooks/queries/useBaropot';
+import { BaropotsQueries } from '@/app/shared/types/baropots';
+import { containerVariants, itemVariants } from '@/app/shared/lib/animation';
+import { statusOptions } from '@/app/shared/lib/baropotOptions';
+import { BaropotStatus, baropotStatusKorean } from '@/app/shared/types/enums';
+import { useAuthStore } from '@/app/shared/store/useAuthStore';
+import { Input } from '@/app/shared/ui';
+import HostManagementPanel from './HostManagementPanel';
 
 export default function HostBaropotPage() {
   const { user } = useAuthStore();
@@ -30,7 +31,7 @@ export default function HostBaropotPage() {
   const handleFilterChange = (key: keyof BaropotsQueries, value: any) => {
     setQueries((prev) => ({
       ...prev,
-      [key]: value === "" ? undefined : value,
+      [key]: value === '' ? undefined : value,
     }));
   };
 
@@ -41,7 +42,7 @@ export default function HostBaropotPage() {
 
     if (!statusOption) {
       return (
-        <span className="px-2 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-700">
+        <span className="rounded-full bg-gray-100 px-2 py-1 text-xs font-medium text-gray-700">
           {status}
         </span>
       );
@@ -49,7 +50,7 @@ export default function HostBaropotPage() {
 
     return (
       <span
-        className={`px-2 py-1 rounded-full text-xs font-medium ${statusOption.bgColor} ${statusOption.textColor}`}
+        className={`rounded-full px-2 py-1 text-xs font-medium ${statusOption.bgColor} ${statusOption.textColor}`}
       >
         {statusOption.label}
       </span>
@@ -63,12 +64,12 @@ export default function HostBaropotPage() {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-[#E6EEF5] flex items-center justify-center">
+      <div className="flex min-h-screen items-center justify-center bg-[#E6EEF5]">
         <div className="text-center">
-          <p className="text-red-600 mb-4">데이터를 불러오는데 실패했습니다.</p>
+          <p className="mb-4 text-red-600">데이터를 불러오는데 실패했습니다.</p>
           <button
             onClick={() => window.location.reload()}
-            className="px-4 py-2 bg-[#1C4E80] text-white rounded-lg hover:bg-blue-700"
+            className="rounded-lg bg-[#1C4E80] px-4 py-2 text-white hover:bg-blue-700"
           >
             다시 시도
           </button>
@@ -85,7 +86,7 @@ export default function HostBaropotPage() {
           <h1 className="text-2xl font-bold text-[#2B2B2B]">
             내가 만든 바로팟
           </h1>
-          <p className="text-[#8A8A8A] mt-1">
+          <p className="mt-1 text-[#8A8A8A]">
             호스트로 참여중인 모임을 관리해보세요
           </p>
         </div>
@@ -94,25 +95,25 @@ export default function HostBaropotPage() {
       <div className="px-4 py-6">
         {/* 필터 섹션 */}
         <motion.div
-          className="bg-white rounded-xl p-6 shadow-sm mb-6"
+          className="mb-6 rounded-xl bg-white p-6 shadow-sm"
           variants={itemVariants}
           initial="hidden"
           animate="visible"
         >
-          <h2 className="text-lg font-semibold text-[#2B2B2B] mb-4">필터</h2>
+          <h2 className="mb-4 text-lg font-semibold text-[#2B2B2B]">필터</h2>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
             {/* 상태 필터 */}
             <div>
-              <label className="block text-sm font-medium text-[#2B2B2B] mb-2">
+              <label className="mb-2 block text-sm font-medium text-[#2B2B2B]">
                 상태
               </label>
               <select
-                value={queries.statusList || ""}
+                value={queries.statusList || ''}
                 onChange={(e) =>
-                  handleFilterChange("statusList", e.target.value)
+                  handleFilterChange('statusList', e.target.value)
                 }
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1C4E80] focus:border-transparent"
+                className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:border-transparent focus:ring-2 focus:ring-[#1C4E80]"
               >
                 <option value="">전체</option>
                 {Object.values(BaropotStatus).map((status) => (
@@ -124,34 +125,24 @@ export default function HostBaropotPage() {
             </div>
 
             {/* 제목 검색 */}
-            <div>
-              <label className="block text-sm font-medium text-[#2B2B2B] mb-2">
-                제목 검색
-              </label>
-              <input
-                type="text"
-                placeholder="바로팟 제목 검색"
-                value={queries.title || ""}
-                onChange={(e) => handleFilterChange("title", e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1C4E80] focus:border-transparent"
-              />
-            </div>
+            <Input
+              type="text"
+              placeholder="바로팟 제목 검색"
+              value={queries.title || ''}
+              onChange={(e) => handleFilterChange('title', e.target.value)}
+              label="제목 검색"
+            />
 
             {/* 맛집 이름 검색 */}
-            <div>
-              <label className="block text-sm font-medium text-[#2B2B2B] mb-2">
-                맛집 이름
-              </label>
-              <input
-                type="text"
-                placeholder="맛집 이름 검색"
-                value={queries.restaurantName || ""}
-                onChange={(e) =>
-                  handleFilterChange("restaurantName", e.target.value)
-                }
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1C4E80] focus:border-transparent"
-              />
-            </div>
+            <Input
+              type="text"
+              placeholder="맛집 이름 검색"
+              value={queries.restaurantName || ''}
+              onChange={(e) =>
+                handleFilterChange('restaurantName', e.target.value)
+              }
+              label="맛집 이름"
+            />
           </div>
         </motion.div>
 
@@ -162,36 +153,36 @@ export default function HostBaropotPage() {
           animate="visible"
         >
           {isLoading ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
               {[...Array(6)].map((_, index) => (
                 <div
                   key={index}
-                  className="bg-white rounded-xl p-6 shadow-sm animate-pulse"
+                  className="animate-pulse rounded-xl bg-white p-6 shadow-sm"
                 >
-                  <div className="h-4 bg-gray-200 rounded mb-4"></div>
-                  <div className="h-3 bg-gray-200 rounded mb-2"></div>
-                  <div className="h-3 bg-gray-200 rounded mb-4"></div>
+                  <div className="mb-4 h-4 rounded bg-gray-200"></div>
+                  <div className="mb-2 h-3 rounded bg-gray-200"></div>
+                  <div className="mb-4 h-3 rounded bg-gray-200"></div>
                   <div className="flex justify-between">
-                    <div className="h-6 bg-gray-200 rounded w-16"></div>
-                    <div className="h-6 bg-gray-200 rounded w-12"></div>
+                    <div className="h-6 w-16 rounded bg-gray-200"></div>
+                    <div className="h-6 w-12 rounded bg-gray-200"></div>
                   </div>
                 </div>
               ))}
             </div>
           ) : baropots && baropots.length > 0 ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
               {baropots.map((baropot) => (
                 <motion.div
                   key={baropot.id}
                   variants={itemVariants}
-                  className="bg-white rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow cursor-pointer"
+                  className="cursor-pointer rounded-xl bg-white p-6 shadow-sm transition-shadow hover:shadow-md"
                   onClick={() => {
                     // TODO: 상세 페이지로 이동
-                    console.log("바로팟 상세:", baropot.id);
+                    console.log('바로팟 상세:', baropot.id);
                   }}
                 >
                   {/* 상태와 날짜 */}
-                  <div className="flex justify-between items-start mb-4">
+                  <div className="mb-4 flex items-start justify-between">
                     {getStatusBadge(baropot.status)}
                     <span className="text-sm text-[#8A8A8A]">
                       {baropot.date} {baropot.time}
@@ -199,7 +190,7 @@ export default function HostBaropotPage() {
                   </div>
 
                   {/* 제목 */}
-                  <h3 className="text-lg font-semibold text-[#2B2B2B] mb-2 line-clamp-1">
+                  <h3 className="mb-2 line-clamp-1 text-lg font-semibold text-[#2B2B2B]">
                     {baropot.title}
                   </h3>
 
@@ -214,7 +205,7 @@ export default function HostBaropotPage() {
                   </div>
 
                   {/* 참가자 정보 */}
-                  <div className="flex justify-between items-center mb-4">
+                  <div className="mb-4 flex items-center justify-between">
                     <div className="flex items-center space-x-2">
                       <span className="text-sm text-[#8A8A8A]">참가자</span>
                       <span className="font-medium text-[#1C4E80]">
@@ -232,13 +223,13 @@ export default function HostBaropotPage() {
                       {baropot.tags.slice(0, 3).map((tag, index) => (
                         <span
                           key={index}
-                          className="px-2 py-1 bg-[#E6EEF5] text-[#1C4E80] text-xs rounded-full"
+                          className="rounded-full bg-[#E6EEF5] px-2 py-1 text-xs text-[#1C4E80]"
                         >
                           #{tag}
                         </span>
                       ))}
                       {baropot.tags.length > 3 && (
-                        <span className="px-2 py-1 bg-gray-100 text-gray-600 text-xs rounded-full">
+                        <span className="rounded-full bg-gray-100 px-2 py-1 text-xs text-gray-600">
                           +{baropot.tags.length - 3}
                         </span>
                       )}
@@ -246,9 +237,9 @@ export default function HostBaropotPage() {
                   )}
 
                   {/* 액션 버튼 */}
-                  <div className="flex gap-2 mt-4 pt-4 border-t border-gray-100">
+                  <div className="mt-4 flex gap-2 border-t border-gray-100 pt-4">
                     <button
-                      className="flex-1 px-4 py-2 bg-[#1C4E80] text-white rounded-lg hover:bg-blue-700 transition-colors"
+                      className="flex-1 rounded-lg bg-[#1C4E80] px-4 py-2 text-white transition-colors hover:bg-blue-700"
                       onClick={(e) => {
                         e.stopPropagation();
                         setSelectedBaropotId(baropot.id);
@@ -257,11 +248,11 @@ export default function HostBaropotPage() {
                       관리하기
                     </button>
                     <button
-                      className="px-4 py-2 border border-[#1C4E80] text-[#1C4E80] rounded-lg hover:bg-[#E6EEF5] transition-colors"
+                      className="rounded-lg border border-[#1C4E80] px-4 py-2 text-[#1C4E80] transition-colors hover:bg-[#E6EEF5]"
                       onClick={(e) => {
                         e.stopPropagation();
                         // TODO: 수정 페이지로 이동
-                        console.log("바로팟 수정:", baropot.id);
+                        console.log('바로팟 수정:', baropot.id);
                       }}
                     >
                       수정
@@ -271,15 +262,15 @@ export default function HostBaropotPage() {
               ))}
             </div>
           ) : (
-            <motion.div variants={itemVariants} className="text-center py-12">
-              <div className="text-6xl mb-4">🍽️</div>
-              <h3 className="text-lg font-semibold text-[#2B2B2B] mb-2">
+            <motion.div variants={itemVariants} className="py-12 text-center">
+              <div className="mb-4 text-6xl">🍽️</div>
+              <h3 className="mb-2 text-lg font-semibold text-[#2B2B2B]">
                 아직 만든 바로팟이 없어요
               </h3>
-              <p className="text-[#8A8A8A] mb-6">
+              <p className="mb-6 text-[#8A8A8A]">
                 새로운 바로팟을 만들어 사람들과 함께 맛있는 시간을 보내보세요!
               </p>
-              <button className="px-6 py-3 bg-[#1C4E80] text-white rounded-lg hover:bg-blue-700 transition-colors">
+              <button className="rounded-lg bg-[#1C4E80] px-6 py-3 text-white transition-colors hover:bg-blue-700">
                 바로팟 만들기
               </button>
             </motion.div>
