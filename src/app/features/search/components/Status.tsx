@@ -66,7 +66,6 @@ export const RestaurantStatus = ({
               disabled={isRegistering}
               className="w-full px-4 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors disabled:opacity-50 flex items-center justify-center space-x-2"
             >
-              <span>📝</span>
               <span>{isRegistering ? "등록 중..." : "맛집 등록하기"}</span>
             </button>
 
