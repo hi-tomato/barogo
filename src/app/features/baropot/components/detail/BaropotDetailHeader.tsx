@@ -1,12 +1,12 @@
-import React, { useState } from "react";
-import { motion } from "framer-motion";
-import { HiArrowLeft, HiHeart, HiShare } from "react-icons/hi";
-import { useParams, useRouter } from "next/navigation";
-import Button from "@/app/shared/ui/Button";
+import React, { useState } from 'react';
+import { motion } from 'framer-motion';
+import { HiArrowLeft, HiHeart, HiShare } from 'react-icons/hi';
+import { useParams, useRouter } from 'next/navigation';
+import { Button } from '@/app/shared/ui';
 import {
   useAddBookmark,
   useRemoveBookmark,
-} from "@/app/shared/hooks/queries/useReview";
+} from '@/app/shared/hooks/queries/useReview';
 
 export default function BaropotDetailHeader() {
   const router = useRouter();
@@ -37,7 +37,7 @@ export default function BaropotDetailHeader() {
     // TODO: 공유 기능
     if (navigator.share) {
       navigator.share({
-        title: "바로팟 공유",
+        title: '바로팟 공유',
         url: window.location.href,
       });
     }
@@ -45,15 +45,15 @@ export default function BaropotDetailHeader() {
 
   return (
     <motion.div
-      className="bg-white/95 backdrop-blur-lg sticky top-0 z-50 border-b border-[#E6EEF5]/50"
+      className="sticky top-0 z-50 border-b border-[#E6EEF5]/50 bg-white/95 backdrop-blur-lg"
       initial={{ opacity: 0, y: -20 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.4, ease: "easeOut" }}
+      transition={{ duration: 0.4, ease: 'easeOut' }}
     >
       <div className="flex items-center justify-between px-5 py-4">
         <motion.button
           onClick={() => router.back()}
-          className="flex items-center justify-center w-10 h-10 text-[#2B2B2B] hover:bg-[#E6EEF5] rounded-full transition-all duration-200"
+          className="flex h-10 w-10 items-center justify-center rounded-full text-[#2B2B2B] transition-all duration-200 hover:bg-[#E6EEF5]"
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
         >
@@ -61,7 +61,7 @@ export default function BaropotDetailHeader() {
         </motion.button>
 
         <motion.h1
-          className="text-lg font-bold text-[#2B2B2B] tracking-tight"
+          className="text-lg font-bold tracking-tight text-[#2B2B2B]"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.2 }}
@@ -72,39 +72,27 @@ export default function BaropotDetailHeader() {
         <div className="flex items-center space-x-2">
           <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
             <Button
-              className={`relative flex items-center justify-center w-10 h-10 rounded-full transition-all duration-300 ${
+              icon={<HiHeart size={20} />}
+              variant={isBookmarked ? 'gradient' : 'outline'}
+              size="icon"
+              className={`relative transition-all duration-300 ${
                 isBookmarked
-                  ? "bg-gradient-to-r from-red-400 to-pink-500 text-white shadow-lg"
-                  : "text-[#2B2B2B] hover:bg-[#E6EEF5]"
+                  ? 'bg-gradient-to-r from-red-400 to-pink-500 text-white shadow-lg'
+                  : 'text-[#2B2B2B] hover:bg-[#E6EEF5]'
               }`}
               onClick={handleToggleBookmark}
-            >
-              <HiHeart
-                size={20}
-                className={`transition-all duration-300 ${
-                  isBookmarked ? "fill-current animate-pulse" : ""
-                }`}
-              />
-              {isBookmarked && (
-                <motion.div
-                  className="absolute inset-0 rounded-full bg-gradient-to-r from-red-400 to-pink-500"
-                  initial={{ scale: 0 }}
-                  animate={{ scale: 1.2, opacity: 0 }}
-                  transition={{ duration: 0.6 }}
-                  onClick={handleToggleBookmark}
-                />
-              )}
-            </Button>
+            />
           </motion.div>
 
-          <motion.button
-            onClick={handleShare}
-            className="flex items-center justify-center w-10 h-10 text-[#2B2B2B] hover:bg-[#E6EEF5] rounded-full transition-all duration-200"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-          >
-            <HiShare size={20} />
-          </motion.button>
+          <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+            <Button
+              icon={<HiShare size={20} />}
+              variant="outline"
+              size="icon"
+              className="text-[#2B2B2B] hover:bg-[#E6EEF5]"
+              onClick={handleShare}
+            />
+          </motion.div>
         </div>
       </div>
     </motion.div>
