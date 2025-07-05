@@ -1,8 +1,8 @@
-"use client";
-import { motion } from "framer-motion";
-import { useRouter } from "next/navigation";
-import { HiArrowLeft, HiDotsVertical } from "react-icons/hi";
-import Button from "./Button";
+'use client';
+import { motion } from 'framer-motion';
+import { useRouter } from 'next/navigation';
+import { HiDotsVertical } from 'react-icons/hi';
+import Button from './Button';
 
 interface HeaderProps {
   title: string;
@@ -11,13 +11,13 @@ interface HeaderProps {
   onMenuClick?: () => void;
   rightContent?: React.ReactNode;
   className?: string;
-  variant?: "default" | "transparent" | "gradient";
+  variant?: 'default' | 'transparent' | 'gradient';
 }
 
 const headerVariants = {
-  default: "bg-white/95 backdrop-blur-sm border-b border-gray-200 shadow-sm",
-  transparent: "bg-transparent",
-  gradient: "bg-gradient-to-r from-[#1C4E80] to-[#2563eb] text-white",
+  default: 'bg-white/95 backdrop-blur-sm border-b border-gray-200 shadow-sm',
+  transparent: 'bg-transparent',
+  gradient: 'bg-gradient-to-r from-[#1C4E80] to-[#2563eb] text-white',
 };
 
 export default function Header({
@@ -26,8 +26,8 @@ export default function Header({
   showMenu = false,
   onMenuClick,
   rightContent,
-  className = "",
-  variant = "default",
+  className = '',
+  variant = 'default',
 }: HeaderProps) {
   const router = useRouter();
 
@@ -44,14 +44,13 @@ export default function Header({
           {showBack && (
             <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
               <Button
+                text="뒤로"
                 variant="ghost"
                 size="sm"
                 onClick={() => router.back()}
                 icon="back"
-                className="p-2 text-gray-600 hover:bg-gray-100 rounded-lg"
-              >
-                뒤로
-              </Button>
+                className="rounded-lg p-2"
+              />
             </motion.div>
           )}
         </div>
@@ -59,8 +58,8 @@ export default function Header({
         {/* 중앙 제목 */}
         <div className="flex-1 text-center">
           <motion.h1
-            className={`text-lg font-semibold truncate max-w-[200px] mx-auto ${
-              variant === "gradient" ? "text-white" : "text-[#2B2B2B]"
+            className={`mx-auto max-w-[200px] truncate text-lg font-semibold ${
+              variant === 'gradient' ? 'text-white' : 'text-[#2B2B2B]'
             }`}
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
@@ -77,7 +76,7 @@ export default function Header({
             <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
               <button
                 onClick={onMenuClick}
-                className="p-2 text-gray-600 hover:bg-gray-100 rounded-lg transition-colors"
+                className="rounded-lg p-2 text-gray-600 transition-colors hover:bg-gray-100"
               >
                 <HiDotsVertical size={20} />
               </button>

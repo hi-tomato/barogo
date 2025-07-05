@@ -1,37 +1,61 @@
-"use client";
-import React from "react";
-import { motion } from "framer-motion";
-import { HiArrowLeft, HiArrowRight } from "react-icons/hi";
+'use client';
+import React from 'react';
+import { HiArrowLeft, HiArrowRight } from 'react-icons/hi';
+import { cn } from '../lib/cn';
+import Loading from './Loading';
 
+type Variant =
+  | 'primary'
+  | 'secondary'
+  | 'outline'
+  | 'gradient'
+  | 'ghost'
+  | 'text'
+  | 'tabButton'
+  | 'kakao'
+  | 'popularButton'
+  | 'nearbyButton';
+type Size = 'sm' | 'md' | 'lg' | 'icon' | 'pill';
+type Icon = 'left' | 'right' | 'back' | 'forward' | React.ReactNode;
+type IconPosition = 'left' | 'center' | 'right';
+type ButtonType = 'button' | 'submit' | 'reset';
 interface ButtonProps {
-  children: React.ReactNode;
+  children?: React.ReactNode;
   onClick?: (() => void) | ((e: React.FormEvent) => void);
   disabled?: boolean;
   loading?: boolean;
-  variant?: "primary" | "secondary" | "outline" | "ghost" | "danger";
-  size?: "sm" | "md" | "lg";
-  fullWidth?: boolean;
-  icon?: "left" | "right" | "back" | "forward";
+  variant?: Variant;
+  size?: Size;
+  icon?: Icon;
+  iconPosition?: IconPosition;
   className?: string;
-  type?: "button" | "submit" | "reset";
+  type?: ButtonType;
+  text?: string;
+  fullWidth?: boolean;
 }
 
 const buttonVariants = {
-  primary:
-    "bg-gradient-to-r from-[#1C4E80] to-[#2563eb] text-white hover:shadow-lg hover:from-[#1C4E80]/90 hover:to-[#2563eb]/90",
-  secondary:
-    "bg-gradient-to-r from-[#6366F1] to-[#8B5CF6] text-white hover:shadow-lg hover:from-[#6366F1]/90 hover:to-[#8B5CF6]/90",
+  primary: 'bg-[#1C4E80] hover:bg-[#154066] text-white transition-colors',
+  secondary: 'bg-gray-500 hover:bg-gray-600 text-white transition-colors',
   outline:
-    "border-2 border-[#1C4E80] text-[#1C4E80] hover:bg-[#1C4E80] hover:text-white",
-  ghost: "text-[#1C4E80] hover:bg-[#1C4E80]/10",
-  danger:
-    "bg-gradient-to-r from-[#DC2626] to-[#EF4444] text-white hover:shadow-lg hover:from-[#DC2626]/90 hover:to-[#EF4444]/90",
+    'border border-[#1C4E80]/15 text-[#1C4E80] hover:bg-[#1C4E80]/5 hover:border-[#1C4E80]/30 transition-all',
+  gradient:
+    'bg-gradient-to-r from-blue-500 to-blue-600 hover:shadow-md transition-all',
+  ghost: 'text-gray-600 hover:bg-gray-100 transition-colors',
+  text: 'text-[#1C4E80] text-center transition-colors bg-transparent border-none',
+  tabButton: 'bg-[#1C4E80] text-white transition-colors',
+  kakao: 'bg-[#FEE500] hover:bg-[#FDD835] text-black transition-colors',
+  popularButton: 'bg-[#1C4E80] hover:bg-[#154066] text-white transition-colors',
+  nearbyButton:
+    'bg-[#1C4E80] hover:bg-[#154066] text-white rounded-full transition-colors',
 };
 
 const buttonSizes = {
-  sm: "px-3 py-2 text-sm rounded-lg",
-  md: "px-4 py-3 text-base rounded-xl",
-  lg: "px-6 py-4 text-lg rounded-2xl",
+  sm: 'px-3 py-2 text-sm rounded',
+  md: 'px-4 py-2 text-base rounded-lg',
+  lg: 'px-6 py-3 text-lg rounded-lg',
+  icon: 'p-2 rounded-lg',
+  pill: 'px-4 py-2 text-sm rounded-full',
 };
 
 const iconComponents = {
@@ -46,45 +70,91 @@ export default function Button({
   onClick,
   disabled = false,
   loading = false,
-  variant = "primary",
-  size = "md",
+  variant = 'primary',
+  size = 'md',
   fullWidth = false,
   icon,
-  className = "",
-  type = "button",
+  iconPosition = 'left',
+  className = '',
+  type = 'button',
+  text,
 }: ButtonProps) {
-  const IconComponent = icon ? iconComponents[icon] : null;
-
   const baseClasses =
-    "font-semibold transition-all duration-200 flex items-center justify-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed";
+    variant === 'text'
+      ? 'font-semibold transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed'
+      : 'font-semibold transition-all duration-200 flex items-center justify-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed';
   const variantClasses = buttonVariants[variant];
   const sizeClasses = buttonSizes[size];
-  const widthClasses = fullWidth ? "w-full" : "";
+  const combinedClasses = cn(
+    baseClasses,
+    variantClasses,
+    sizeClasses,
+    {
+      'w-full': fullWidth,
+    },
+    className
+  );
 
-  const combinedClasses = `${baseClasses} ${variantClasses} ${sizeClasses} ${widthClasses} ${className}`;
+  const renderIcon = () => {
+    if (loading) {
+      return <Loading />;
+    }
+
+    if (!icon) return null;
+
+    if (typeof icon !== 'string') {
+      return icon;
+    }
+
+    const IconComponent = iconComponents[icon as keyof typeof iconComponents];
+
+    if (icon === 'back' && IconComponent) {
+      return <IconComponent size={20} />;
+    }
+
+    if (icon === 'forward' && IconComponent) {
+      return <IconComponent size={20} />;
+    }
+
+    return null;
+  };
+
+  const iconElement = renderIcon();
 
   return (
-    <motion.button
+    <button
       type={type}
       onClick={onClick}
       disabled={disabled || loading}
       className={combinedClasses}
-      whileHover={!disabled && !loading ? { scale: 1.02 } : {}}
-      whileTap={!disabled && !loading ? { scale: 0.98 } : {}}
     >
-      {loading && (
-        <div className="animate-spin w-4 h-4 border-2 border-white border-t-transparent rounded-full" />
+      {variant === 'text' ? (
+        <>
+          {iconPosition === 'left' && (
+            <>
+              {iconElement}
+              <span className="mr-1" />
+            </>
+          )}
+          {text || children}
+          {iconPosition === 'right' && (
+            <>
+              <span className="ml-1" />
+              {iconElement}
+            </>
+          )}
+        </>
+      ) : (
+        <>
+          {iconPosition === 'left' && iconElement}
+          {iconPosition === 'center' ? (
+            iconElement
+          ) : (
+            <span>{text || children}</span>
+          )}
+          {iconPosition === 'right' && iconElement}
+        </>
       )}
-
-      {!loading && icon === "back" && IconComponent && (
-        <IconComponent size={20} />
-      )}
-
-      <span>{children}</span>
-
-      {!loading && icon === "forward" && IconComponent && (
-        <IconComponent size={20} />
-      )}
-    </motion.button>
+    </button>
   );
 }
