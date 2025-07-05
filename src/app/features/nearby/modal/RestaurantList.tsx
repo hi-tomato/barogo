@@ -16,6 +16,7 @@ import {
 } from '../../nearby/utils/categoryHelpers';
 import Button from '@/app/shared/ui/Button';
 import { useCreateBaropot } from '@/app/shared/hooks/queries/useBaropot';
+import { baropotService } from '@/app/shared/services/baropotService';
 
 interface RestaurantListProps {
   restaurants?: NearbyRestaurant[];
@@ -24,7 +25,7 @@ interface RestaurantListProps {
 
 export default function RestaurantList({
   restaurants = [],
-  onCreateBaropot,
+  // onCreateBaropot,
 }: RestaurantListProps) {
   const router = useRouter();
   const createBaropotMutation = useCreateBaropot();
@@ -32,6 +33,11 @@ export default function RestaurantList({
   const [selectedRestaurant, setSelectedRestaurant] = useState<number | null>(
     null
   );
+
+  const getCurrentUserId = () => {
+    const userId = localStorage.getItem('userId');
+    return userId ? Number(userId) : 1;
+  };
 
   const findRegisteredRestaurant = (restaurant: NearbyRestaurant) => {
     return restaurantList.find(
@@ -66,10 +72,21 @@ export default function RestaurantList({
 
       console.log('🚀 바로팟 생성 데이터:', baropotData);
 
-      await createBaropotMutation.mutateAsync(baropotData);
+      // 서버 응답을 기다려서 실제 생성된 바로팟 ID를 받음
+      const response = await createBaropotMutation.mutateAsync(baropotData);
+
+      // 서버에서 반환된 실제 바로팟 ID 사용
+      const serverBaropotId = response.id;
+      console.log('✅ 바로팟 생성 성공! 서버 바로팟 ID:', serverBaropotId);
+
+      // sessionStorage 정리
+      sessionStorage.removeItem('baropotData');
+      sessionStorage.removeItem('selectedRestaurant');
 
       alert('🎉 바로팟이 생성되었습니다!');
-      router.push('/baropot');
+
+      // 생성된 바로팟의 상세 페이지로 이동
+      router.push(`/baropot/${serverBaropotId}`);
     } catch (error) {
       console.error('바로팟 생성 실패:', error);
       alert('바로팟 생성에 실패했습니다. 다시 시도해주세요.');
@@ -78,7 +95,7 @@ export default function RestaurantList({
     }
   };
 
-  const handleConfirmSelection = (restaurant: NearbyRestaurant) => {
+  const handleConfirmSelection = async (restaurant: NearbyRestaurant) => {
     if (
       !restaurant.id ||
       !restaurant.place_name ||
@@ -98,13 +115,43 @@ export default function RestaurantList({
       console.error('맛집 정보가 불완전합니다. 다시 선택해주세요.');
       return;
     }
-
     // 서버에 등록된 맛집인지 확인
     const existingRestaurant = findRegisteredRestaurant(restaurant);
 
     if (existingRestaurant) {
-      handleQuickBaropotCreation(existingRestaurant.id);
+      try {
+        const existingBaropots = await baropotService.getBaropotByRestaurant(
+          existingRestaurant.id
+        );
+
+        if (existingBaropots && existingBaropots.length > 0) {
+          const activeBaropot = existingBaropots[0]; // 첫 번째 활성 바로팟
+
+          console.log('🎯 기존 바로팟 발견:', activeBaropot.id);
+
+          const currentUserId = getCurrentUserId();
+
+          if (activeBaropot.host.userId === currentUserId) {
+            // 내가 만든 바로팟 → 관리 페이지로
+            alert('이미 이 맛집에 본인이 만든 바로팟이 있습니다!');
+            router.push(`/baropot/${activeBaropot.id}/manage`);
+          } else {
+            // 다른 사람이 만든 바로팟 → 참가 페이지로
+            alert('이미 이 맛집에 바로팟이 있습니다! 참가하시겠어요?');
+            router.push(`/baropot/${activeBaropot.id}`);
+          }
+          return;
+        }
+        // 바로팟이 없으면 새로 생성
+        console.log('✅ 바로팟이 없음. 새로 생성합니다.');
+        handleQuickBaropotCreation(existingRestaurant.id);
+      } catch (error) {
+        console.error('바로팟 조회 실패:', error);
+        // 에러가 발생해도 바로팟 생성은 진행
+        handleQuickBaropotCreation(existingRestaurant.id);
+      }
     } else {
+      // 등록되지 않은 맛집이면 맛집 등록 페이지로 이동
       const restaurantData = {
         id: restaurant.id,
         name: restaurant.place_name,
@@ -201,7 +248,7 @@ export default function RestaurantList({
                 </p>
                 {restaurant.distance && (
                   <p className="mt-1 text-xs text-blue-600">
-                    �� {Math.round(Number(restaurant.distance))}m
+                    📍 {Math.round(Number(restaurant.distance))}m
                   </p>
                 )}
                 {restaurant.phone && (
@@ -213,7 +260,7 @@ export default function RestaurantList({
                 {isRegistered ? (
                   <>
                     <Button
-                      text={isCreating ? '생성중...' : '바로팟 생성'}
+                      text={isCreating ? '확인중...' : '바로팟 확인'}
                       onClick={() => handleConfirmSelection(restaurant)}
                       disabled={isCreating || createBaropotMutation.isPending}
                       className={`cursor-pointer rounded-full px-3 py-1 text-xs font-medium text-white transition-all hover:shadow-md ${

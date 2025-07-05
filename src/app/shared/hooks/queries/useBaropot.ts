@@ -1,14 +1,14 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { queryKeys } from "@/app/shared/lib/queryKeys";
-import { baropotService } from "@/app/shared/services/baropotService";
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { queryKeys } from '@/app/shared/lib/queryKeys';
+import { baropotService } from '@/app/shared/services/baropotService';
 import {
   CreateBaropotRequest,
   BaropotsQueries,
   JoinBaropotRequest,
   BaropotEditRequest,
   ManageParticipantRequest,
-} from "@/app/shared/types/baropots";
-import { BaropotStatus } from "../../types/enums";
+} from '@/app/shared/types/baropots';
+import { BaropotStatus } from '../../types/enums';
 
 export const useGetBaropotList = (queries?: BaropotsQueries) => {
   return useQuery({
@@ -18,12 +18,21 @@ export const useGetBaropotList = (queries?: BaropotsQueries) => {
   });
 };
 
+export const useBaropotByRestaurant = (restaurantId: number) => {
+  return useQuery({
+    queryKey: ['baropot', 'restaurant', restaurantId],
+    queryFn: () => baropotService.getBaropotByRestaurant(restaurantId),
+    enabled: !!restaurantId,
+    staleTime: 1000 * 60 * 2,
+  });
+};
+
 export const useCreateBaropot = () => {
   return useMutation({
     mutationFn: (baropotData: CreateBaropotRequest) =>
       baropotService.createBaropot(baropotData),
     onError: (error) => {
-      console.error("바로팟을 생성하는데 문제가 발생하였음", error);
+      console.error('바로팟을 생성하는데 문제가 발생하였음', error);
     },
   });
 };
@@ -45,7 +54,7 @@ export const useJoinBaropot = () => {
       });
     },
     onError: (error) => {
-      console.error("바로팟에 참여하는데 문제가 발생하였음", error);
+      console.error('바로팟에 참여하는데 문제가 발생하였음', error);
     },
   });
 };

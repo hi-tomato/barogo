@@ -1,4 +1,4 @@
-import { get, patch, post } from "../api/client";
+import { get, patch, post } from '../api/client';
 
 import {
   BaropotsQueries,
@@ -8,8 +8,8 @@ import {
   BaropotDetailResponse,
   BaropotEditRequest,
   ManageParticipantRequest,
-} from "@/app/shared/types/baropots";
-import { BaropotStatus } from "../types/enums";
+} from '@/app/shared/types/baropots';
+import { BaropotStatus } from '../types/enums';
 
 export const baropotService = {
   /** 유저가 참여할 수 있는 바로팟 목록 조회 */
@@ -21,15 +21,22 @@ export const baropotService = {
     if (queries) {
       const entries = Object.entries(queries);
       const queryString = entries
-        .filter(([_, value]) => value !== "")
+        .filter(([_, value]) => value !== '')
         .map(([key, value]) => `${key}=${value}`)
-        .join("&");
+        .join('&');
 
       const { data } = await get<BaropotListResponse[]>(
         `/baropots?${queryString}`
       );
       return data;
     }
+  },
+  /** 유저가 검색한 바로팟 목록 조회 (ID) */
+  getBaropotByRestaurant: async (restaurantID: number) => {
+    const { data } = await get<BaropotListResponse[]>(
+      `/baropots?restaurantId=${restaurantID}&status=RECRUITING`
+    );
+    return data;
   },
   /** 바로팟 생성 */
   createBaropot: async (baropotData: CreateBaropotRequest) => {
@@ -87,19 +94,19 @@ export const baropotService = {
       ? Object.entries(queries)
           .filter(
             ([_, value]) =>
-              value !== "" &&
+              value !== '' &&
               value != null &&
               value !== undefined &&
               value !== 0
           )
           .map(([key, value]) => {
-            if (key === "statusList") {
+            if (key === 'statusList') {
               return `${key}[]=${encodeURIComponent(value)}`;
             }
             return `${key}=${encodeURIComponent(value)}`;
           })
-          .join("&")
-      : "";
+          .join('&')
+      : '';
 
     const url =
       queries && Object.keys(queries).length > 0 && queryString
