@@ -1,10 +1,9 @@
-"use client";
-import { useState } from "react";
-import { useRouter } from "next/navigation";
-import { motion } from "framer-motion";
-import { HiArrowLeft } from "react-icons/hi";
-import Button from "@/app/shared/ui/Button";
-import { RestaurantDetail } from "@/app/shared/types/restaurant";
+'use client';
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { motion } from 'framer-motion';
+import { Button } from '@/app/shared/ui';
+import { RestaurantDetail } from '@/app/shared/types/restaurant';
 
 interface RestaurantHeaderProps {
   restaurant: RestaurantDetail;
@@ -18,10 +17,10 @@ export default function RestaurantHeader({
 
   return (
     <div className="px-4 py-6">
-      <div className="flex items-start justify-between mb-4">
+      <div className="mb-4 flex items-start justify-between">
         <div className="flex-1">
           <motion.h1
-            className="text-2xl font-bold text-[#2B2B2B] mb-3"
+            className="mb-3 text-2xl font-bold text-[#2B2B2B]"
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.3 }}
@@ -34,13 +33,16 @@ export default function RestaurantHeader({
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4 }}
           >
-            <div className="flex-1 min-w-0">
-              <div className="text-gray-600 text-sm leading-relaxed truncate">
+            <div className="min-w-0 flex-1">
+              <div className="truncate text-sm leading-relaxed text-gray-600">
                 {restaurant.address}
               </div>
-              <Button className="text-[#1C4E80] text-sm font-medium mt-1">
-                지도보기 →
-              </Button>
+              <Button
+                text="지도보기 →"
+                variant="outline"
+                size="sm"
+                className="mt-1"
+              />
             </div>
           </motion.div>
         </div>
