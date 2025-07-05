@@ -2,7 +2,7 @@
 import React from 'react';
 import { HiArrowLeft, HiArrowRight } from 'react-icons/hi';
 import { cn } from '../lib/cn';
-import Loading from './Loading';
+import LoadingSpinner from './LoadingSpinner';
 
 type Variant =
   | 'primary'
@@ -97,7 +97,7 @@ export default function Button({
 
   const renderIcon = () => {
     if (loading) {
-      return <Loading />;
+      return <LoadingSpinner size="sm" color="white" inline />;
     }
 
     if (!icon) return null;
@@ -121,31 +121,19 @@ export default function Button({
 
   const iconElement = renderIcon();
 
-  return (
-    <button
-      type={type}
-      onClick={onClick}
-      disabled={disabled || loading}
-      className={combinedClasses}
-    >
-      {variant === 'text' ? (
-        <>
-          {iconPosition === 'left' && (
-            <>
-              {iconElement}
-              <span className="mr-1" />
-            </>
-          )}
-          {text || children}
-          {iconPosition === 'right' && (
-            <>
-              <span className="ml-1" />
-              {iconElement}
-            </>
-          )}
-        </>
-      ) : (
-        <>
+  const renderContent = () => {
+    if (loading) {
+      return (
+        <div className="flex items-center justify-center space-x-2">
+          {iconElement}
+          <span>{text || children}</span>
+        </div>
+      );
+    }
+
+    if (icon && text) {
+      return (
+        <div className="flex items-center space-x-2">
           {iconPosition === 'left' && iconElement}
           {iconPosition === 'center' ? (
             iconElement
@@ -153,8 +141,25 @@ export default function Button({
             <span>{text || children}</span>
           )}
           {iconPosition === 'right' && iconElement}
-        </>
-      )}
+        </div>
+      );
+    }
+
+    if (icon) {
+      return iconElement;
+    }
+
+    return <span>{text || children}</span>;
+  };
+
+  return (
+    <button
+      type={type}
+      onClick={onClick}
+      disabled={disabled || loading}
+      className={combinedClasses}
+    >
+      {renderContent()}
     </button>
   );
 }

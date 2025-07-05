@@ -1,7 +1,7 @@
 'use client';
 import { useRouter } from 'next/navigation';
 import { HiArrowLeft } from 'react-icons/hi';
-import { Input } from '@/app/shared/ui';
+import { Input, LoadingSpinner } from '@/app/shared/ui';
 
 interface SearchHeaderProps {
   query: string;
@@ -32,7 +32,7 @@ export default function SearchHeader({
             autoFocus
             rightIcon={
               loading ? (
-                <div className="h-6 w-6 animate-spin rounded-full border-2 border-blue-500 border-t-transparent"></div>
+                <LoadingSpinner size="sm" color="blue" inline />
               ) : undefined
             }
           />

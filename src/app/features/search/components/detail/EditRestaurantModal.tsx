@@ -1,6 +1,6 @@
 import { useUpdateRestaurant } from '@/app/shared/hooks/queries/useRestaurant';
 import { RestaurantDetail } from '@/app/shared/types/restaurant';
-import { Button, Input } from '@/app/shared/ui';
+import { Button, Input, LoadingSpinner } from '@/app/shared/ui';
 import React, { useState } from 'react';
 import { HiClock, HiPencil, HiX } from 'react-icons/hi';
 
@@ -66,6 +66,8 @@ export default function EditRestaurantModal({
       console.error('Error updating restaurant:', error);
     }
   };
+
+  if (!isOpen) return null;
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
@@ -201,7 +203,7 @@ export default function EditRestaurantModal({
               >
                 {updateRestaurant.isPending ? (
                   <>
-                    <div className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent"></div>
+                    <LoadingSpinner size="sm" color="white" inline />
                     <span>수정 중...</span>
                   </>
                 ) : (
