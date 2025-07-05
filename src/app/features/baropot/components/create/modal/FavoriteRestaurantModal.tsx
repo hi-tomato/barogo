@@ -1,7 +1,8 @@
-"use client";
-import { RestaurantData } from "@/app/features/nearby/types/restaurant";
-import { useGetBookMarks } from "@/app/shared/hooks/queries/useRestaurant";
-import { Restaurant } from "@/app/shared/types/restaurant";
+'use client';
+import { RestaurantData } from '@/app/features/nearby/types/restaurant';
+import { useGetBookMarks } from '@/app/shared/hooks/queries/useRestaurant';
+import { Restaurant } from '@/app/shared/types/restaurant';
+import { StateDisplay } from '@/app/shared/ui';
 
 interface FavoriteRestaurantModalProps {
   onClose: () => void;
@@ -28,10 +29,10 @@ export default function FavoriteRestaurantModal({
   };
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
-      <div className="bg-white rounded-xl w-full max-w-md max-h-[80vh] overflow-hidden">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
+      <div className="max-h-[80vh] w-full max-w-md overflow-hidden rounded-xl bg-white">
         {/* 헤더 */}
-        <div className="flex justify-between items-center p-4 border-b">
+        <div className="flex items-center justify-between border-b p-4">
           <div>
             <h3 className="font-semibold text-gray-900">찜한 맛집</h3>
             <p className="text-sm text-gray-500">
@@ -40,57 +41,59 @@ export default function FavoriteRestaurantModal({
           </div>
           <button
             onClick={onClose}
-            className="text-gray-400 hover:text-gray-600 text-xl"
+            className="text-xl text-gray-400 hover:text-gray-600"
           >
             ✕
           </button>
         </div>
 
         {/* 리스트 */}
-        <div className="overflow-y-auto max-h-[60vh]">
+        <div className="max-h-[60vh] overflow-y-auto">
           {isLoading ? (
-            <div className="text-center py-8">
-              <div className="animate-spin w-8 h-8 border-2 border-blue-500 border-t-transparent rounded-full mx-auto mb-4"></div>
-              <p className="text-gray-500">찜한 맛집을 불러오는 중...</p>
-            </div>
+            <StateDisplay
+              state="loading"
+              loadingMessage="찜한 맛집을 불러오는 중..."
+              size="md"
+            />
           ) : isError ? (
-            <div className="text-center py-8 text-red-500">
-              <span className="text-4xl mb-4 block">😞</span>
-              <p>찜한 맛집을 불러오는데 실패했습니다</p>
-            </div>
+            <StateDisplay
+              state="error"
+              errorMessage="찜한 맛집을 불러오는데 실패했습니다"
+              size="md"
+            />
           ) : !favorites || favorites.length === 0 ? (
-            <div className="text-center py-8 text-gray-500">
-              <span className="text-4xl mb-4 block">💙</span>
-              <p>찜한 맛집이 없습니다</p>
-              <p className="text-sm mt-2">맛집을 찜하고 다시 시도해보세요</p>
-            </div>
+            <StateDisplay
+              state="empty"
+              emptyMessage="찜한 맛집이 없습니다"
+              emptyIcon="💙"
+              size="md"
+            />
           ) : (
-            <div className="divide-y divide-gray-100">
-              {favorites.map((restaurant, index) => (
+            <div className="space-y-3 p-4">
+              {favorites.map((restaurant: Restaurant) => (
                 <button
                   key={restaurant.id}
                   onClick={() => handleSelect(restaurant)}
-                  className="w-full p-4 text-left hover:bg-gray-50 transition-colors"
+                  className="w-full rounded-lg border border-gray-200 p-3 transition-all hover:border-blue-300 hover:shadow-md"
                 >
                   <div className="flex items-center space-x-3">
-                    <div className="flex-1 min-w-0 text-left">
-                      <h4 className="font-medium text-gray-900 truncate">
+                    {/* 카테고리 아이콘 */}
+                    <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-blue-500 to-blue-600">
+                      <span className="text-lg text-white">🍽️</span>
+                    </div>
+
+                    {/* 정보 */}
+                    <div className="flex-1 text-left">
+                      <h4 className="truncate font-medium text-gray-900">
                         {restaurant.name}
                       </h4>
-                      <p className="text-sm text-gray-600 truncate">
+                      <p className="truncate text-sm text-gray-500">
                         {restaurant.category}
                       </p>
-                      <p className="text-xs text-gray-500 truncate">
-                        {restaurant.address}
+                      <p className="truncate text-xs text-gray-400">
+                        📍 {restaurant.address}
                       </p>
-                      {restaurant.phoneNumber && (
-                        <p className="text-xs text-gray-500">
-                          📞 {restaurant.phoneNumber}
-                        </p>
-                      )}
                     </div>
-                    {/* 선택 아이콘 */}
-                    <div className="text-blue-500">→</div>
                   </div>
                 </button>
               ))}

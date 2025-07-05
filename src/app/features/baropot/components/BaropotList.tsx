@@ -1,8 +1,13 @@
-import { BaropotListResponse } from "@/app/shared/types/baropots";
-import BaropotItem from "./BaropotItems";
+import { useGetBaropotList } from '@/app/shared/hooks/queries/useBaropot';
+import { BaropotsQueries } from '@/app/shared/types/baropots';
+import { statusOptions } from '@/app/shared/lib/baropotOptions';
+import { useAuthStore } from '@/app/shared/store/useAuthStore';
+import { LoadingSpinner } from '@/app/shared/ui';
+import BaropotItem from './BaropotItems';
 
 interface BaropotListProps {
-  baropotList: BaropotListResponse[];
+  queries: BaropotsQueries;
+  onQueriesChange: (queries: BaropotsQueries) => void;
   isLoading: boolean;
   error: Error | null;
   onRefresh?: () => void;
@@ -11,42 +16,68 @@ interface BaropotListProps {
 }
 
 export default function BaropotList({
-  baropotList,
+  queries,
+  onQueriesChange,
   isLoading,
   error,
   onRefresh,
   onJoin,
 }: BaropotListProps) {
-  // loading,error,notFound
-  if (isLoading) return <Loading />;
-  if (error) return <Error onRefresh={onRefresh} />;
-  if (baropotList.length === 0) return <NotFound />;
+  const { user } = useAuthStore();
+  const { data: baropots, error: baropotError } = useGetBaropotList(queries);
+
+  const handleFilterChange = (key: keyof BaropotsQueries, value: any) => {
+    onQueriesChange({
+      ...queries,
+      [key]: value === '' ? undefined : value,
+    });
+  };
+
+  const getStatusBadge = (status: string) => {
+    const statusOption = statusOptions.find(
+      (option) => option.value === status
+    );
+
+    if (!statusOption) {
+      return (
+        <span className="rounded-full bg-gray-100 px-2 py-1 text-xs font-medium text-gray-700">
+          {status}
+        </span>
+      );
+    }
+
+    return (
+      <span
+        className={`rounded-full px-2 py-1 text-xs font-medium ${statusOption.bgColor} ${statusOption.textColor}`}
+      >
+        {statusOption.label}
+      </span>
+    );
+  };
+
+  if (isLoading) {
+    return <LoadingSpinner message="바로팟을 불러오는 중..." size="lg" />;
+  }
+
+  if (baropotError) return <Error onRefresh={onRefresh} />;
+  if (!baropots || baropots.length === 0) return <NotFound />;
 
   return (
     <div className="space-y-4">
-      {baropotList.map((baropot) => (
+      {baropots.map((baropot) => (
         <BaropotItem key={baropot.id} baropot={baropot} onJoin={onJoin} />
       ))}
     </div>
   );
 }
 
-const Loading = () => {
-  return (
-    <div className="text-center py-12">
-      <div className="animate-spin w-8 h-8 border-2 border-blue-500 border-t-transparent rounded-full mx-auto mb-4" />
-      <p className="text-gray-500">로딩중...</p>
-    </div>
-  );
-};
-
 const Error = ({ onRefresh }: { onRefresh?: () => void }) => {
   return (
-    <div className="text-center py-12">
-      <p className="text-red-500 mb-4">데이터를 불러오는데 실패했습니다</p>
+    <div className="py-12 text-center">
+      <p className="mb-4 text-red-500">데이터를 불러오는데 실패했습니다</p>
       <button
         onClick={onRefresh}
-        className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
+        className="rounded-lg bg-blue-500 px-4 py-2 text-white hover:bg-blue-600"
       >
         다시 시도
       </button>
@@ -56,7 +87,7 @@ const Error = ({ onRefresh }: { onRefresh?: () => void }) => {
 
 const NotFound = () => {
   return (
-    <div className="text-center py-12 text-gray-500">
+    <div className="py-12 text-center text-gray-500">
       현재 진행중인 바로팟이 없습니다
     </div>
   );

@@ -2,7 +2,7 @@
 import { RestaurantData } from '@/app/features/nearby/types/restaurant';
 import { KakaoRestaurant } from '@/app/shared/types/kakao';
 import React, { useState } from 'react';
-import { Button, Input } from '@/app/shared/ui';
+import { Button, Input, StateDisplay } from '@/app/shared/ui';
 
 interface SearchRestaurantModalProps {
   onClose: () => void;
@@ -31,9 +31,16 @@ export default function SearchRestaurantModal({
       const data = await response.json();
       setSearchResults(data.documents || []);
     } catch (error) {
-      console.error('검색 중 오류가 발생하였습니다.', error);
+      console.error('검색 실패:', error);
+      setSearchResults([]);
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const handleKeyPress = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter') {
+      handleSearch();
     }
   };
 
@@ -43,15 +50,11 @@ export default function SearchRestaurantModal({
       name: restaurant.place_name,
       location: restaurant.address_name,
       category: restaurant.category_name,
-      phone: restaurant.phone || '',
+      phone: restaurant.phone,
+      lat: restaurant.x,
+      lng: restaurant.y,
     };
     onSelect(restaurantData);
-  };
-
-  const handleKeyPress = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter') {
-      handleSearch();
-    }
   };
 
   return (
@@ -93,60 +96,65 @@ export default function SearchRestaurantModal({
         {/* 검색 결과 */}
         <div className="max-h-[50vh] overflow-y-auto">
           {!hasSearched && (
-            <div className="py-8 text-center text-gray-500">
-              <span className="mb-4 block text-4xl">🔍</span>
-              <p>맛집 이름을 검색해보세요!</p>
-            </div>
+            <StateDisplay
+              state="empty"
+              emptyMessage="맛집 이름을 검색해보세요!"
+              emptyIcon="🔍"
+              size="md"
+            />
           )}
 
           {isLoading && (
-            <div className="py-8 text-center">
-              <div className="mx-auto mb-4 h-8 w-8 animate-spin rounded-full border-2 border-blue-500 border-t-transparent"></div>
-              <p className="text-gray-500">검색중...</p>
-            </div>
+            <StateDisplay
+              state="loading"
+              loadingMessage="검색중..."
+              size="md"
+            />
           )}
 
           {hasSearched && !isLoading && searchResults.length === 0 && (
-            <div className="py-8 text-center text-gray-500">
-              <span className="mb-4 block text-4xl">😅</span>
-              <p>검색 결과가 없습니다</p>
-              <p className="mt-2 text-sm">다른 키워드로 검색해보세요</p>
-            </div>
+            <StateDisplay
+              state="empty"
+              emptyMessage="검색 결과가 없습니다"
+              emptyIcon="😅"
+              size="md"
+            />
           )}
 
           {searchResults.length > 0 && (
-            <div className="space-y-2 p-4">
-              {searchResults.map(
-                (restaurant: KakaoRestaurant, index: number) => (
-                  <button
-                    key={restaurant.id || index}
-                    onClick={() => handleSelect(restaurant)}
-                    className="w-full rounded-lg border border-gray-200 p-3 text-left transition-all hover:border-blue-300 hover:shadow-sm"
-                  >
-                    <div className="flex items-start space-x-3">
-                      <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-orange-400 to-red-500">
-                        <span className="text-sm text-white">🍽️</span>
-                      </div>
-                      <div className="min-w-0 flex-1">
-                        <h4 className="truncate font-medium text-gray-900">
-                          {restaurant.place_name}
-                        </h4>
-                        <p className="truncate text-sm text-gray-600">
-                          {restaurant.category_name}
-                        </p>
-                        <p className="truncate text-xs text-gray-500">
-                          {restaurant.address_name}
-                        </p>
-                        {restaurant.phone && (
-                          <p className="text-xs text-gray-500">
-                            📞 {restaurant.phone}
-                          </p>
-                        )}
-                      </div>
+            <div className="space-y-3 p-4">
+              {searchResults.map((restaurant) => (
+                <button
+                  key={restaurant.id}
+                  onClick={() => handleSelect(restaurant)}
+                  className="w-full rounded-lg border border-gray-200 p-3 text-left transition-all hover:border-blue-300 hover:shadow-md"
+                >
+                  <div className="flex items-center space-x-3">
+                    {/* 카테고리 아이콘 */}
+                    <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-blue-500 to-blue-600">
+                      <span className="text-lg text-white">🍽️</span>
                     </div>
-                  </button>
-                )
-              )}
+
+                    {/* 정보 */}
+                    <div className="min-w-0 flex-1">
+                      <h4 className="truncate font-medium text-gray-900">
+                        {restaurant.place_name}
+                      </h4>
+                      <p className="truncate text-sm text-gray-500">
+                        {restaurant.category_name}
+                      </p>
+                      <p className="truncate text-xs text-gray-400">
+                        📍 {restaurant.address_name}
+                      </p>
+                      {restaurant.phone && (
+                        <p className="text-xs text-gray-400">
+                          📞 {restaurant.phone}
+                        </p>
+                      )}
+                    </div>
+                  </div>
+                </button>
+              ))}
             </div>
           )}
         </div>
