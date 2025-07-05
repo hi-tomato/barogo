@@ -95,7 +95,11 @@ export default function LoginForm() {
               <Button
                 text={isPending ? '로그인 중...' : '로그인'}
                 type="submit"
-                className="font-suit w-full rounded-lg bg-[#1C4E80] px-6 py-3 font-semibold tracking-tight text-white transition-opacity hover:opacity-90"
+                loading={isPending}
+                variant="primary"
+                size="lg"
+                fullWidth
+                className="font-suit"
               />
             </motion.div>
 
@@ -103,9 +107,12 @@ export default function LoginForm() {
               <Button
                 text="카카오로 시작하기"
                 type="button"
+                variant="kakao"
+                size="lg"
                 icon={<RiKakaoTalkFill />}
                 iconPosition="left"
-                className="font-suit flex w-full items-center justify-center gap-2 rounded-lg bg-[#FEE500] px-6 py-3 font-semibold tracking-tight text-[#000000] transition-colors hover:bg-[#FFDC00]"
+                fullWidth
+                className="font-suit"
               />
             </motion.div>
           </motion.div>
@@ -131,7 +138,9 @@ export default function LoginForm() {
           아직 계정이 없으신가요?
           <Button
             text="회원가입"
-            className="ml-1 font-semibold text-[#1C4E80] hover:underline"
+            variant="text"
+            size="sm"
+            className="text-center"
             onClick={() => router.push('/register')}
           />
         </motion.div>

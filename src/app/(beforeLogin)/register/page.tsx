@@ -152,8 +152,11 @@ export default function RegisterForm() {
           <Button
             text={isLoading ? '가입 중...' : '회원가입'}
             type="submit"
-            disabled={isLoading}
-            className="font-suit w-full rounded-lg bg-[#1C4E80] px-6 py-3 font-semibold tracking-tight text-white transition-opacity hover:opacity-90 disabled:opacity-50"
+            loading={isLoading}
+            variant="primary"
+            size="lg"
+            fullWidth
+            className="font-suit"
           />
         </motion.form>
 
@@ -165,10 +168,12 @@ export default function RegisterForm() {
         <div className="font-suit mt-6 text-center text-sm leading-relaxed text-[#8A8A8A]">
           이미 계정이 있으신가요?
           <Button
-            onClick={() => router.push('/login')}
-            disabled={isLoading}
-            className="ml-1 font-semibold text-[#1C4E80] hover:underline disabled:opacity-50"
             text="로그인"
+            variant="text"
+            size="sm"
+            disabled={isLoading}
+            className="ml-1 font-semibold"
+            onClick={() => router.push('/login')}
           />
         </div>
       </div>
