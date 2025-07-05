@@ -1,4 +1,6 @@
-import { RestaurantDetail } from "@/app/features/nearby/types/restaurant";
+import { Status } from '@/app/shared/ui';
+import { RestaurantDetail } from '@/app/features/nearby/types/restaurant';
+
 interface RestaurantModalState {
   isLoading: boolean;
   isError: boolean;
@@ -12,26 +14,41 @@ export const getStatusMessage = ({
 }: RestaurantModalState) => {
   if (isLoading) {
     return (
-      <div className="text-green-600 flex items-center space-x-2">
-        <span>✅</span>
-        <span>등록된 맛집입니다! 리뷰와 바로팟을 확인하세요.</span>
-      </div>
+      <Status
+        type="success"
+        icon="✅"
+        title="등록된 맛집입니다!"
+        message="리뷰와 바로팟을 확인하세요."
+        className="text-green-600"
+        size="sm"
+        variant="inline"
+      />
     );
   }
 
   if (restaurantDetail && !isError) {
     return (
-      <div className="text-green-600 flex items-center space-x-2">
-        <span>✅</span>
-        <span>등록된 맛집입니다! 리뷰와 바로팟을 확인하세요.</span>
-      </div>
+      <Status
+        type="success"
+        icon="✅"
+        title="등록된 맛집입니다!"
+        message="리뷰와 바로팟을 확인하세요."
+        className="text-green-600"
+        size="sm"
+        variant="inline"
+      />
     );
   }
 
   return (
-    <div className="text-orange-600 flex items-center space-x-2">
-      <span>🆕</span>
-      <span>새로운 맛집입니다! 첫 바로팟을 만들어보세요.</span>
-    </div>
+    <Status
+      type="custom"
+      icon="🆕"
+      title="새로운 맛집입니다!"
+      message="첫 바로팟을 만들어보세요."
+      className="text-orange-600"
+      size="sm"
+      variant="inline"
+    />
   );
 };

@@ -15,8 +15,8 @@ type Variant = 'default' | 'centered' | 'inline';
 interface StatusProps {
   type: StatusType;
   title?: string;
-  message?: string;
-  icon?: string;
+  message?: React.ReactNode;
+  icon?: React.ReactNode;
   action?: {
     label: string;
     onClick: () => void;
