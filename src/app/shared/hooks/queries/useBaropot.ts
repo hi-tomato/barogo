@@ -63,6 +63,7 @@ export const useGetBaropotDetail = (baropotId: number) => {
   return useQuery({
     queryKey: queryKeys.baropot.detail(baropotId),
     queryFn: () => baropotService.getDetail(baropotId),
+    enabled: !!baropotId && baropotId > 0,
   });
 };
 

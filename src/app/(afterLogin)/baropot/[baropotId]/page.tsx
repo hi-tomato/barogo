@@ -21,7 +21,7 @@ export default function BaropotDetailPage() {
 
   // 안전한 호스트 확인
   const isHost =
-    user?.id && baropot?.host?.userId ? user.id === baropot.host.userId : false;
+    user?.id && baropot?.host?.id ? user.id === baropot.host.id : false;
 
   if (isLoading) {
     return <BaropotStatus type="isLoading" />;

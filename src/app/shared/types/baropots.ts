@@ -6,21 +6,21 @@ import {
   ContactMethod,
   PaymentMethod,
   BaropotStatus,
-} from "./enums";
-import { Restaurant } from "./restaurant";
+} from '@/app/shared/types/enums';
+import { Restaurant } from './restaurant';
 
 export interface BaropotsQueries {
-  statusList: BaropotJoinedStatus;
-  title: string;
-  tags: string;
-  participantGenderList: ParticipantGender;
-  participantAgeGroupList: ParticipantAgeGroup;
-  restaurantName: string;
-  restaurantCategory: RestaurantCategory;
-  address: string;
-  lat: number;
-  lng: number;
-  radius: number;
+  statusList?: BaropotStatus; // OPEN, FULL, IN_PROGRESS, COMPLETED, CANCELLED
+  title?: string;
+  tags?: string | string[];
+  participantGenderList?: ParticipantGender; // MALE, FEMALE, ANY
+  participantAgeGroupList?: ParticipantAgeGroup; // TWENTIES, THIRTIES, FORTIES, ANY
+  restaurantName?: string;
+  restaurantCategory?: RestaurantCategory;
+  address?: string;
+  lat?: number;
+  lng?: number;
+  radius?: number; // Default: 10
 }
 
 export interface CreateBaropotRequest {
@@ -41,8 +41,8 @@ export interface CreateBaropotRequest {
 }
 
 export interface Host {
+  id: number;
   name: string;
-  userId: number;
 }
 
 export interface Participant {
@@ -134,5 +134,5 @@ export interface ManageParticipantRequest {
 
 /**(Host): 바로팟 상태 변경 */
 export interface UpdateBaropotStatusRequest {
-  status: "IN_PROGRESS" | "COMPLETED" | "CANCELLED";
+  status: 'IN_PROGRESS' | 'COMPLETED' | 'CANCELLED';
 }
