@@ -190,13 +190,7 @@ export default function RestaurantList({
   };
 
   if (!restaurants || restaurants.length === 0) {
-    return (
-      <div className="py-8 text-center">
-        <div className="mb-4 text-4xl">🍽️</div>
-        <p className="mb-2 text-gray-600">맛집을 찾을 수 없습니다</p>
-        <p className="text-sm text-gray-500">다른 검색어로 다시 시도해보세요</p>
-      </div>
-    );
+    return null;
   }
 
   return (

@@ -2,7 +2,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
-import { Button } from '@/app/shared/ui';
+import { Button, StateDisplay } from '@/app/shared/ui';
 import { RestaurantDetail } from '@/app/shared/types/restaurant';
 
 interface RestaurantHeaderProps {
@@ -14,6 +14,10 @@ export default function RestaurantHeader({
 }: RestaurantHeaderProps) {
   const router = useRouter();
   const [showMenu, setShowMenu] = useState(false);
+
+  if (!restaurant) {
+    return null;
+  }
 
   return (
     <div className="px-4 py-6">

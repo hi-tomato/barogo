@@ -1,11 +1,11 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { queryKeys } from "../../lib/queryKeys";
-import { restaurantService } from "../../services/restaurantService";
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { queryKeys } from '../../lib/queryKeys';
+import { restaurantService } from '../../services/restaurantService';
 import {
   RestaurantList,
   SearchQueries,
   UpdateRestaurantRequest,
-} from "../../types/restaurant";
+} from '../../types/restaurant';
 
 export const useRestaurantList = (query?: SearchQueries) => {
   return useQuery({
@@ -20,15 +20,26 @@ export const useCreateRestaurant = () => {
 
   return useMutation({
     mutationFn: restaurantService.create,
-    onSuccess: (response) => {
-      console.log("맛집 등록 성공! 서버 ID:", response.id);
-
+    onSuccess: async (response) => {
+      console.log('맛집 등록 성공! 서버 ID:', response.id);
+      // 1. 모든 캐시 무효화
       queryClient.invalidateQueries({
         queryKey: queryKeys.restaurant.all,
       });
+      //  2. 즉시 최신 데이터 다시 가져오기
+      await queryClient.refetchQueries({
+        queryKey: queryKeys.restaurant.list(),
+        type: 'active',
+      });
+
+      //  3. 새 맛집 데이터를 상세 캐시에 저장
+      queryClient.setQueryData(
+        queryKeys.restaurant.detail(response.id.toString()),
+        response
+      );
     },
     onError: (error) => {
-      console.error("맛집 등록 실패:", error);
+      console.error('맛집 등록 실패:', error);
     },
   });
 };
@@ -60,7 +71,7 @@ export const useDeleteRestaurant = () => {
       queryClient.invalidateQueries({ queryKey: queryKeys.restaurant.list() });
     },
     onError: (error) => {
-      console.error("맛집을 삭제하는데 문제가 발생하였습니다." + error);
+      console.error('맛집을 삭제하는데 문제가 발생하였습니다.' + error);
     },
   });
 };
@@ -82,7 +93,7 @@ export const useUpdateRestaurant = () => {
       });
     },
     onError: (error) => {
-      console.error("맛집을 수정하는데 문제가 발생하였습니다." + error);
+      console.error('맛집을 수정하는데 문제가 발생하였습니다.' + error);
     },
   });
 };
