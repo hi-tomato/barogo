@@ -1,18 +1,15 @@
-"use client";
-import { NearbyRestaurant } from "@/app/shared/types";
-import { useRouter } from "next/navigation";
-import Button from "@/app/shared/ui/Button";
-import {
-  useCreateRestaurant,
-  useRestaurantList,
-} from "@/app/shared/hooks/queries/useRestaurant";
-import { RestaurantStatus } from "./Status";
+'use client';
+import { NearbyRestaurant } from '@/app/shared/types';
+import { useRouter } from 'next/navigation';
+import Button from '@/app/shared/ui/Button';
+import { RestaurantStatus } from './Status';
+import { useRestaurantSelection } from '@/app/shared/hooks/useRestaurantSelection';
 
 interface RestaurantPreviewModalProps {
   restaurant: NearbyRestaurant;
   isOpen: boolean;
   onClose: () => void;
-  onConfirm: (restaurant: NearbyRestaurant) => void;
+  onConfirm?: (restaurant: NearbyRestaurant) => void;
 }
 
 export default function RestaurantPreviewModal({
@@ -22,21 +19,26 @@ export default function RestaurantPreviewModal({
   onConfirm,
 }: RestaurantPreviewModalProps) {
   const router = useRouter();
-  const createRestaurant = useCreateRestaurant();
-  // TODO: 서버에 있는지 없는지를 queryParams으로 검사하기
-  const { data: restaurantList, isLoading: isLoadingList } = useRestaurantList({
-    name: restaurant.place_name,
-    address: restaurant.address_name,
-  });
+  const { handleRestaurantSelection, isProcessing, findRegisteredRestaurant } =
+    useRestaurantSelection({
+      onSuccess: (baropotId) => {
+        onClose();
+        alert('바로팟 생성을 완료하였습니다.');
+        router.push(`/baropot/${baropotId}`);
+      },
+      onBaropotFound: (baropotId) => {
+        onClose();
+        alert('등록된 맛집이 있습니다!');
+        router.push(`/baropot/${baropotId}`);
+      },
+      onRegistrationNeeded: () => {
+        onClose();
+        router.push(`/restaurants/create`);
+      },
+    });
 
-  const existingRestaurant = restaurantList?.find(
-    (item) =>
-      item.name === restaurant.place_name &&
-      item.address === restaurant.address_name
-  );
-
+  const existingRestaurant = findRegisteredRestaurant(restaurant);
   const hasServerData = !!existingRestaurant;
-  const isLoading = isLoadingList;
 
   // 상세 페이지
   const handleDetailView = () => {
@@ -49,52 +51,39 @@ export default function RestaurantPreviewModal({
   // 맛집 등록 버튼 클릭
   const handleRegisterRestaurant = async () => {
     if (!restaurant.x || !restaurant.y) {
-      alert("위치 정보가 없어서 맛집을 등록할 수 없습니다.");
+      alert('위치 정보가 없어서 맛집을 등록할 수 없습니다.');
       return;
     }
-
-    const restaurantInfo = {
-      id: restaurant.id,
-      name: restaurant.place_name,
-      location: restaurant.address_name,
-      category: "", // 사용자가 직접 선택하도록 빈 값으로 설정
-      phone: restaurant.phone || "",
-      x: restaurant.x,
-      y: restaurant.y,
-      kakaoId: restaurant.id,
-    };
-
-    sessionStorage.setItem(
-      "selectedRestaurant",
-      JSON.stringify(restaurantInfo)
-    );
-    onClose();
-    router.push(`/restaurants/create`);
+    try {
+      await handleRestaurantSelection(restaurant);
+    } catch (error) {
+      console.error('맛집 등록 실패: ', error);
+    }
   };
 
-  // TODO: 서버에 받은 ID를 파람으로 전송하여서, 바로팟 생성하기
+  // 바로팟 생성 핸들러
   const handleCreateBaropot = () => {
-    onConfirm(restaurant);
+    handleRegisterRestaurant();
   };
 
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-      <div className="bg-white rounded-xl p-6 max-w-sm w-full">
+    <div className="bg-opacity-50 fixed inset-0 z-50 flex items-center justify-center bg-black p-4">
+      <div className="w-full max-w-sm rounded-xl bg-white p-6">
         {/* 헤더 */}
-        <div className="flex justify-between items-start mb-4">
+        <div className="mb-4 flex items-start justify-between">
           <h3 className="text-lg font-bold">맛집 정보</h3>
           <Button
             text="✕"
             onClick={onClose}
-            className="text-gray-400 hover:text-gray-600 transition-colors"
+            className="text-gray-400 transition-colors hover:text-gray-600"
           />
         </div>
 
         {/* 맛집 정보 */}
-        <div className="space-y-3 mb-6">
-          <h4 className="font-semibold text-lg">{restaurant.place_name}</h4>
+        <div className="mb-6 space-y-3">
+          <h4 className="text-lg font-semibold">{restaurant.place_name}</h4>
           <p className="text-sm text-gray-600">{restaurant.category_name}</p>
           <p className="text-sm text-gray-600">📍 {restaurant.address_name}</p>
           {restaurant.road_address_name && (
@@ -110,10 +99,12 @@ export default function RestaurantPreviewModal({
         {/* Action Buttons - 조건별 렌더링 */}
         <div className="space-y-3">
           {/* 로딩 중일 때 */}
-          {isLoading && <RestaurantStatus type="isLoading" onClose={onClose} />}
+          {isProcessing && (
+            <RestaurantStatus type="isLoading" onClose={onClose} />
+          )}
 
           {/* 서버에 데이터가 있을 때 - 상세보기 + 바로팟 만들기 */}
-          {!isLoading && hasServerData && (
+          {!isProcessing && hasServerData && (
             <RestaurantStatus
               type="hasServerData"
               onClose={onClose}
@@ -123,13 +114,13 @@ export default function RestaurantPreviewModal({
           )}
 
           {/* 서버에 데이터가 없을 때 - 맛집 등록 + 바로팟 만들기 */}
-          {!isLoading && !hasServerData && (
+          {!isProcessing && !hasServerData && (
             <RestaurantStatus
               type="notServerData"
               onClose={onClose}
               onRegisterRestaurant={handleRegisterRestaurant}
               onCreateBaropot={handleCreateBaropot}
-              isRegistering={createRestaurant.isPending}
+              isRegistering={isProcessing}
             />
           )}
         </div>
