@@ -1,16 +1,18 @@
-import { get, post } from "../api/client";
+import { apiClient } from '../api/client';
 
-export const notificationsServices = {
-  getStream: async () => {
-    const response = await get("/notifications/stream");
-    return response;
-  },
-  get: async (config?: { headers?: Record<string, string> }) => {
-    const response = await get("/notifications", config);
-    return response;
-  },
-  post: async (id: number) => {
-    const response = await post(`/notifications/${id}/read`);
-    return response;
-  },
-};
+export class NotificationsService {
+  async getStream() {
+    return await apiClient.get('/notifications/stream');
+  }
+
+  async get(config?: { headers?: Record<string, string> }) {
+    return await apiClient.get('/notifications', config);
+  }
+
+  async post(id: number) {
+    return await apiClient.post(`/notifications/${id}/read`);
+  }
+}
+
+// 싱글톤 인스턴스 생성
+export const notificationsServices = new NotificationsService();

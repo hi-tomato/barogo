@@ -1,5 +1,5 @@
-import axios from "axios";
-import { post } from "../api/client";
+import axios from 'axios';
+import { apiClient } from '../api/client';
 
 export interface PresignedUrlRequest {
   extension: string;
@@ -11,22 +11,24 @@ export interface PresignedUrlResponse {
   url: string;
 }
 
-export const imageUploadService = {
-  getPresignedUrl: async (extension: string): Promise<PresignedUrlResponse> => {
+export class ImageUploadService {
+  async getPresignedUrl(extension: string): Promise<PresignedUrlResponse> {
     const requestData: PresignedUrlRequest = { extension };
 
-    const { data } = await post<PresignedUrlResponse>(
-      "/aws/presigned-url",
+    return await apiClient.post<PresignedUrlResponse>(
+      '/aws/presigned-url',
       requestData
     );
-    return data;
-  },
+  }
 
-  uploadToS3: async (presignedUrl: string, file: File): Promise<void> => {
+  async uploadToS3(presignedUrl: string, file: File): Promise<void> {
     await axios.put(presignedUrl, file, {
       headers: {
-        "Content-Type": file.type,
+        'Content-Type': file.type,
       },
     });
-  },
-};
+  }
+}
+
+// 싱글톤 인스턴스 생성
+export const imageUploadService = new ImageUploadService();

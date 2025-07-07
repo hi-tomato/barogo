@@ -1,4 +1,4 @@
-import { get, patch, post } from '../api/client';
+// import { get, patch, post } from '../api/client';
 
 import {
   BaropotsQueries,
@@ -10,84 +10,93 @@ import {
   ManageParticipantRequest,
 } from '@/app/shared/types/baropots';
 import { BaropotStatus } from '../types/enums';
+import { apiClient } from '../api/client';
 
-export const baropotService = {
+export class BaropotService {
   /** 유저가 참여할 수 있는 바로팟 목록 조회 */
-  getList: async (queries?: BaropotsQueries) => {
+  async getList(queries?: BaropotsQueries): Promise<BaropotListResponse[]> {
     if (!queries) {
-      const { data } = await get<BaropotListResponse[]>(`/baropots`);
-      return data;
+      return await apiClient.get<BaropotListResponse[]>(`/baropots`);
     }
-    if (queries) {
-      const entries = Object.entries(queries);
-      const queryString = entries
-        .filter(([_, value]) => value !== '')
-        .map(([key, value]) => `${key}=${value}`)
-        .join('&');
 
-      const { data } = await get<BaropotListResponse[]>(
-        `/baropots?${queryString}`
-      );
-      return data;
-    }
-  },
+    const entries = Object.entries(queries);
+    const queryString = entries
+      .filter(([_, value]) => value !== '')
+      .map(([key, value]) => `${key}=${value}`)
+      .join('&');
+
+    return await apiClient.get<BaropotListResponse[]>(
+      `/baropots?${queryString}`
+    );
+  }
+
   /** 유저가 검색한 바로팟 목록 조회 (ID) */
-  getBaropotByRestaurant: async (restaurantID: number) => {
-    const { data } = await get<BaropotListResponse[]>(
+  async getBaropotByRestaurant(
+    restaurantID: number
+  ): Promise<BaropotListResponse[]> {
+    return await apiClient.get<BaropotListResponse[]>(
       `/baropots?restaurantId=${restaurantID}&status=RECRUITING`
     );
-    return data;
-  },
+  }
+
   /** 바로팟 생성 */
-  createBaropot: async (baropotData: CreateBaropotRequest) => {
-    const { data } = await post<BaropotListResponse>(`/baropots`, baropotData);
-    return data;
-  },
+  async createBaropot(
+    baropotData: CreateBaropotRequest
+  ): Promise<BaropotListResponse> {
+    return await apiClient.post<BaropotListResponse>(`/baropots`, baropotData);
+  }
+
   /** 유저 전용: 바로팟 참여 */
-  joinBaropot: async (baropotId: number, message: JoinBaropotRequest) => {
-    const { data } = await post<BaropotListResponse>(
+  async joinBaropot(
+    baropotId: number,
+    message: JoinBaropotRequest
+  ): Promise<BaropotListResponse> {
+    return await apiClient.post<BaropotListResponse>(
       `/baropots/${baropotId}/participants`,
       message
     );
-    return data;
-  },
+  }
+
   /** 바로팟 상세 조회 */
-  getDetail: async (baropotId: number) => {
-    const { data } = await get<BaropotDetailResponse>(`/baropots/${baropotId}`);
-    return data;
-  },
+  async getDetail(baropotId: number): Promise<BaropotDetailResponse> {
+    return await apiClient.get<BaropotDetailResponse>(`/baropots/${baropotId}`);
+  }
+
   /** 바로팟 내용 수정 */
-  updateBaropot: async (baropotId: number, baropotData: BaropotEditRequest) => {
-    const { data } = await patch<BaropotDetailResponse>(
+  async updateBaropot(
+    baropotId: number,
+    baropotData: BaropotEditRequest
+  ): Promise<BaropotDetailResponse> {
+    return await apiClient.patch<BaropotDetailResponse>(
       `/baropots/${baropotId}`,
       baropotData
     );
-    return data;
-  },
+  }
+
   /** (Host) 바로팟 참가 요청 처리  */
-  mangeParticipant: async (
+  async mangeParticipant(
     baropotId: number,
     baropotData: ManageParticipantRequest
-  ) => {
-    const { data } = await patch<BaropotDetailResponse>(
+  ): Promise<BaropotDetailResponse> {
+    return await apiClient.patch<BaropotDetailResponse>(
       `/baropots/${baropotId}/participants`,
       baropotData
     );
-    return data;
-  },
+  }
+
   /** (Host) 바로팟 상태 변경 */
-  updateStatus: async (
+  async updateStatus(
     baropotId: number,
     statusData: { status: BaropotStatus }
-  ) => {
-    const { data } = await patch<BaropotDetailResponse>(
+  ): Promise<BaropotDetailResponse> {
+    return await apiClient.patch<BaropotDetailResponse>(
       `/baropots/${baropotId}/status`,
       statusData
     );
-    return data;
-  },
+  }
+
   /** (Host) 바로팟 전체 목록 리스트 조회 */
-  getHostList: async (queries?: BaropotsQueries) => {
+  async getHostList(queries?: BaropotsQueries): Promise<BaropotListResponse[]> {
     const baseUrl = `/baropots/me`;
 
     const queryString = queries
@@ -113,7 +122,9 @@ export const baropotService = {
         ? `${baseUrl}?${queryString}`
         : baseUrl;
 
-    const { data } = await get<BaropotListResponse[]>(url);
-    return data;
-  },
-};
+    return await apiClient.get<BaropotListResponse[]>(url);
+  }
+}
+
+// 싱글톤 인스턴스 생성
+export const baropotService = new BaropotService();

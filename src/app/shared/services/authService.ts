@@ -1,25 +1,24 @@
-import { get, post } from "@/app/shared/api/client";
+import { apiClient } from '@/app/shared/api/client';
 import {
   SignInRequest,
   SignInResponse,
   SignupRequest,
   SignupResponse,
   User,
-} from "@/app/shared/types/auth";
+} from '@/app/shared/types/auth';
 
-export const authService = {
-  signUp: async (params: SignupRequest) => {
-    const { data } = await post<SignupResponse>("/auth/signup", params);
-    return data;
-  },
+export class AuthService {
+  async signUp(params: SignupRequest): Promise<SignupResponse> {
+    return await apiClient.post<SignupResponse>('/auth/signup', params);
+  }
 
-  signIn: async (params: SignInRequest) => {
-    const { data } = await post<SignInResponse>("/auth/signin", params);
-    return data;
-  },
+  async signIn(params: SignInRequest): Promise<SignInResponse> {
+    return await apiClient.post<SignInResponse>('/auth/signin', params);
+  }
 
-  getUser: async (): Promise<User> => {
-    const { data } = await get<User>("/user/me");
-    return data;
-  },
-};
+  async getUser(): Promise<User> {
+    return await apiClient.get<User>('/user/me');
+  }
+}
+
+export const authService = new AuthService();
