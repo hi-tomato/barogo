@@ -3,59 +3,89 @@ import { RestaurantData } from '@/app/features/nearby/types/restaurant';
 import { KakaoRestaurant } from '@/app/shared/types/kakao';
 import React, { useState } from 'react';
 import { Button, Input, StateDisplay } from '@/app/shared/ui';
+import { useSearchRestaurants } from '@/app/shared/hooks/useSearchRestaurants';
+import { useRestaurantSelection } from '@/app/shared/hooks/useRestaurantSelection';
+import { useRouter } from 'next/navigation';
 
 interface SearchRestaurantModalProps {
   onClose: () => void;
-  onSelect: (restaurant: RestaurantData) => void;
+  onSelect?: (restaurant: RestaurantData) => void;
 }
 
 export default function SearchRestaurantModal({
   onClose,
   onSelect,
 }: SearchRestaurantModalProps) {
-  const [searchQuery, setSearchQuery] = useState('');
-  const [searchResults, setSearchResults] = useState<KakaoRestaurant[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter();
+  const { handleRestaurantSelection, isProcessing } = useRestaurantSelection({
+    onSuccess: (baropotId) => {
+      onClose();
+      alert('바로팟을 생성되었습니다');
+      router.push(`/baropot/${baropotId}`);
+    },
+    onBaropotFound: (baropotId) => {
+      onClose();
+      alert('이미 등록된 맛집에 바로팟이 있습니다.');
+      router.push(`/baropot/${baropotId}`);
+    },
+    onRegistrationNeeded: () => {
+      onClose();
+      router.push('/restaurants/create');
+    },
+  });
+  const {
+    searchQuery,
+    setSearchQuery,
+    searchResults,
+    isLoading: isSearching,
+    error,
+    searchRestaurants,
+    handleKeyPress,
+  } = useSearchRestaurants();
+
   const [hasSearched, setHasSearched] = useState(false);
 
   const handleSearch = async () => {
     if (!searchQuery.trim()) return;
-
-    setIsLoading(true);
     setHasSearched(true);
+    await searchRestaurants(searchQuery);
+  };
 
-    try {
-      const response = await fetch(
-        `/api/search-restaurants?query=${encodeURIComponent(searchQuery)}`
-      );
-      const data = await response.json();
-      setSearchResults(data.documents || []);
-    } catch (error) {
-      console.error('검색 실패:', error);
-      setSearchResults([]);
-    } finally {
-      setIsLoading(false);
+  const handleSelect = async (restaurant: KakaoRestaurant) => {
+    if (onSelect) {
+      const restaurantData = {
+        id: restaurant.id,
+        name: restaurant.place_name,
+        location: restaurant.address_name,
+        category: restaurant.category_name,
+        phone: restaurant.phone,
+        lat: restaurant.x,
+        lng: restaurant.y,
+      };
+      onSelect(restaurantData);
+    } else {
+      try {
+        const nearbyRestaurant = {
+          id: restaurant.id,
+          place_name: restaurant.place_name,
+          address_name: restaurant.address_name,
+          category_name: restaurant.category_name,
+          phone: restaurant.phone || '',
+          distance: '',
+          place_url: '',
+          x: restaurant.x,
+          y: restaurant.y,
+        };
+
+        await handleRestaurantSelection(nearbyRestaurant);
+      } catch (error) {
+        console.error('맛집 선택 실패:', error);
+        alert(error instanceof Error ? error.message : '오류가 발생했습니다.');
+      }
     }
   };
 
-  const handleKeyPress = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter') {
-      handleSearch();
-    }
-  };
-
-  const handleSelect = (restaurant: KakaoRestaurant) => {
-    const restaurantData: RestaurantData = {
-      id: restaurant.id,
-      name: restaurant.place_name,
-      location: restaurant.address_name,
-      category: restaurant.category_name,
-      phone: restaurant.phone,
-      lat: restaurant.x,
-      lng: restaurant.y,
-    };
-    onSelect(restaurantData);
-  };
+  const isLoading = isSearching || isProcessing;
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
@@ -64,11 +94,11 @@ export default function SearchRestaurantModal({
         <div className="flex items-center justify-between border-b p-4">
           <h3 className="font-semibold text-gray-900">맛집 검색</h3>
           <Button
+            text="X"
             onClick={onClose}
             className="text-xl text-gray-400 hover:text-gray-600"
-          >
-            ✕
-          </Button>
+            disabled={isProcessing}
+          />
         </div>
 
         {/* 검색바 */}
@@ -82,20 +112,21 @@ export default function SearchRestaurantModal({
               placeholder="맛집 이름을 입력하세요"
               autoFocus
               fullWidth={false}
+              disabled={isProcessing}
             />
-            <button
+            <Button
               onClick={handleSearch}
               disabled={isLoading || !searchQuery.trim()}
               className="rounded-lg bg-blue-500 px-4 py-2 text-white hover:bg-blue-600 disabled:cursor-not-allowed disabled:opacity-50"
             >
-              {isLoading ? '검색중...' : '검색'}
-            </button>
+              {isSearching ? '검색중...' : '검색'}
+            </Button>
           </div>
         </div>
 
         {/* 검색 결과 */}
         <div className="max-h-[50vh] overflow-y-auto">
-          {!hasSearched && (
+          {!hasSearched && !isLoading && (
             <StateDisplay
               state="empty"
               emptyMessage="맛집 이름을 검색해보세요!"
@@ -107,27 +138,41 @@ export default function SearchRestaurantModal({
           {isLoading && (
             <StateDisplay
               state="loading"
-              loadingMessage="검색중..."
+              loadingMessage={isSearching ? '검색중...' : '처리중...'}
               size="md"
             />
           )}
 
-          {hasSearched && !isLoading && searchResults.length === 0 && (
+          {error && (
             <StateDisplay
-              state="empty"
-              emptyMessage="검색 결과가 없습니다"
-              emptyIcon="😅"
+              state="error"
+              errorMessage={error}
+              onRetry={() => handleSearch()}
               size="md"
             />
           )}
 
-          {searchResults.length > 0 && (
+          {hasSearched &&
+            !isLoading &&
+            !error &&
+            searchResults.length === 0 && (
+              <StateDisplay
+                state="empty"
+                emptyMessage="검색 결과가 없습니다"
+                emptyIcon="😅"
+                size="md"
+              />
+            )}
+
+          {/* 검색 결과 목록 */}
+          {searchResults.length > 0 && !isLoading && (
             <div className="space-y-3 p-4">
               {searchResults.map((restaurant) => (
                 <button
                   key={restaurant.id}
                   onClick={() => handleSelect(restaurant)}
-                  className="w-full rounded-lg border border-gray-200 p-3 text-left transition-all hover:border-blue-300 hover:shadow-md"
+                  disabled={isProcessing}
+                  className="w-full rounded-lg border border-gray-200 p-3 text-left transition-all hover:border-blue-300 hover:shadow-md disabled:cursor-not-allowed disabled:opacity-50"
                 >
                   <div className="flex items-center space-x-3">
                     {/* 카테고리 아이콘 */}
@@ -152,6 +197,14 @@ export default function SearchRestaurantModal({
                         </p>
                       )}
                     </div>
+
+                    {/* 처리 중 표시 */}
+                    {isProcessing && (
+                      <div className="flex items-center space-x-2">
+                        <div className="h-4 w-4 animate-spin rounded-full border-2 border-blue-500 border-t-transparent"></div>
+                        <span className="text-xs text-gray-500">처리중...</span>
+                      </div>
+                    )}
                   </div>
                 </button>
               ))}
