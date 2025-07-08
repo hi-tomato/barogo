@@ -12,7 +12,9 @@ export const useLoginForm = () => {
     isPending: isLoginPending,
     error: loginError,
   } = useSignIn();
+
   const {
+    register,
     handleSubmit,
     formState: { errors },
   } = useFormBase<LoginFormData>({
@@ -35,5 +37,12 @@ export const useLoginForm = () => {
     },
   };
 
-  return { handleSubmit, errors, validateRules, isLoginPending, loginError };
+  return {
+    register,
+    handleSubmit,
+    errors,
+    validateRules,
+    isLoginPending,
+    loginError,
+  };
 };

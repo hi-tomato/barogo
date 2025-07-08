@@ -1,46 +1,21 @@
 'use client';
-import { useForm } from 'react-hook-form';
 import { Button, Input } from '@/app/shared/ui';
 import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { containerVariants, itemVariants } from '@/app/shared/lib/animation';
-import { useSignUp } from '@/app/shared/hooks/queries/useAuth';
-import { SignupRequest } from '@/app/shared/types/auth';
-import { useState } from 'react';
+import { useRegisterForm } from '@/app/shared/hooks/form/useRegisterForm';
 import SignUpSuccessModal from '../_components/SignUpSuccessModal';
-
-interface SignupFormData extends SignupRequest {
-  confirmPassword: string;
-  terms: boolean;
-}
 
 export default function RegisterForm() {
   const router = useRouter();
-  const [showSuccessModal, setShowSuccessModal] = useState(false);
-  const { mutate: signUp, isPending: isLoading } = useSignUp();
-
   const {
     register,
     handleSubmit,
-    watch,
-    formState: { errors },
-  } = useForm<SignupFormData>();
-
-  const password = watch('password');
-
-  const onSubmit = async (data: SignupFormData) => {
-    const signupData: SignupRequest = {
-      name: data.name,
-      email: data.email,
-      password: data.password,
-    };
-
-    signUp(signupData, {
-      onSuccess: () => {
-        setShowSuccessModal(true);
-      },
-    });
-  };
+    errors,
+    showSuccessModal,
+    isSignUpPending,
+    validateRules,
+  } = useRegisterForm();
 
   return (
     <div className="relative flex min-h-screen items-center justify-center px-4 py-12">
@@ -53,7 +28,7 @@ export default function RegisterForm() {
         </p>
 
         <motion.form
-          onSubmit={handleSubmit(onSubmit)}
+          onSubmit={handleSubmit}
           className="space-y-4"
           variants={containerVariants}
           initial="hidden"
@@ -61,69 +36,47 @@ export default function RegisterForm() {
         >
           <motion.div variants={itemVariants}>
             <Input
-              {...register('name', {
-                required: '이름을 입력해주세요',
-                minLength: {
-                  value: 2,
-                  message: '이름은 최소 2자 이상이어야 합니다',
-                },
-              })}
+              {...register('name', validateRules.name)}
               label="이름"
               placeholder="홍길동"
               error={errors.name?.message}
-              disabled={isLoading}
+              disabled={isSignUpPending}
               required
             />
           </motion.div>
 
           <motion.div variants={itemVariants}>
             <Input
-              {...register('email', {
-                required: '이메일을 입력해주세요',
-                pattern: {
-                  value: /^\S+@\S+$/i,
-                  message: '올바른 이메일 형식이 아닙니다',
-                },
-              })}
+              {...register('email', validateRules.email)}
               label="이메일"
               type="email"
               placeholder="you@example.com"
               error={errors.email?.message}
-              disabled={isLoading}
+              disabled={isSignUpPending}
               required
             />
           </motion.div>
 
           <motion.div variants={itemVariants}>
             <Input
-              {...register('password', {
-                required: '비밀번호를 입력해주세요',
-                minLength: {
-                  value: 8,
-                  message: '비밀번호는 최소 8자 이상이어야 합니다',
-                },
-              })}
+              {...register('password', validateRules.password)}
               label="비밀번호"
               type="password"
               placeholder="••••••••"
               error={errors.password?.message}
-              disabled={isLoading}
+              disabled={isSignUpPending}
               required
             />
           </motion.div>
 
           <motion.div variants={itemVariants}>
             <Input
-              {...register('confirmPassword', {
-                required: '비밀번호 확인을 입력해주세요',
-                validate: (value) =>
-                  value === password || '비밀번호가 일치하지 않습니다',
-              })}
+              {...register('confirmPassword', validateRules.confirmPassword)}
               label="비밀번호 확인"
               type="password"
               placeholder="••••••••"
               error={errors.confirmPassword?.message}
-              disabled={isLoading}
+              disabled={isSignUpPending}
               required
             />
           </motion.div>
@@ -131,11 +84,9 @@ export default function RegisterForm() {
           <motion.div variants={itemVariants}>
             <label className="flex cursor-pointer items-center space-x-2">
               <input
-                {...register('terms', {
-                  required: '이용약관에 동의해주세요',
-                })}
+                {...register('terms', validateRules.terms)}
                 type="checkbox"
-                disabled={isLoading}
+                disabled={isSignUpPending}
                 className="h-4 w-4 rounded border-gray-300 text-[#1C4E80] focus:ring-[#1C4E80] disabled:opacity-50"
               />
               <span className="font-suit text-sm text-[#2B2B2B]">
@@ -150,9 +101,9 @@ export default function RegisterForm() {
           </motion.div>
 
           <Button
-            text={isLoading ? '가입 중...' : '회원가입'}
+            text={isSignUpPending ? '가입 중...' : '회원가입'}
             type="submit"
-            loading={isLoading}
+            loading={isSignUpPending}
             variant="primary"
             size="lg"
             fullWidth
@@ -160,21 +111,19 @@ export default function RegisterForm() {
           />
         </motion.form>
 
-        <SignUpSuccessModal
-          isOpen={showSuccessModal}
-          userName={watch('name')}
-        />
+        <SignUpSuccessModal isOpen={showSuccessModal} userName="" />
+
         {/* 하단 */}
-        <div className="font-suit mt-6 text-center text-sm leading-relaxed text-[#8A8A8A]">
-          이미 계정이 있으신가요?
-          <Button
-            text="로그인"
-            variant="text"
-            size="sm"
-            disabled={isLoading}
-            className="ml-1 font-semibold"
-            onClick={() => router.push('/login')}
-          />
+        <div className="mt-6 text-center">
+          <p className="font-suit text-sm text-[#8A8A8A]">
+            이미 계정이 있으신가요?{' '}
+            <button
+              onClick={() => router.push('/login')}
+              className="font-suit text-[#1C4E80] hover:underline"
+            >
+              로그인하기
+            </button>
+          </p>
         </div>
       </div>
     </div>
