@@ -1,10 +1,10 @@
 'use client';
-import { RiKakaoTalkFill } from 'react-icons/ri';
 import { useRouter } from 'next/navigation';
 import { Button, Input } from '@/app/shared/ui';
 import { motion } from 'framer-motion';
 import { containerVariants, itemVariants } from '@/app/shared/lib/animation';
 import { useLoginForm } from '@/app/shared/hooks/form/useLoginForm';
+import { GoogleButton, KakaoButton } from '../_components/SocialLoginButton';
 
 export default function LoginForm() {
   const router = useRouter();
@@ -16,6 +16,10 @@ export default function LoginForm() {
     isLoginPending,
     loginError,
   } = useLoginForm();
+
+  const handleGoogleLogin = () => {
+    window.location.href = `${process.env.NEXT_PUBLIC_API_URL}/auth/signin/google`;
+  };
 
   return (
     <div className="flex min-h-screen items-center justify-center px-4 py-12">
@@ -78,19 +82,8 @@ export default function LoginForm() {
                 className="font-suit"
               />
             </motion.div>
-
-            <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
-              <Button
-                text="카카오로 시작하기"
-                type="button"
-                variant="kakao"
-                size="lg"
-                icon={<RiKakaoTalkFill />}
-                iconPosition="left"
-                fullWidth
-                className="font-suit"
-              />
-            </motion.div>
+            <GoogleButton />
+            <KakaoButton />
           </motion.div>
         </motion.form>
 
