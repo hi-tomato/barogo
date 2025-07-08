@@ -1,5 +1,5 @@
 'use client';
-import { getStatusColor, getStatusText } from '../../hooks/useBaropotStatus';
+import { getStatusColor, getStatusText } from '../../hooks/getBaropotStatus';
 import { Button } from '@/app/shared/ui';
 import { BaropotListResponse } from '@/app/shared/types/baropots';
 

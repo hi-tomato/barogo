@@ -1,7 +1,7 @@
 import {
   getStatusColor,
   getStatusText,
-} from '@/app/features/baropot/hooks/useBaropotStatus';
+} from '@/app/features/baropot/hooks/getBaropotStatus';
 import { BaropotListResponse } from '@/app/shared/types/baropots';
 import { BaropotStatus } from '@/app/shared/types/enums';
 import { useRouter } from 'next/navigation';
