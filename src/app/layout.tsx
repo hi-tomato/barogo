@@ -1,8 +1,7 @@
 import Script from 'next/script';
 import './globals.css';
 import QueryProvider from './shared/providers/QueryProvider';
-import { ErrorBoundary } from './shared/ui/error-boundary/ErrorBoundary';
-import { useQueryErrorResetBoundary } from '@tanstack/react-query';
+import ErrorBoundaryProvider from '@/app/shared/providers/ErrorBoundaryProvider';
 
 export default function RootLayout({
   children,
@@ -11,17 +10,10 @@ export default function RootLayout({
   children: React.ReactNode;
   modal: React.ReactNode;
 }>) {
-  const { reset } = useQueryErrorResetBoundary();
-
   return (
     <html lang="ko">
       <body>
-        <ErrorBoundary
-          onReset={reset}
-          onError={(error, errorInfo) => {
-            console.error('App Error:', error, errorInfo);
-          }}
-        >
+        <ErrorBoundaryProvider>
           <QueryProvider>
             {children}
             {modal}
@@ -30,7 +22,7 @@ export default function RootLayout({
               strategy="beforeInteractive"
             />
           </QueryProvider>
-        </ErrorBoundary>
+        </ErrorBoundaryProvider>
       </body>
     </html>
   );
