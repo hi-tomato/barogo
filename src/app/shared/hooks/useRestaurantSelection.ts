@@ -16,6 +16,7 @@ interface UseRestaurantSelectionOptions {
   onSuccess?: (restaurantId: number) => void;
   onBaropotFound?: (baropotId: number) => void;
   onRegistrationNeeded?: (restaurant: NearbyRestaurant) => void;
+  redirectPath?: string;
 }
 
 export const useRestaurantSelection = (
@@ -84,7 +85,7 @@ export const useRestaurantSelection = (
         if (options.onSuccess) {
           options.onSuccess(existingRestaurant.id);
         } else {
-          router.push(`/restaurant/${existingRestaurant.id}/baropot/create`);
+          router.push(`/restaurants/${existingRestaurant.id}/baropot/create`);
         }
         return;
       } else {
