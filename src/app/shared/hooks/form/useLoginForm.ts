@@ -16,6 +16,7 @@ export const useLoginForm = () => {
   const {
     register,
     handleSubmit,
+    setValue,
     formState: { errors },
   } = useFormBase<LoginFormData>({
     onSubmit: (data: LoginFormData) => {
@@ -40,6 +41,7 @@ export const useLoginForm = () => {
   return {
     register,
     handleSubmit,
+    setValue,
     errors,
     validateRules,
     isLoginPending,
