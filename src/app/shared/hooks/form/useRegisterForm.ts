@@ -19,13 +19,14 @@ export const useRegisterForm = () => {
     register,
     handleSubmit,
     watch,
+    setValue,
     formState: { errors },
   } = useFormBase<RegisterFormDataProps>({
-    onSubmit: (data) => {
+    onSubmit: ({ name, email, password }) => {
       const signupData: SignupRequest = {
-        name: data.name,
-        email: data.email,
-        password: data.password,
+        name,
+        email,
+        password,
       };
 
       signUp(signupData, {
@@ -40,7 +41,7 @@ export const useRegisterForm = () => {
 
   const password = watch('password');
 
-  const validateRules = {
+  const VALIDATE_RULES = {
     name: {
       required: '이름을 입력해주세요',
       minLength: { value: 2, message: '이름은 2자 이상이어야 합니다.' },
@@ -73,9 +74,10 @@ export const useRegisterForm = () => {
   return {
     register,
     handleSubmit,
+    setValue,
     errors,
     showSuccessModal,
     isSignUpPending,
-    validateRules,
+    VALIDATE_RULES,
   };
 };
