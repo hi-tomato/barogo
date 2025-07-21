@@ -1,7 +1,8 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { SignupRequest } from '@/app/shared/types/auth';
 import { useSignUp } from '@/app/shared/hooks/queries/useAuth';
 import { useFormBase } from '@/app/shared/hooks/form/useFormBase';
+import { REGISTER_FORM_VALIDATE_RULES } from '@/app/shared/lib/validate';
 
 interface RegisterFormDataProps {
   name: string;
@@ -40,35 +41,17 @@ export const useRegisterForm = () => {
   });
 
   const password = watch('password');
-  const VALIDATE_RULES = {
-    name: {
-      required: '이름을 입력해주세요',
-      minLength: { value: 2, message: '이름은 2자 이상이어야 합니다.' },
-    },
-    email: {
-      required: '이메일을 입력해주세요',
-      pattern: {
-        value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-        message: '올바른 이메일 형식이 아닙니다',
+  const validateRules = useMemo(
+    () => ({
+      ...REGISTER_FORM_VALIDATE_RULES,
+      confirmPassword: {
+        ...REGISTER_FORM_VALIDATE_RULES.confirmPassword,
+        validate: (v: string) =>
+          v === password || '비밀번호가 일치하지 않습니다.',
       },
-    },
-    password: {
-      required: '비밀번호를 입력해주세요',
-      minLength: {
-        value: 8,
-        message: '비밀번호는 최소 8자 이상이어야 합니다.',
-      },
-    },
-    confirmPassword: {
-      required: '비밀번호를 입력해주세요',
-      validate: (value: string) => {
-        return value === password || '비밀번호가 일치하지 않습니다.';
-      },
-    },
-    terms: {
-      required: '약관에 동의해주세요',
-    },
-  };
+    }),
+    [password]
+  );
 
   return {
     register,
@@ -77,6 +60,6 @@ export const useRegisterForm = () => {
     errors,
     showSuccessModal,
     isSignUpPending,
-    VALIDATE_RULES,
+    validateRules,
   };
 };
