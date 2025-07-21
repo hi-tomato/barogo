@@ -40,7 +40,6 @@ export const useRegisterForm = () => {
   });
 
   const password = watch('password');
-
   const VALIDATE_RULES = {
     name: {
       required: '이름을 입력해주세요',
@@ -49,7 +48,7 @@ export const useRegisterForm = () => {
     email: {
       required: '이메일을 입력해주세요',
       pattern: {
-        value: /^\S+@\S+$/i,
+        value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
         message: '올바른 이메일 형식이 아닙니다',
       },
     },
