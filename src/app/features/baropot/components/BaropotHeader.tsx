@@ -1,4 +1,5 @@
 import { Button } from '@/app/shared/ui';
+import { FiRefreshCcw, FiX } from 'react-icons/fi';
 
 interface BaropotHeaderProps {
   onClose: () => void;
@@ -20,15 +21,15 @@ export default function BaropotHeader({
       <div className="flex items-center gap-2">
         {onRefresh && (
           <Button
-            text="🔄"
+            icon={<FiRefreshCcw className="text-gray-400" />}
             onClick={onRefresh}
-            variant="outline"
+            variant="ghost"
             size="icon"
             className="text-gray-400 hover:bg-gray-100 hover:text-gray-600"
           />
         )}
         <Button
-          text="×"
+          icon={<FiX className="text-gray-400" />}
           onClick={onClose}
           variant="text"
           size="icon"
