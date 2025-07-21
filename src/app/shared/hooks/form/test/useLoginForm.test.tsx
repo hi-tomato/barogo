@@ -47,7 +47,7 @@ describe('로그인의 관련된 훅들을 검사한다.', () => {
     expect(result.current.register).toBeDefined();
     expect(result.current.handleSubmit).toBeDefined();
     expect(result.current.errors).toBeDefined();
-    expect(result.current.validateRules).toBeDefined();
+    expect(result.current.LOGIN_FORM_VALIDATE_RULES).toBeDefined();
     expect(result.current.isLoginPending).toBe(false);
     expect(result.current.loginError).toBe(null);
   });

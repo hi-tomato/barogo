@@ -1,3 +1,4 @@
+import { LOGIN_FORM_VALIDATE_RULES } from '@/app/shared/lib/validate';
 import { useSignIn } from '../queries/useAuth';
 import { useFormBase } from './useFormBase';
 
@@ -25,25 +26,12 @@ export const useLoginForm = () => {
     mode: 'onChange',
   });
 
-  const validateRules = {
-    email: {
-      required: '이메일을 입력해주세요',
-      pattern: {
-        value: /^\S+@\S+$/i,
-        message: '올바른 이메일 형식이 아닙니다',
-      },
-    },
-    password: {
-      required: '비밀번호를 입력해주세요',
-    },
-  };
-
   return {
     register,
     handleSubmit,
     setValue,
     errors,
-    validateRules,
+    LOGIN_FORM_VALIDATE_RULES,
     isLoginPending,
     loginError,
   };

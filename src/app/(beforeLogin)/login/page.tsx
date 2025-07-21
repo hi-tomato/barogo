@@ -12,7 +12,7 @@ export default function LoginForm() {
     register,
     handleSubmit,
     errors,
-    validateRules,
+    LOGIN_FORM_VALIDATE_RULES,
     isLoginPending,
     loginError,
   } = useLoginForm();
@@ -53,7 +53,7 @@ export default function LoginForm() {
         >
           <motion.div variants={itemVariants}>
             <Input
-              {...register('email', validateRules.email)}
+              {...register('email', LOGIN_FORM_VALIDATE_RULES.email)}
               label="이메일"
               placeholder="you@example.com"
               error={errors.email?.message}
@@ -62,7 +62,7 @@ export default function LoginForm() {
 
           <motion.div variants={itemVariants}>
             <Input
-              {...register('password', validateRules.password)}
+              {...register('password', LOGIN_FORM_VALIDATE_RULES.password)}
               label="비밀번호"
               type="password"
               placeholder="••••••••"
