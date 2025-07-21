@@ -45,7 +45,7 @@ export default function CreateRestaurantBaropotPage() {
     watchAgeGroup,
     watchTags,
     toggleArrayField,
-    validateRules,
+    BAROPOT_CREATE_FORM_VALIDATE_RULES,
     isCreating,
   } = useBaropotCreateForm(restaurantData);
 
