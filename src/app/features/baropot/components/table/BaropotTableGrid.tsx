@@ -2,6 +2,7 @@
 import { getStatusColor, getStatusText } from '../../hooks/getBaropotStatus';
 import { Button } from '@/app/shared/ui';
 import { BaropotListResponse } from '@/app/shared/types/baropots';
+import PopularStatus from '@/app/features/popular/modal/PopularStatus';
 
 interface GridProps {
   baropotList: BaropotListResponse[];
@@ -16,16 +17,8 @@ export default function BaropotTableGrid({
 }: GridProps) {
   if (baropotList.length === 0)
     return (
-      <div className="mx-4 mt-4">
-        <div className="rounded-xl border border-gray-100 bg-white p-12 text-center shadow-sm">
-          <div className="mb-4 text-6xl">��</div>
-          <h3 className="mb-2 text-lg font-semibold text-gray-700">
-            조건에 맞는 바로팟이 없어요
-          </h3>
-          <p className="text-sm text-gray-500">
-            검색 조건을 변경하거나 새로운 바로팟을 만들어보세요!
-          </p>
-        </div>
+      <div className="mx-4 mt-4 text-center">
+        <PopularStatus type="notFound" />
       </div>
     );
 

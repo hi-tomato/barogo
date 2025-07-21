@@ -1,7 +1,21 @@
 import { Button, Input } from '@/app/shared/ui';
+import {
+  FilterType,
+  SortType,
+} from '@/app/features/baropot/types/baropotTable';
 
-type FilterType = 'all' | 'recruiting' | 'full' | 'closed';
-type SortType = 'latest' | 'deadline' | 'popular' | 'distance';
+const Filters = [
+  { id: FilterType.ALL, label: '전체', color: 'bg-gray-500' },
+  { id: FilterType.RECRUITING, label: '모집중', color: 'bg-blue-500' },
+  { id: FilterType.FULL, label: '모집완료', color: 'bg-orange-500' },
+  { id: FilterType.CLOSED, label: '종료', color: 'bg-gray-400' },
+] as const;
+
+const sorts = [
+  { id: SortType.LATEST, label: '최신순' },
+  { id: SortType.DEADLINE, label: '마감임박순' },
+  { id: SortType.POPULAR, label: '인기순' },
+] as const;
 
 interface FiltersProps {
   filter: FilterType;
@@ -73,17 +87,3 @@ export default function BaropotTableFilters({
     </div>
   );
 }
-
-const Filters = [
-  { id: 'all', label: '전체', color: 'bg-gray-500' },
-  { id: 'recruiting', label: '모집중', color: 'bg-blue-500' },
-  { id: 'full', label: '모집완료', color: 'bg-orange-500' },
-  { id: 'closed', label: '종료', color: 'bg-gray-400' },
-] as const;
-
-const sorts = [
-  { id: 'latest', label: '최신순' },
-  { id: 'deadline', label: '마감임박순' },
-  { id: 'popular', label: '인기순' },
-  // ...(hideDistanceSort ? [] : [{ id: "distance", label: "거리순" }]),
-] as const;
