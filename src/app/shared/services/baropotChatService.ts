@@ -10,6 +10,7 @@ import {
 } from '@/app/shared/types/baropotChat';
 import { BAROPOT_CHAT_EVENTS } from '@/app/shared/types/enums';
 
+const API_URL = process.env.NEXT_PUBLIC_API_URL + '/baropot-chat';
 export class BaropotChatService {
   private socket: Socket | null = null;
   private isConnected = false;
@@ -21,7 +22,7 @@ export class BaropotChatService {
   /** 바로팟 채팅 서비스 연결 */
   async connect(token: string): Promise<void> {
     return new Promise((resolve, reject) => {
-      this.socket = io('http://localhost:8000', {
+      this.socket = io(API_URL, {
         extraHeaders: { token },
         transports: ['websocket'],
         forceNew: true,
