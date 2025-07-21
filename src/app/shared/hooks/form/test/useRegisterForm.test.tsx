@@ -37,11 +37,11 @@ describe('회원가입 폼 테스트', () => {
     result = hookResult;
 
     act(() => {
-      result.current.register('name', result.current.VALIDATE_RULES.name);
-      result.current.register('email', result.current.VALIDATE_RULES.email);
+      result.current.register('name', result.current.validateRules.name);
+      result.current.register('email', result.current.validateRules.email);
       result.current.register(
         'password',
-        result.current.VALIDATE_RULES.password
+        result.current.validateRules.password
       );
     });
   });
