@@ -8,6 +8,7 @@ import {
   NewMessageEvent,
   ReadMessageEvent,
 } from '@/app/shared/types/baropotChat';
+import { BAROPOT_CHAT_EVENTS } from '@/app/shared/types/enums';
 
 export class BaropotChatService {
   private socket: Socket | null = null;
@@ -20,8 +21,10 @@ export class BaropotChatService {
   /** 바로팟 채팅 서비스 연결 */
   async connect(token: string): Promise<void> {
     return new Promise((resolve, reject) => {
-      this.socket = io('/baropot-chat', {
+      this.socket = io('http://localhost:8000', {
         extraHeaders: { token },
+        transports: ['websocket'],
+        forceNew: true,
       });
       /** Socket Connection Success */
       this.socket.on('connect', () => {
@@ -54,9 +57,10 @@ export class BaropotChatService {
 
     return new Promise((resolve, reject) => {
       this.socket?.emit(
-        'JOIN_ROOM',
+        BAROPOT_CHAT_EVENTS.JOIN_ROOM,
         { baropotChatRoomId },
         (response: JoinRoomResponse) => {
+          console.log(response);
           if (response.success) {
             resolve(response.message);
           } else {
@@ -73,7 +77,7 @@ export class BaropotChatService {
     this.checkConnection();
     return new Promise((resolve, reject) => {
       this.socket?.emit(
-        'LEAVE_ROOM',
+        BAROPOT_CHAT_EVENTS.LEAVE_ROOM,
         { baropotChatRoomId },
         (response: LeaveRoomResponse) => {
           if (response.success) {
@@ -92,12 +96,14 @@ export class BaropotChatService {
     baropotChatRoomId,
     content,
   }: SendMessageRequest): Promise<string> {
+    console.log('Socket emit SEND_MESSAGE 시도');
     this.checkConnection();
     return new Promise((resolve, reject) => {
       this.socket?.emit(
-        'SEND_MESSAGE',
+        BAROPOT_CHAT_EVENTS.SEND_MESSAGE,
         { baropotChatRoomId, content },
         (response: SendMessageResponse) => {
+          console.log('SEND_MESSAGE 응답:', response);
           if (response.success) {
             resolve(response.messageId || '');
           } else {
@@ -115,7 +121,7 @@ export class BaropotChatService {
 
     return new Promise((resolve, reject) => {
       this.socket?.emit(
-        'MARK_AS_READ',
+        BAROPOT_CHAT_EVENTS.MARK_AS_READ,
         { baropotChatRoomId },
         (response: MarkAsReadResponse) => {
           if (response.success) {
@@ -129,14 +135,25 @@ export class BaropotChatService {
       );
     });
   }
+
+  /** 바로팟 채팅 서비스 연결 해제 */
+  disconnect(): void {
+    if (this.socket) {
+      this.socket.offAny();
+      this.socket.disconnect();
+      this.socket = null;
+      this.isConnected = false;
+    }
+  }
+
   /** 바로팟 채팅 새 메시지 수신 */
   onNewMessage(callback: (newMessage: NewMessageEvent) => void) {
     this.checkConnection();
-    this.socket?.on('NEW_MESSAGE', callback);
+    this.socket?.on(BAROPOT_CHAT_EVENTS.NEW_MESSAGE, callback);
   }
   /** 바로팟 채팅 메시지 수신 */
   onMessagesReceived(callback: (readMessages: ReadMessageEvent) => void) {
     this.checkConnection();
-    this.socket?.on('MESSAGES_READ', callback);
+    this.socket?.on(BAROPOT_CHAT_EVENTS.MESSAGES_READ, callback);
   }
 }
