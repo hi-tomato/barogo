@@ -50,3 +50,12 @@ export interface ReadMessageEvent {
   userId: number;
   timestamp: Date;
 }
+
+export interface CreateChatRoomRequest {
+  baropotId: number;
+  name: string;
+}
+
+export interface ChatRoomResponse {
+  BaropotChatRoomId: number;
+}

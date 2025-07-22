@@ -7,8 +7,11 @@ import {
   MarkAsReadResponse,
   NewMessageEvent,
   ReadMessageEvent,
+  ChatRoomResponse,
+  CreateChatRoomRequest,
 } from '@/app/shared/types/baropotChat';
 import { BAROPOT_CHAT_EVENTS } from '@/app/shared/types/enums';
+import { apiClient } from '../api/client';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL + '/baropot-chat';
 export class BaropotChatService {
@@ -18,6 +21,12 @@ export class BaropotChatService {
     if (!this.socket) {
       throw new Error('채팅 서비스가 연결되지 않았습니다.');
     }
+  }
+  /** 바로팟 채팅방 개설 */
+  async createChatRoom(
+    request: CreateChatRoomRequest
+  ): Promise<ChatRoomResponse> {
+    return await apiClient.post<ChatRoomResponse>('/baropot-chat', request);
   }
   /** 바로팟 채팅 서비스 연결 */
   async connect(token: string): Promise<void> {
@@ -158,3 +167,5 @@ export class BaropotChatService {
     this.socket?.on(BAROPOT_CHAT_EVENTS.MESSAGES_READ, callback);
   }
 }
+
+export const baropotChatService = new BaropotChatService();
