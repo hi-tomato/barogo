@@ -22,6 +22,11 @@ export const queryKeys = {
     hostLists: () => [...queryKeys.baropot.all, 'host'] as const,
     hostList: (queries?: BaropotsQueries) =>
       [...queryKeys.baropot.hostLists(), queries] as const,
+
+    /** 채팅방 관련 */
+    chatRooms: () => [...queryKeys.baropot.all, 'chatRooms'] as const,
+    chatRoom: (baropotId: number) =>
+      [...queryKeys.baropot.chatRooms(), baropotId] as const,
   },
 
   restaurant: {
