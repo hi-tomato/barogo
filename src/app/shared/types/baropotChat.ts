@@ -59,3 +59,22 @@ export interface CreateChatRoomRequest {
 export interface ChatRoomResponse {
   BaropotChatRoomId: number;
 }
+
+export interface GetChatRoomRequest {
+  baropotChatRoomId: number;
+}
+
+export interface GetChatRoomResponse {
+  id: number;
+  createdAt: string;
+  name: string;
+  unreadCount: number;
+  baropot: {
+    id: number;
+    title: string;
+    maxParticipants: number;
+    date: string;
+    time: string;
+  };
+  participants: string[];
+}
