@@ -1,4 +1,4 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { baropotChatService } from '@/app/shared/services/baropotChatService';
 import { CreateChatRoomRequest } from '@/app/shared/types/baropotChat';
 import { queryKeys } from '@/app/shared/lib/queryKeys';
@@ -18,5 +18,14 @@ export const useCreateChatRoom = () => {
     onError: (error) => {
       console.log('채팅방 생성을 실패하였습니다', error);
     },
+  });
+};
+
+export const useGetChatRoomInfo = (chatRoomId: number) => {
+  return useQuery({
+    queryKey: queryKeys.baropot.chatRoomInfo(chatRoomId),
+    queryFn: () => baropotChatService.getChatRoomInfo(chatRoomId),
+    enabled: !!chatRoomId,
+    staleTime: 1000 * 60 * 5, // 채팅방 정보는 5분
   });
 };

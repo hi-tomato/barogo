@@ -27,6 +27,8 @@ export const queryKeys = {
     chatRooms: () => [...queryKeys.baropot.all, 'chatRooms'] as const,
     chatRoom: (baropotId: number) =>
       [...queryKeys.baropot.chatRooms(), baropotId] as const,
+    chatRoomInfo: (chatRoomId: number) =>
+      [...queryKeys.baropot.all, 'chatRoomInfo', chatRoomId] as const,
   },
 
   restaurant: {

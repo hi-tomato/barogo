@@ -9,6 +9,7 @@ import {
   ReadMessageEvent,
   ChatRoomResponse,
   CreateChatRoomRequest,
+  GetChatRoomResponse,
 } from '@/app/shared/types/baropotChat';
 import { BAROPOT_CHAT_EVENTS } from '@/app/shared/types/enums';
 import { apiClient } from '../api/client';
@@ -27,6 +28,12 @@ export class BaropotChatService {
     request: CreateChatRoomRequest
   ): Promise<ChatRoomResponse> {
     return await apiClient.post<ChatRoomResponse>('/baropot-chat', request);
+  }
+  /** 바로팟 채팅방 조회 */
+  async getChatRoomInfo(chatRoomId: number): Promise<GetChatRoomResponse> {
+    return await apiClient.get<GetChatRoomResponse>(
+      `/baropot-chat/${chatRoomId}`
+    );
   }
   /** 바로팟 채팅 서비스 연결 */
   async connect(token: string): Promise<void> {
