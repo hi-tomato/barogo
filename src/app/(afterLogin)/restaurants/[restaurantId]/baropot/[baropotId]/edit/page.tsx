@@ -1,10 +1,13 @@
 'use client';
 import { useParams, useRouter } from 'next/navigation';
 import { useGetBaropotDetail } from '@/app/shared/hooks/queries/useBaropot';
-import { Input } from '@/app/shared/ui';
+import { Button, Input, StateDisplay } from '@/app/shared/ui';
+import { useToast } from '@/app/shared/hooks/useToast';
+import { HiArrowLeft } from 'react-icons/hi';
 
 export default function BaropotEditPage() {
   const params = useParams<{ baropotId: string }>();
+  const toast = useToast();
   const router = useRouter();
   const baropotId = params.baropotId;
 
@@ -15,32 +18,11 @@ export default function BaropotEditPage() {
   } = useGetBaropotDetail(Number(baropotId));
 
   if (isLoading) {
-    return (
-      <div className="flex min-h-screen items-center justify-center bg-[#E6EEF5]">
-        <div className="flex flex-col items-center space-y-4">
-          <div className="h-12 w-12 animate-spin rounded-full border-b-2 border-[#1C4E80]"></div>
-          <p className="text-[#1C4E80]">바로팟 정보를 불러오고 있습니다...</p>
-        </div>
-      </div>
-    );
+    return <StateDisplay state="loading" size="lg" />;
   }
 
   if (isError || !baropot) {
-    return (
-      <div className="flex min-h-screen items-center justify-center bg-[#E6EEF5]">
-        <div className="space-y-4 text-center">
-          <p className="text-lg text-red-500">
-            바로팟 정보를 불러올 수 없습니다.
-          </p>
-          <button
-            onClick={() => window.location.reload()}
-            className="rounded-lg bg-[#1C4E80] px-4 py-2 text-white transition-colors hover:bg-[#154066]"
-          >
-            다시 시도
-          </button>
-        </div>
-      </div>
-    );
+    return <StateDisplay state="error" size="lg" />;
   }
 
   return (
@@ -48,25 +30,26 @@ export default function BaropotEditPage() {
       {/* 헤더 */}
       <div className="sticky top-0 z-40 border-b border-gray-200 bg-white">
         <div className="flex items-center px-4 py-3">
-          <button
-            onClick={() => router.back()}
+          <Button
+            onClick={() => {
+              router.back();
+            }}
             className="rounded-lg p-2 text-gray-600 hover:bg-gray-100"
-          >
-            ←
-          </button>
+            icon={<HiArrowLeft className="h-4 w-4" />}
+          />
           <h1 className="flex-1 text-center text-lg font-semibold text-[#2B2B2B]">
             바로팟 수정
           </h1>
-          <button
+          <Button
             onClick={() => {
               // TODO: 수정 로직 구현
-              alert('수정되었습니다!');
+              toast.success('수정되었습니다!');
               router.push(`/baropot/${baropotId}`);
             }}
             className="rounded-lg p-2 text-[#1C4E80] hover:bg-blue-50"
           >
             저장
-          </button>
+          </Button>
         </div>
       </div>
 

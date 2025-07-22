@@ -1,4 +1,5 @@
 'use client';
+import { useToast } from '@/app/shared/hooks/useToast';
 import { setAccessToken } from '@/app/shared/lib/authToken';
 import { useAuthStore } from '@/app/shared/store/useAuthStore';
 import { LoadingSpinner } from '@/app/shared/ui';
@@ -9,7 +10,7 @@ export default function GoogleCallback() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { initialize } = useAuthStore();
-
+  const toast = useToast();
   useEffect(() => {
     const handleGoogleCallback = async () => {
       const accessToken = searchParams.get('accessToken');
@@ -18,15 +19,15 @@ export default function GoogleCallback() {
         try {
           setAccessToken(accessToken);
           await initialize();
-          alert('로그인 완료');
+          toast.success('로그인 완료');
           router.push('/main');
         } catch (err) {
           console.error('구글 로그인 처리 실패', err);
-          alert('로그인 처리 중 오류가 발생하였습니다');
+          toast.error('로그인 처리 중 오류가 발생하였습니다');
           router.push('/');
         }
       } else {
-        alert('구글 로그인에 실패하였습니다');
+        toast.error('구글 로그인에 실패하였습니다');
         router.push('/');
       }
     };

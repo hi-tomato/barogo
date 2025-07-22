@@ -11,6 +11,7 @@ import {
 } from '@/app/shared/types/enums';
 import { CreateBaropotRequest } from '@/app/shared/types/baropots';
 import { baropotService } from '@/app/shared/services/baropotService';
+import { useToast } from './useToast';
 
 interface UseRestaurantSelectionOptions {
   onSuccess?: (restaurantId: number) => void;
@@ -30,6 +31,7 @@ export const useRestaurantSelection = (
   // Create, Fetching Hooks
   const { data: restaurantList = [] } = useRestaurantList({});
   const createBaropotMutation = useCreateBaropot();
+  const toast = useToast();
 
   // TODO: 서버에 등록되어있는 맛집인지 체크, 현재 RestaurantID와 Fetch된 RestaurantID가 일치하는지 체크함
   const findRegisteredRestaurant = (restaurant: NearbyRestaurant) => {
@@ -67,7 +69,7 @@ export const useRestaurantSelection = (
     sessionStorage.removeItem('baropotData');
     sessionStorage.removeItem('selectedRestaurant');
 
-    alert('🎉 바로팟이 생성되었습니다!');
+    toast.success('🎉 바로팟이 생성되었습니다!');
     return response.id;
   };
 

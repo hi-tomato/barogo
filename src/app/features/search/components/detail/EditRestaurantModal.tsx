@@ -3,6 +3,7 @@ import { RestaurantDetail } from '@/app/shared/types/restaurant';
 import { Button, Input, LoadingSpinner } from '@/app/shared/ui';
 import React, { useState } from 'react';
 import { HiClock, HiPencil, HiX } from 'react-icons/hi';
+import { useToast } from '@/app/shared/hooks/useToast';
 
 interface EditRestaurantModalProps {
   restaurant: RestaurantDetail;
@@ -17,7 +18,7 @@ export default function EditRestaurantModal({
 }: EditRestaurantModalProps) {
   const updateRestaurant = useUpdateRestaurant();
   const [newTag, setNewTag] = useState('');
-
+  const toast = useToast();
   const [formData, setFormData] = useState({
     description: restaurant.description || '',
     photos: restaurant.photos || [],
@@ -57,7 +58,7 @@ export default function EditRestaurantModal({
         },
         {
           onSuccess: () => {
-            alert('맛집 정보가 수정되었습니다.');
+            toast.success('맛집 정보가 수정되었습니다.');
             onClose();
           },
         }
