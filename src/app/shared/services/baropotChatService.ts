@@ -23,7 +23,7 @@ export class BaropotChatService {
   async connect(token: string): Promise<void> {
     return new Promise((resolve, reject) => {
       this.socket = io(API_URL, {
-        extraHeaders: { token },
+        query: { token },
         transports: ['websocket'],
         forceNew: true,
       });
