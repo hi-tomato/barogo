@@ -1,8 +1,11 @@
+import React from 'react';
 import { describe, it, beforeEach, expect, vi } from 'vitest';
 import { NearbyRestaurant } from '../../types';
 import { useRestaurantSelection } from '../useRestaurantSelection';
 import { act, renderHook } from '@testing-library/react';
-import { useRouter } from 'next/navigation';
+import ToastContextProvider from '@/app/shared/ui/toast/ToastContext';
+import { ReactNode } from 'react';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 const mockPush = vi.fn();
 vi.mock('next/navigation', () => ({
@@ -65,6 +68,23 @@ vi.mock('@/app/shared/services/baropotService', () => ({
   }),
 }));
 
+vi.mock('@/app/shared/hooks/useToast', () => ({
+  useToast: vi.fn().mockReturnValue({
+    success: vi.fn(),
+    error: vi.fn(),
+    warning: vi.fn(),
+    info: vi.fn(),
+  }),
+}));
+
+const queryClient = new QueryClient();
+
+const wrapper = ({ children }: { children: ReactNode }) => (
+  <QueryClientProvider client={queryClient}>
+    <ToastContextProvider>{children}</ToastContextProvider>
+  </QueryClientProvider>
+);
+
 describe('useRestaurantSelection', () => {
   const mockRestaurant: NearbyRestaurant = {
     id: '1',
@@ -96,7 +116,9 @@ describe('useRestaurantSelection', () => {
   });
 
   it('기존 맛집이 있을 때 바로팟 생성 페이지로 이동한다', async () => {
-    const { result } = renderHook(() => useRestaurantSelection({}));
+    const { result } = renderHook(() => useRestaurantSelection({}), {
+      wrapper,
+    });
 
     await act(async () => {
       await result.current.handleRestaurantSelection(mockRestaurant);
@@ -107,7 +129,9 @@ describe('useRestaurantSelection', () => {
   });
 
   it('새 맛집일 때 맛집 등록 페이지로 이동한다', async () => {
-    const { result } = renderHook(() => useRestaurantSelection({}));
+    const { result } = renderHook(() => useRestaurantSelection({}), {
+      wrapper,
+    });
 
     await act(async () => {
       await result.current.handleRestaurantSelection(mockNewRestaurant);
@@ -118,7 +142,9 @@ describe('useRestaurantSelection', () => {
   });
 
   it('기존 맛집일 때 바로팟 등록 페이지로 이동한다', async () => {
-    const { result } = renderHook(() => useRestaurantSelection({}));
+    const { result } = renderHook(() => useRestaurantSelection({}), {
+      wrapper,
+    });
 
     await act(async () => {
       await result.current.handleRestaurantSelection(mockRestaurant);
@@ -129,7 +155,9 @@ describe('useRestaurantSelection', () => {
   });
 
   it('중복 요청을 방지한다', async () => {
-    const { result } = renderHook(() => useRestaurantSelection({}));
+    const { result } = renderHook(() => useRestaurantSelection({}), {
+      wrapper,
+    });
 
     const firstRequest =
       result.current.handleRestaurantSelection(mockRestaurant);

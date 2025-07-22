@@ -11,6 +11,7 @@ import {
   PaymentMethod,
 } from '@/app/shared/types/enums';
 import { CreateBaropotRequest } from '@/app/shared/types/baropots';
+import ToastContextProvider from '@/app/shared/ui/toast/ToastContext';
 
 const mocks = vi.hoisted(() => {
   return {
@@ -19,6 +20,12 @@ const mocks = vi.hoisted(() => {
     mockRestaurantId: vi.fn().mockReturnValue('1004'),
     mockMutate: vi.fn(),
     mockAlert: vi.fn(),
+    mockToast: {
+      success: vi.fn(),
+      error: vi.fn(),
+      warning: vi.fn(),
+      info: vi.fn(),
+    },
   };
 });
 
@@ -40,6 +47,10 @@ vi.mock('@/app/shared/hooks/queries/useBaropot', () => ({
   }),
 }));
 
+vi.mock('@/app/shared/hooks/useToast', () => ({
+  useToast: vi.fn().mockReturnValue(mocks.mockToast),
+}));
+
 global.alert = mocks.mockAlert;
 
 const queryClient = new QueryClient({
@@ -50,7 +61,9 @@ const queryClient = new QueryClient({
 });
 
 const wrapper = ({ children }: { children: ReactNode }) => (
-  <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+  <QueryClientProvider client={queryClient}>
+    <ToastContextProvider>{children}</ToastContextProvider>
+  </QueryClientProvider>
 );
 
 const mockSessionStorage = {
@@ -174,7 +187,7 @@ describe('바로팟 생성 폼 테스트', () => {
       mocks.mockMutate.mock.calls[0][1].onSuccess();
     });
 
-    expect(mocks.mockAlert).toHaveBeenCalledWith('✅ 바로팟이 생성되었습니다!');
+    expect(mocks.mockToast.success).toHaveBeenCalled();
     expect(mocks.mockPush).toHaveBeenCalledWith('/baropot');
   });
 });
