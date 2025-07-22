@@ -51,6 +51,7 @@ export default function Toast({ id, message, type, onRemove }: ToastProps) {
         size="icon"
         aria-label="토스트 닫기"
         className="text-white/85 transition-colors duration-200 hover:bg-white/20 hover:text-white"
+        variant="ghost"
         icon={<HiX className="h-4 w-4" />}
       />
     </div>

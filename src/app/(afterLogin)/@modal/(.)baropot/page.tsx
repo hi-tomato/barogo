@@ -7,10 +7,12 @@ import {
   useGetBaropotList,
   useJoinBaropot,
 } from '@/app/shared/hooks/queries/useBaropot';
+import { useToast } from '@/app/shared/hooks/useToast';
 
 // TODO: 디버깅 완료되면, 탭 Filter을 도입하자
 export default function BaropotModal() {
   const router = useRouter();
+  const toast = useToast();
 
   const {
     data: baropotList = [],
@@ -34,11 +36,11 @@ export default function BaropotModal() {
         },
         {
           onSuccess: () => {
-            alert('바로팟에 참여했습니다.');
+            toast.success('바로팟에 참여했습니다.');
             refetch(); // 목록 새로고침
           },
           onError: () => {
-            alert('바로팟에 참여하는데 실패했습니다.');
+            toast.error('바로팟에 참여하는데 실패했습니다.');
           },
         }
       );
@@ -58,7 +60,7 @@ export default function BaropotModal() {
             error={error}
             onRefresh={refetch}
             onJoin={handleJoin}
-            isJoining={joinMutation.isPending} // 추가
+            isJoining={joinMutation.isPending}
           />
         </div>
 

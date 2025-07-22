@@ -12,6 +12,7 @@ import {
   mapGenderToEnum,
   mapPaymentMethodToEnum,
 } from '@/app/shared/lib/createBaropotHelper';
+import { useToast } from '@/app/shared/hooks/useToast';
 
 const defaultValues = {
   gender: [],
@@ -23,6 +24,8 @@ const defaultValues = {
 export const useBaropotCreateForm = (restaurantData: RestaurantData | null) => {
   const router = useRouter();
   const params = useParams();
+  const toast = useToast();
+
   const {
     mutate: createBaropot,
     isPending: isCreating,
@@ -78,11 +81,11 @@ export const useBaropotCreateForm = (restaurantData: RestaurantData | null) => {
 
       createBaropot(submitData, {
         onSuccess: () => {
-          alert('✅ 바로팟이 생성되었습니다!');
+          toast.success('✅ 바로팟이 생성되었습니다!');
           router.push('/baropot');
         },
         onError: () => {
-          alert('바로팟 생성에 실패했습니다. 다시 시도해주세요.');
+          toast.error('바로팟 생성에 실패했습니다. 다시 시도해주세요.');
         },
       });
     },

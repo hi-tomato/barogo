@@ -7,6 +7,7 @@ import {
 } from '../../nearby/utils/categoryHelpers';
 import Button from '@/app/shared/ui/Button';
 import { useRestaurantSelection } from '@/app/shared/hooks/useRestaurantSelection';
+import { useToast } from '@/app/shared/hooks/useToast';
 
 interface RestaurantListProps {
   restaurants?: NearbyRestaurant[];
@@ -16,6 +17,7 @@ export default function RestaurantList({
   restaurants = [],
 }: RestaurantListProps) {
   const router = useRouter();
+  const toast = useToast();
 
   const {
     handleRestaurantSelection,
@@ -24,11 +26,11 @@ export default function RestaurantList({
     findRegisteredRestaurant,
   } = useRestaurantSelection({
     onSuccess: (baropotId) => {
-      alert('바로팟이 생성되었습니다!');
+      toast.success('바로팟이 생성되었습니다!');
       router.push(`/baropot/${baropotId}`);
     },
     onBaropotFound: (baropotId) => {
-      alert('이미 등록된 맛집이있습니다!');
+      toast.warning('이미 등록된 맛집이있습니다!');
       router.push(`/baropot/${baropotId}`);
     },
     onRegistrationNeeded: () => {
@@ -44,7 +46,9 @@ export default function RestaurantList({
       await handleRestaurantSelection(restaurant);
     } catch (error) {
       console.error('맛집 선택 실패:', error);
-      alert(error instanceof Error ? error.message : '오류가 발생했습니다.');
+      toast.error(
+        error instanceof Error ? error.message : '오류가 발생했습니다.'
+      );
     }
   };
 

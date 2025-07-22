@@ -11,6 +11,7 @@ import { PanelHeader } from './PanelHeader';
 import { StatusManagementSection } from './StatusManagementSection';
 import { HostTabNavigation } from './HostTabNavigation';
 import { HostParticipantList } from './HostParticipantList';
+import { useToast } from '@/app/shared/hooks/useToast';
 
 interface HostManagementPanelProps {
   baropot: BaropotDetailResponse;
@@ -28,6 +29,7 @@ export default function HostManagementPanel({
   const [isPanelOpen, setIsPanelOpen] = useState(false);
   const [activeTab, setActiveTab] = useState('pending');
   const [hostMemos, setHostMemos] = useState<Record<number, string>>({});
+  const toast = useToast();
 
   const manageParticipantMutation = useManageParticipant();
   const updateBaropotStatusMutation = useUpdateBaropotStatus();
@@ -64,7 +66,7 @@ export default function HostManagementPanel({
         },
         {
           onSuccess: () => {
-            alert('참가자를 승인했습니다!');
+            toast.success('참가자를 승인했습니다!');
             setHostMemos((prev) => ({
               ...prev,
               [participantUserId]: '',
@@ -90,7 +92,7 @@ export default function HostManagementPanel({
         },
         {
           onSuccess: () => {
-            alert('참가자를 거절했습니다!');
+            toast.success('참가자를 거절했습니다!');
           },
         }
       );
@@ -113,7 +115,7 @@ export default function HostManagementPanel({
         },
         {
           onSuccess: () => {
-            alert('참가자를 퇴장시켰습니다!');
+            toast.success('참가자를 퇴장시켰습니다!');
           },
         }
       );

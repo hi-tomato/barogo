@@ -1,16 +1,17 @@
-"use client";
-import { useState } from "react";
-import { motion } from "framer-motion";
-import { HiDotsVertical, HiPencil, HiTrash } from "react-icons/hi";
-import { RestaurantDetail } from "@/app/shared/types/restaurant";
-import { FaHeartCircleCheck, FaHeartCircleXmark } from "react-icons/fa6";
+'use client';
+import { useState } from 'react';
+import { motion } from 'framer-motion';
+import { HiDotsVertical, HiPencil, HiTrash } from 'react-icons/hi';
+import { RestaurantDetail } from '@/app/shared/types/restaurant';
+import { FaHeartCircleCheck, FaHeartCircleXmark } from 'react-icons/fa6';
 import {
   useAddBookmark,
   useRemoveBookmark,
-} from "@/app/shared/hooks/queries/useReview";
-import { useDeleteRestaurant } from "@/app/shared/hooks/queries/useRestaurant";
-import { useRouter } from "next/navigation";
-import EditRestaurantModal from "./EditRestaurantModal";
+} from '@/app/shared/hooks/queries/useReview';
+import { useDeleteRestaurant } from '@/app/shared/hooks/queries/useRestaurant';
+import { useRouter } from 'next/navigation';
+import EditRestaurantModal from './EditRestaurantModal';
+import { useToast } from '@/app/shared/hooks/useToast';
 
 interface RestaurantActionsProps {
   restaurant: RestaurantDetail;
@@ -31,6 +32,7 @@ export default function RestaurantActions({
   const addBookmarkMutation = useAddBookmark();
   const removeBookmarkMutation = useRemoveBookmark();
   const deleteRestaurantMutation = useDeleteRestaurant();
+  const toast = useToast();
 
   const handleBookmarkToggle = async () => {
     try {
@@ -42,15 +44,16 @@ export default function RestaurantActions({
         setBookmarked(true);
       }
     } catch (error) {
-      console.error("북마크 처리 중 오류:", error);
-      alert("북마크 처리에 실패했습니다. 다시 시도해주세요.");
+      console.error('북마크 처리 중 오류:', error);
+      toast.error('북마크 처리에 실패했습니다. 다시 시도해주세요.');
     }
   };
 
   const handleDeleteDetail = () => {
-    if (confirm("해당 맛집을 삭제하시겠습니까?")) {
+    // TODO: 확인 모달 추가 필요
+    if (confirm('해당 맛집을 삭제하시겠습니까?')) {
       deleteRestaurantMutation.mutate(restaurant.id.toString());
-      router.push("/main");
+      router.push('/main');
     }
   };
 
@@ -58,16 +61,16 @@ export default function RestaurantActions({
     addBookmarkMutation.isPending || removeBookmarkMutation.isPending;
 
   return (
-    <div className="flex items-center space-x-2 ml-4">
+    <div className="ml-4 flex items-center space-x-2">
       {/* 북마크 버튼 */}
       <motion.button
         onClick={handleBookmarkToggle}
         disabled={isBookmarkLoading}
-        className={`p-3 rounded-full border-2 transition-all relative ${
+        className={`relative rounded-full border-2 p-3 transition-all ${
           isBookmarked
-            ? "bg-red-50 border-red-200 text-red-500"
-            : "bg-gray-50 border-gray-200 text-gray-400 hover:border-red-200 hover:text-red-400"
-        } ${isBookmarkLoading ? "opacity-50 cursor-not-allowed" : ""}`}
+            ? 'border-red-200 bg-red-50 text-red-500'
+            : 'border-gray-200 bg-gray-50 text-gray-400 hover:border-red-200 hover:text-red-400'
+        } ${isBookmarkLoading ? 'cursor-not-allowed opacity-50' : ''}`}
         whileHover={!isBookmarkLoading ? { scale: 1.1 } : {}}
         whileTap={!isBookmarkLoading ? { scale: 0.9 } : {}}
       >
@@ -86,7 +89,7 @@ export default function RestaurantActions({
         <div className="relative">
           <motion.button
             onClick={() => setShowOwnerMenu(!showOwnerMenu)}
-            className="p-3 rounded-full bg-orange-50 border-2 border-orange-200 text-orange-500 hover:bg-orange-100 transition-all"
+            className="rounded-full border-2 border-orange-200 bg-orange-50 p-3 text-orange-500 transition-all hover:bg-orange-100"
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.9 }}
           >
@@ -97,14 +100,14 @@ export default function RestaurantActions({
             <motion.div
               initial={{ opacity: 0, scale: 0.95, y: -10 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
-              className="absolute right-0 top-14 bg-white rounded-xl shadow-lg border border-gray-200 py-2 min-w-[140px] z-50"
+              className="absolute top-14 right-0 z-50 min-w-[140px] rounded-xl border border-gray-200 bg-white py-2 shadow-lg"
             >
               <button
                 onClick={() => {
                   setShowOwnerMenu(true);
                   setIsEditModalOpen(true);
                 }}
-                className="w-full px-4 py-3 text-left text-sm text-gray-700 hover:bg-gray-50 flex items-center space-x-3"
+                className="flex w-full items-center space-x-3 px-4 py-3 text-left text-sm text-gray-700 hover:bg-gray-50"
               >
                 <HiPencil size={16} />
                 <span>정보 수정</span>
@@ -117,7 +120,7 @@ export default function RestaurantActions({
                 />
               )}
               <button
-                className="w-full px-4 py-3 text-left text-sm text-gray-700 hover:bg-gray-50 flex items-center space-x-3"
+                className="flex w-full items-center space-x-3 px-4 py-3 text-left text-sm text-gray-700 hover:bg-gray-50"
                 onClick={handleDeleteDetail}
               >
                 <HiTrash size={16} /> <span>맛집 삭제</span>

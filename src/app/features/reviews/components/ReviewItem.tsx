@@ -1,9 +1,10 @@
-import { HiStar, HiTrash } from "react-icons/hi";
-import { Review } from "@/app/shared/types/restaurant";
-import Image from "next/image";
-import { BiCheck, BiEdit, BiX } from "react-icons/bi";
-import { useUpdateReview } from "@/app/shared/hooks/queries/useReview";
-import { useState } from "react";
+import { HiStar, HiTrash } from 'react-icons/hi';
+import { Review } from '@/app/shared/types/restaurant';
+import Image from 'next/image';
+import { BiCheck, BiEdit, BiX } from 'react-icons/bi';
+import { useUpdateReview } from '@/app/shared/hooks/queries/useReview';
+import { useState } from 'react';
+import { useToast } from '@/app/shared/hooks/useToast';
 
 interface ReviewItemProps {
   review: Review;
@@ -26,7 +27,7 @@ export default function ReviewItem({
     rating: review.rating,
     photos: review.photos || [],
   });
-
+  const toast = useToast();
   // TODO: 수정하기
   const updateReviewMutate = useUpdateReview();
   const handleEdit = async () => {
@@ -37,10 +38,10 @@ export default function ReviewItem({
         reviewData: newData,
       });
       setIsEditing(false);
-      alert("리뷰가 수정되었습니다! 🎉");
+      toast.success('리뷰가 수정되었습니다! 🎉');
     } catch (error) {
-      console.error("리뷰 등록 실패:", error);
-      alert("리뷰 등록에 실패했습니다. 다시 시도해주세요.");
+      console.error('리뷰 등록 실패:', error);
+      toast.error('리뷰 등록에 실패했습니다. 다시 시도해주세요.');
     }
   };
 
@@ -58,12 +59,12 @@ export default function ReviewItem({
   };
 
   return (
-    <div className="bg-gray-50 rounded-xl p-4 hover:shadow-sm transition-shadow">
-      <div className="flex items-start justify-between mb-3">
+    <div className="rounded-xl bg-gray-50 p-4 transition-shadow hover:shadow-sm">
+      <div className="mb-3 flex items-start justify-between">
         <div className="flex items-center space-x-3">
           {/* 아바타 */}
-          <div className="w-10 h-10 bg-gradient-to-br from-[#1C4E80] to-[#2563eb] rounded-full flex items-center justify-center shadow-sm">
-            <span className="text-white font-bold text-sm">
+          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-[#1C4E80] to-[#2563eb] shadow-sm">
+            <span className="text-sm font-bold text-white">
               {review.userName.charAt(0)}
             </span>
           </div>
@@ -73,13 +74,13 @@ export default function ReviewItem({
                 {review.userName}
               </span>
             </div>
-            <div className="flex items-center space-x-2 mt-1">
+            <div className="mt-1 flex items-center space-x-2">
               <div className="flex">
                 {[...Array(5)].map((_, i) => (
                   <HiStar
                     key={i}
-                    className={`w-4 h-4 ${
-                      i < review.rating ? "text-yellow-400" : "text-gray-200"
+                    className={`h-4 w-4 ${
+                      i < review.rating ? 'text-yellow-400' : 'text-gray-200'
                     }`}
                   />
                 ))}
@@ -95,14 +96,14 @@ export default function ReviewItem({
                 <button
                   onClick={handleEdit}
                   disabled={updateReviewMutate.isPending}
-                  className="p-2 text-green-400 hover:text-green-600 hover:bg-green-50 rounded-lg transition-all disabled:opacity-50"
+                  className="rounded-lg p-2 text-green-400 transition-all hover:bg-green-50 hover:text-green-600 disabled:opacity-50"
                   title="수정 완료"
                 >
                   <BiCheck size={16} />
                 </button>
                 <button
                   onClick={handleCancelEdit}
-                  className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-50 rounded-lg transition-all"
+                  className="rounded-lg p-2 text-gray-400 transition-all hover:bg-gray-50 hover:text-gray-600"
                   title="수정 취소"
                 >
                   <BiX size={16} />
@@ -112,7 +113,7 @@ export default function ReviewItem({
               <>
                 <button
                   onClick={handleStartEdit}
-                  className="p-2 text-blue-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all"
+                  className="rounded-lg p-2 text-blue-400 transition-all hover:bg-blue-50 hover:text-blue-600"
                   title="리뷰 수정"
                 >
                   <BiEdit size={16} />
@@ -120,7 +121,7 @@ export default function ReviewItem({
                 <button
                   onClick={onDelete}
                   disabled={isDeleting}
-                  className="p-2 text-red-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-all disabled:opacity-50"
+                  className="rounded-lg p-2 text-red-400 transition-all hover:bg-red-50 hover:text-red-600 disabled:opacity-50"
                   title="리뷰 삭제"
                 >
                   <HiTrash size={16} />
@@ -132,19 +133,19 @@ export default function ReviewItem({
       </div>
 
       {/* 리뷰 내용 */}
-      <div className="bg-white rounded-lg p-3 ml-13">
+      <div className="ml-13 rounded-lg bg-white p-3">
         {isEditing ? (
           <textarea
             value={newData.content}
             onChange={(e) =>
               setNewData((prev) => ({ ...prev, content: e.target.value }))
             }
-            className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
+            className="w-full resize-none rounded-lg border border-gray-300 p-2 focus:border-transparent focus:ring-2 focus:ring-blue-500"
             rows={3}
             placeholder="리뷰 내용을 입력하세요..."
           />
         ) : (
-          <p className="text-[#2B2B2B] leading-relaxed mb-3">
+          <p className="mb-3 leading-relaxed text-[#2B2B2B]">
             {review.content}
           </p>
         )}
@@ -157,8 +158,8 @@ export default function ReviewItem({
                 key={photoIndex}
                 src={photo}
                 alt={`Review photo ${photoIndex + 1}`}
-                className="object-cover rounded-lg flex-shrink-0 cursor-pointer hover:opacity-80 transition-opacity"
-                onClick={() => window.open(photo, "_blank")}
+                className="flex-shrink-0 cursor-pointer rounded-lg object-cover transition-opacity hover:opacity-80"
+                onClick={() => window.open(photo, '_blank')}
                 width={24}
                 height={24}
               />

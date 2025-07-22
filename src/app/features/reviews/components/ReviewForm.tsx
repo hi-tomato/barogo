@@ -4,6 +4,7 @@ import { CreateReviewRequest } from '@/app/shared/types/restaurant';
 import PhotoUploader from './PhotoUploader';
 import ImageUploader from '@/app/shared/components/ImageUploader';
 import { LoadingSpinner } from '@/app/shared/ui';
+import { useToast } from '@/app/shared/hooks/useToast';
 
 interface ReviewFormProps {
   onSubmit: (reviewData: CreateReviewRequest) => Promise<void>;
@@ -19,10 +20,11 @@ export default function ReviewForm({
   const [rating, setRating] = useState(0);
   const [reviewContent, setReviewContent] = useState('');
   const [uploadedUrls, setUploadedUrls] = useState<string[]>([]);
+  const toast = useToast();
 
   const handleSubmit = async () => {
     if (!rating || !reviewContent.trim()) {
-      alert('별점과 리뷰 내용을 모두 입력해주세요!');
+      toast.error('별점과 리뷰 내용을 모두 입력해주세요!');
       return;
     }
 

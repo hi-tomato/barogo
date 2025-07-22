@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation';
 import Button from '@/app/shared/ui/Button';
 import { RestaurantStatus } from './Status';
 import { useRestaurantSelection } from '@/app/shared/hooks/useRestaurantSelection';
+import { useToast } from '@/app/shared/hooks/useToast';
 
 interface RestaurantPreviewModalProps {
   restaurant: NearbyRestaurant;
@@ -18,17 +19,18 @@ export default function RestaurantPreviewModal({
   onClose,
   onConfirm,
 }: RestaurantPreviewModalProps) {
+  const toast = useToast();
   const router = useRouter();
   const { handleRestaurantSelection, isProcessing, findRegisteredRestaurant } =
     useRestaurantSelection({
       onSuccess: (baropotId) => {
         onClose();
-        alert('바로팟 생성을 완료하였습니다.');
+        toast.success('바로팟 생성을 완료하였습니다.');
         router.push(`/baropot/${baropotId}`);
       },
       onBaropotFound: (baropotId) => {
         onClose();
-        alert('등록된 맛집이 있습니다!');
+        toast.success('등록된 맛집이 있습니다!');
         router.push(`/baropot/${baropotId}`);
       },
       onRegistrationNeeded: () => {
@@ -51,7 +53,7 @@ export default function RestaurantPreviewModal({
   // 맛집 등록 버튼 클릭
   const handleRegisterRestaurant = async () => {
     if (!restaurant.x || !restaurant.y) {
-      alert('위치 정보가 없어서 맛집을 등록할 수 없습니다.');
+      toast.error('위치 정보가 없어서 맛집을 등록할 수 없습니다.');
       return;
     }
     try {

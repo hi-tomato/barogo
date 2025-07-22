@@ -5,9 +5,11 @@ import { motion } from 'framer-motion';
 import { containerVariants, itemVariants } from '@/app/shared/lib/animation';
 import { useRegisterForm } from '@/app/shared/hooks/form/useRegisterForm';
 import SignUpSuccessModal from '../_components/SignUpSuccessModal';
+import { useToast } from '@/app/shared/hooks/useToast';
 
 export default function RegisterForm() {
   const router = useRouter();
+  const toast = useToast();
   const {
     register,
     handleSubmit,

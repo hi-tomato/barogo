@@ -1,4 +1,5 @@
 'use client';
+import { useToast } from '@/app/shared/hooks/useToast';
 import { setAccessToken } from '@/app/shared/lib/authToken';
 import { useAuthStore } from '@/app/shared/store/useAuthStore';
 import { LoadingSpinner } from '@/app/shared/ui';
@@ -9,6 +10,7 @@ export default function KaKaoCallBack() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { initialize } = useAuthStore();
+  const toast = useToast();
 
   useEffect(() => {
     const accessToken = searchParams.get('accessToken');
@@ -17,7 +19,7 @@ export default function KaKaoCallBack() {
         try {
           setAccessToken(accessToken);
           await initialize();
-          alert('카카오 로그인을 성공하였습니다.');
+          toast.success('카카오 로그인을 성공하였습니다.');
           router.push('/main');
         } catch (err) {
           console.error('카카오 로그인을 실패하였습니다.', err);
