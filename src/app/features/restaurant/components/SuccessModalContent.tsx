@@ -36,7 +36,7 @@ export default function SuccessModalContent({
       {/* 버튼들 */}
       <div className="space-y-3">
         <Button
-          text="⚡ 바로팟 만들기"
+          text="바로팟 만들기"
           onClick={onCreateBaropot}
           className="w-full rounded-lg bg-gradient-to-r from-orange-400 to-red-500 py-3 font-medium text-white transition-all hover:shadow-lg"
         />
@@ -44,7 +44,7 @@ export default function SuccessModalContent({
         <Button
           text="메인으로 돌아가기"
           onClick={onCloseModal}
-          className="w-full rounded-lg border border-gray-300 bg-white py-3 font-medium text-gray-700 transition-colors hover:bg-gray-50"
+          className="w-full rounded-lg border border-gray-300 bg-white py-3 font-medium text-gray-900 transition-colors hover:bg-gray-50"
         />
       </div>
     </div>
