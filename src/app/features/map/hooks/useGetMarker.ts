@@ -3,8 +3,7 @@ import { RestaurantCategory } from '@/app/shared/types/enums';
 import { getCategoryDisplayName } from '@/app/shared/lib/kakaoCategory';
 
 const baropotMarkerImage = {
-  src: 'https://cdn-icons-png.flaticon.com/512/684/684908.png', // 바로팟 메인 컬러와 어울리는 아이콘
-  // src: 'https://cdn-icons-png.flaticon.com/512/7976/7976202.png', // 바로팟 전용 마커 (불 아이콘)
+  src: 'https://cdn-icons-png.flaticon.com/512/684/684908.png',
   size: { width: 32, height: 32 },
   options: { offset: { x: 16, y: 32 } },
 };
