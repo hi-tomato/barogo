@@ -1,4 +1,5 @@
 'use client';
+import { useGetBaropotList } from '@/app/shared/hooks/queries/useBaropot';
 import { Input } from '@/app/shared/ui';
 import { useRouter } from 'next/navigation';
 
@@ -14,7 +15,8 @@ export default function MapHeaderBar({
   resultCount,
 }: MapHeaderBarProps) {
   const router = useRouter();
-
+  const { data: baropotList } = useGetBaropotList();
+  // TODO: 바로팟의 현황을 마커의 적용하기.
   return (
     <div className="absolute top-4 right-4 left-4 z-10">
       <div className="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-lg">
@@ -46,7 +48,9 @@ export default function MapHeaderBar({
 
           <div className="text-xs text-gray-500">
             📍 {resultCount}개 맛집 표시 중
-            <span className="ml-2">🔥 {resultCount}개 바로팟 진행중</span>
+            <span className="ml-2">
+              🔥 {baropotList?.length}개 바로팟 진행중
+            </span>
           </div>
         </div>
       </div>
