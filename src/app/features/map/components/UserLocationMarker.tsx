@@ -1,4 +1,4 @@
-import { MapMarker } from "react-kakao-maps-sdk";
+import { MapMarker } from 'react-kakao-maps-sdk';
 
 export default function UserLocationMarker({
   lat,
@@ -10,8 +10,11 @@ export default function UserLocationMarker({
   if (!lat || !lng) return null;
   return (
     <MapMarker position={{ lat, lng }}>
-      <div className="text-center bg-blue-500 text-white px-3 py-1 rounded-full shadow-lg border-2 border-white text-[12px] font-medium">
-        <span>📍 내 위치</span>
+      <div className="relative flex h-20 w-20 items-center justify-center">
+        <div className="absolute h-20 w-20 rounded-full bg-[#1C4E80] opacity-40" />
+        <div className="relative flex h-10 w-10 items-center justify-center rounded-full bg-white shadow">
+          <span className="h-6 w-6 rounded-full bg-[#1C4E80]" />
+        </div>
       </div>
     </MapMarker>
   );
