@@ -1,8 +1,9 @@
 'use client';
 import { useToast } from '@/app/shared/hooks/useToast';
 import { Restaurant } from '@/app/shared/types/restaurant';
-import Button from '@/app/shared/ui/Button';
+// import Button from '@/app/shared/ui/Button';
 import { useRouter } from 'next/navigation';
+import { HiEye, HiLightningBolt, HiPlus } from 'react-icons/hi';
 
 export default function PopupActions({
   restaurant,
@@ -25,20 +26,33 @@ export default function PopupActions({
   };
 
   return (
-    <div className="flex gap-2">
-      <Button
+    <div className="space-y-3">
+      {/* 상세보기 버튼 */}
+      <button
         onClick={handleDetailPage}
-        className="flex-1 rounded-lg bg-gray-100 py-2 text-center text-xs text-gray-700 transition hover:bg-gray-200"
+        className="flex w-full items-center justify-center gap-2 rounded-xl border-2 border-gray-200 bg-white px-4 py-3 text-sm font-medium text-gray-700 transition-all duration-200 hover:border-gray-300 hover:bg-gray-50 hover:shadow-sm active:scale-95"
       >
-        상세보기
-      </Button>
-      {restaurant.hasBaropot && (
-        <Button
+        <HiEye className="h-4 w-4" />
+        <span>상세보기</span>
+      </button>
+
+      {/* 바로팟 버튼 */}
+      {restaurant.hasBaropot ? (
+        <button
           onClick={handleBaropotPage}
-          className="flex-1 rounded-lg bg-gradient-to-r from-orange-400 to-red-500 py-2 text-center text-xs text-white transition hover:shadow-md"
+          className="flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-orange-500 to-red-500 px-4 py-3 text-sm font-semibold text-white transition-all duration-200 hover:from-orange-600 hover:to-red-600 hover:shadow-lg hover:shadow-orange-200 active:scale-95"
         >
-          바로팟 참여 🔥
-        </Button>
+          <HiLightningBolt className="h-4 w-4" />
+          <span>바로팟 참여 🔥</span>
+        </button>
+      ) : (
+        <button
+          onClick={handleBaropotPage}
+          className="flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-blue-500 to-indigo-600 px-4 py-3 text-sm font-semibold text-white transition-all duration-200 hover:from-blue-600 hover:to-indigo-700 hover:shadow-lg hover:shadow-blue-200 active:scale-95"
+        >
+          <HiPlus className="h-4 w-4" />
+          <span>바로팟 만들기</span>
+        </button>
       )}
     </div>
   );
