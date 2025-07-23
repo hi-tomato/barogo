@@ -62,6 +62,6 @@ div[style*='width: 150px'][style*='height: 80px'] {
   height: auto !important;
   position: absolute;
   top: 50%;
-  left: 5 0%;
+  left: 50%;
   transform: translate(-50%, -50%);
 }
