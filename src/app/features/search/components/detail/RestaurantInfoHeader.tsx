@@ -1,8 +1,8 @@
 'use client';
 import { motion } from 'framer-motion';
 import { RestaurantDetail } from '@/app/shared/types/restaurant';
-import { Button } from '@/app/shared/ui';
 import StarRating from '@/app/shared/components/StarRating';
+import { FaLocationDot } from 'react-icons/fa6';
 
 interface RestaurantInfoHeaderProps {
   restaurant: RestaurantDetail;
@@ -36,32 +36,27 @@ export default function RestaurantInfoHeader({
             {restaurant.name}
           </motion.h1>
 
-          <motion.p
+          <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4 }}
+            className="flex items-center gap-1"
           >
             <StarRating rating={Number(avgRating())} />
             <span className="text-sm text-gray-600">{avgRating()}</span>
             <span className="text-sm text-gray-600">
               ({restaurant.reviews.length})
             </span>
-          </motion.p>
+          </motion.div>
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4 }}
           >
-            <div className="min-w-0 flex-1">
-              <div className="truncate text-sm leading-relaxed text-gray-600">
-                {restaurant.address}
+            <div className="mt-2 min-w-0 flex-1">
+              <div className="flex items-center gap-1 truncate text-sm leading-relaxed text-gray-600">
+                <FaLocationDot size={16} /> {restaurant.address}
               </div>
-              <Button
-                text="지도보기 →"
-                variant="ghost"
-                size="sm"
-                className="mt-1 text-sm font-medium text-[#1C4E80]"
-              />
             </div>
           </motion.div>
         </div>
