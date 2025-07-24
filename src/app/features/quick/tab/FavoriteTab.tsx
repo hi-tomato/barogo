@@ -20,7 +20,7 @@ export default function FavoriteTab() {
         </h3>
       </div>
 
-      <div className="space-y-3">
+      <div className="grid-cols1 grid grid-cols-2 gap-4">
         {favoriteRestaurants.map((restaurant, index) => (
           <motion.div
             key={restaurant.id}
