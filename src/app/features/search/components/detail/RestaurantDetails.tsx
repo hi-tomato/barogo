@@ -1,6 +1,6 @@
 'use client';
 import { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { AnimatePresence } from 'framer-motion';
 import { RestaurantDetail } from '@/app/shared/types/restaurant';
 import { HiInformationCircle, HiLocationMarker } from 'react-icons/hi';
 import BasicInfoTab from './tabs/BasicInfoTab';
