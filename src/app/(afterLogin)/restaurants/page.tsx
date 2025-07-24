@@ -1,5 +1,5 @@
 'use client';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Header } from '@/app/shared/ui';
 import { FaFire, FaHeart, FaSearch, FaStar } from 'react-icons/fa';
@@ -23,7 +23,7 @@ export default function RestaurantsPage() {
   const router = useRouter();
   const [activeTab, setActiveTab] = useState<ActiveTab>('explore');
 
-  const renderTabContent = () => {
+  const renderTabContent = useMemo(() => {
     switch (activeTab) {
       case 'explore':
         return <ExploreTab />;
@@ -36,7 +36,8 @@ export default function RestaurantsPage() {
       default:
         return <ExploreTab />;
     }
-  };
+  }, [activeTab]);
+
   return (
     <div className="min-h-screen bg-[#E6EEF5] pt-16 pb-24">
       <Header title="바로팟 만들기" showBack={true} />
@@ -105,7 +106,7 @@ export default function RestaurantsPage() {
 
         {/* 컨텐츠 영역 */}
         <div className="rounded-xl bg-white p-4 shadow-sm">
-          <AnimatePresence mode="wait">{renderTabContent()}</AnimatePresence>
+          <AnimatePresence mode="wait">{renderTabContent}</AnimatePresence>
         </div>
       </div>
     </div>
