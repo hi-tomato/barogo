@@ -1,10 +1,14 @@
 'use client';
 import { NearbyRestaurant } from '@/app/shared/types';
 import { useRouter } from 'next/navigation';
-import Button from '@/app/shared/ui/Button';
 import { RestaurantStatus } from './Status';
 import { useRestaurantSelection } from '@/app/shared/hooks/useRestaurantSelection';
 import { useToast } from '@/app/shared/hooks/useToast';
+import { HiX, HiLocationMarker, HiTag } from 'react-icons/hi';
+import { getCategoryIcon } from '../../nearby/utils/categoryHelpers';
+import RestaurantModalHeader from './searchModal/RestaurantModalHeader';
+import RestaurantInfoCard from './searchModal/RestaurantInfoCard';
+import RestaurantActionButtons from './searchModal/RestaurantActionButtons';
 
 interface RestaurantPreviewModalProps {
   restaurant: NearbyRestaurant;
@@ -71,60 +75,27 @@ export default function RestaurantPreviewModal({
   if (!isOpen) return null;
 
   return (
-    <div className="bg-opacity-50 fixed inset-0 z-50 flex items-center justify-center bg-black p-4">
-      <div className="w-full max-w-sm rounded-xl bg-white p-6">
+    <div className="animate-fadeIn fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm">
+      <div
+        className="animate-slideUp w-full max-w-md overflow-hidden rounded-2xl bg-white shadow-2xl"
+        onClick={(e) => e.stopPropagation()}
+      >
         {/* 헤더 */}
-        <div className="mb-4 flex items-start justify-between">
-          <h3 className="text-lg font-bold">맛집 정보</h3>
-          <Button
-            text="✕"
-            onClick={onClose}
-            className="text-gray-400 transition-colors hover:text-gray-600"
-          />
-        </div>
+        <RestaurantModalHeader restaurant={restaurant} onClose={onClose} />
 
         {/* 맛집 정보 */}
-        <div className="mb-6 space-y-3">
-          <h4 className="text-lg font-semibold">{restaurant.place_name}</h4>
-          <p className="text-sm text-gray-600">{restaurant.category_name}</p>
-          <p className="text-sm text-gray-600">📍 {restaurant.address_name}</p>
-          {restaurant.road_address_name && (
-            <p className="text-sm text-gray-500">
-              🛣️ {restaurant.road_address_name}
-            </p>
-          )}
-          {restaurant.phone && (
-            <p className="text-sm text-gray-600">📞 {restaurant.phone}</p>
-          )}
-        </div>
+        <div className="space-y-6 p-6">
+          <RestaurantInfoCard restaurant={restaurant} />
 
-        {/* Action Buttons - 조건별 렌더링 */}
-        <div className="space-y-3">
-          {/* 로딩 중일 때 */}
-          {isProcessing && (
-            <RestaurantStatus type="isLoading" onClose={onClose} />
-          )}
-
-          {/* 서버에 데이터가 있을 때 - 상세보기 + 바로팟 만들기 */}
-          {!isProcessing && hasServerData && (
-            <RestaurantStatus
-              type="hasServerData"
-              onClose={onClose}
-              onDetailView={handleDetailView}
-              onCreateBaropot={handleCreateBaropot}
-            />
-          )}
-
-          {/* 서버에 데이터가 없을 때 - 맛집 등록 + 바로팟 만들기 */}
-          {!isProcessing && !hasServerData && (
-            <RestaurantStatus
-              type="notServerData"
-              onClose={onClose}
-              onRegisterRestaurant={handleRegisterRestaurant}
-              onCreateBaropot={handleCreateBaropot}
-              isRegistering={isProcessing}
-            />
-          )}
+          {/* Action Buttons */}
+          <RestaurantActionButtons
+            isProcessing={isProcessing}
+            hasServerData={hasServerData}
+            onClose={onClose}
+            handleDetailView={handleDetailView}
+            handleCreateBaropot={handleCreateBaropot}
+            handleRegisterRestaurant={handleRegisterRestaurant}
+          />
         </div>
       </div>
     </div>
