@@ -1,5 +1,5 @@
 'use client';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { AnimatePresence } from 'framer-motion';
 import { RestaurantDetail } from '@/app/shared/types/restaurant';
 import { HiInformationCircle, HiLocationMarker } from 'react-icons/hi';
@@ -22,7 +22,7 @@ export default function RestaurantDetails({
 }: RestaurantDetailsProps) {
   const [activeTab, setActiveTab] = useState<TabType>('basic');
 
-  const renderContent = () => {
+  const renderContent = useMemo(() => {
     switch (activeTab) {
       case 'basic':
         return <BasicInfoTab restaurant={restaurant} />;
@@ -31,7 +31,7 @@ export default function RestaurantDetails({
       default:
         return <BasicInfoTab restaurant={restaurant} />;
     }
-  };
+  }, [activeTab, restaurant]);
 
   return (
     <div className="px-4">
@@ -58,7 +58,7 @@ export default function RestaurantDetails({
         </div>
       </div>
 
-      <AnimatePresence mode="wait">{renderContent()}</AnimatePresence>
+      <AnimatePresence mode="wait">{renderContent}</AnimatePresence>
     </div>
   );
 }
