@@ -21,14 +21,6 @@ const exploreOptions = [
     path: '/nearby',
     color: 'bg-green-50 border-green-200',
   },
-  {
-    id: 'popular',
-    title: '인기 맛집',
-    description: '사람들이 많이 찾는 맛집',
-    icon: <HiFire className="text-orange-500" size={20} />,
-    path: '/popular',
-    color: 'bg-orange-50 border-orange-200',
-  },
 ];
 
 export default function ExploreTab() {
