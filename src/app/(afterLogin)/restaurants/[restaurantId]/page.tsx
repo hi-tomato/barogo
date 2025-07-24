@@ -31,7 +31,6 @@ export default function RestaurantDetailPage() {
 
   return (
     <div className="min-h-screen bg-[#E6EEF5] pb-24">
-      {/* <RestaurantHeader restaurant={restaurant} /> */}
       <RestaurantImages images={restaurant.photos} />
       <RestaurantInfo
         restaurant={restaurant}
@@ -39,7 +38,6 @@ export default function RestaurantDetailPage() {
       />
       <RestaurantReviews restaurantId={restaurantId} currentUserId={user?.id} />
       <RestaurantSection />
-      {/* <RestaurantMap /> */}
     </div>
   );
 }
