@@ -34,7 +34,7 @@ export default function RestaurantDetails({
   };
 
   return (
-    <div className="px-4 py-6">
+    <div className="px-4">
       {/* 탭 네비게이션 */}
       <div className="mb-6">
         <div className="flex space-x-1 rounded-2xl bg-gray-100 p-1">

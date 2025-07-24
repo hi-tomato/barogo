@@ -61,74 +61,77 @@ export default function RestaurantActions({
     addBookmarkMutation.isPending || removeBookmarkMutation.isPending;
 
   return (
-    <div className="ml-4 flex items-center space-x-2">
-      {/* 북마크 버튼 */}
-      <motion.button
-        onClick={handleBookmarkToggle}
-        disabled={isBookmarkLoading}
-        className={`relative rounded-full border-2 p-3 transition-all ${
-          isBookmarked
-            ? 'border-red-200 bg-red-50 text-red-500'
-            : 'border-gray-200 bg-gray-50 text-gray-400 hover:border-red-200 hover:text-red-400'
-        } ${isBookmarkLoading ? 'cursor-not-allowed opacity-50' : ''}`}
-        whileHover={!isBookmarkLoading ? { scale: 1.1 } : {}}
-        whileTap={!isBookmarkLoading ? { scale: 0.9 } : {}}
-      >
-        {bookmarked ? (
-          <FaHeartCircleCheck
-            className="cursor-pointer text-red-400"
-            size={26}
-          />
-        ) : (
-          <FaHeartCircleXmark className="cursor-pointer" size={26} />
-        )}
-      </motion.button>
-
-      {/* 소유자 메뉴 */}
-      {isOwner && (
-        <div className="relative">
-          <motion.button
-            onClick={() => setShowOwnerMenu(!showOwnerMenu)}
-            className="rounded-full border-2 border-orange-200 bg-orange-50 p-3 text-orange-500 transition-all hover:bg-orange-100"
-            whileHover={{ scale: 1.1 }}
-            whileTap={{ scale: 0.9 }}
-          >
-            <HiDotsVertical size={20} />
-          </motion.button>
-
-          {showOwnerMenu && (
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95, y: -10 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              className="absolute top-14 right-0 z-50 min-w-[140px] rounded-xl border border-gray-200 bg-white py-2 shadow-lg"
-            >
-              <button
-                onClick={() => {
-                  setShowOwnerMenu(true);
-                  setIsEditModalOpen(true);
-                }}
-                className="flex w-full items-center space-x-3 px-4 py-3 text-left text-sm text-gray-700 hover:bg-gray-50"
-              >
-                <HiPencil size={16} />
-                <span>정보 수정</span>
-              </button>
-              {isEditModalOpen && (
-                <EditRestaurantModal
-                  restaurant={restaurant}
-                  isOpen={isEditModalOpen}
-                  onClose={() => setIsEditModalOpen(false)}
-                />
-              )}
-              <button
-                className="flex w-full items-center space-x-3 px-4 py-3 text-left text-sm text-gray-700 hover:bg-gray-50"
-                onClick={handleDeleteDetail}
-              >
-                <HiTrash size={16} /> <span>맛집 삭제</span>
-              </button>
-            </motion.div>
+    <div className="flex flex-col gap-4">
+      <div className="flex items-center gap-2 px-4 py-6">
+        <motion.button
+          onClick={handleBookmarkToggle}
+          disabled={isBookmarkLoading}
+          className={`relative rounded-full border-2 p-3 transition-all ${
+            isBookmarked
+              ? 'border-red-200 bg-red-50 text-red-500'
+              : 'border-gray-200 bg-gray-50 text-gray-400 hover:border-red-200 hover:text-red-400'
+          } ${isBookmarkLoading ? 'cursor-not-allowed opacity-50' : ''}`}
+          whileHover={!isBookmarkLoading ? { scale: 1.1 } : {}}
+          whileTap={!isBookmarkLoading ? { scale: 0.9 } : {}}
+        >
+          {bookmarked ? (
+            <FaHeartCircleCheck
+              className="cursor-pointer text-red-400"
+              size={26}
+            />
+          ) : (
+            <FaHeartCircleXmark className="cursor-pointer" size={26} />
           )}
-        </div>
-      )}
+        </motion.button>
+
+        {/* 소유자 메뉴 */}
+        {isOwner && (
+          <div className="relative">
+            <motion.button
+              onClick={() => setShowOwnerMenu(!showOwnerMenu)}
+              className="rounded-full border-2 border-orange-200 bg-orange-50 p-3 text-orange-500 transition-all hover:bg-orange-100"
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.9 }}
+            >
+              <HiDotsVertical size={20} />
+            </motion.button>
+
+            {showOwnerMenu && (
+              <motion.div
+                initial={{ opacity: 0, scale: 0.95, y: -10 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                className="absolute top-14 right-0 z-50 min-w-[140px] rounded-xl border border-gray-200 bg-white py-2 shadow-lg"
+              >
+                <button
+                  onClick={() => {
+                    setShowOwnerMenu(true);
+                    setIsEditModalOpen(true);
+                  }}
+                  className="flex w-full items-center space-x-3 px-4 py-3 text-left text-sm text-gray-700 hover:bg-gray-50"
+                >
+                  <HiPencil size={16} />
+                  <span>정보 수정</span>
+                </button>
+                {isEditModalOpen && (
+                  <EditRestaurantModal
+                    restaurant={restaurant}
+                    isOpen={isEditModalOpen}
+                    onClose={() => setIsEditModalOpen(false)}
+                  />
+                )}
+                <button
+                  className="flex w-full items-center space-x-3 px-4 py-3 text-left text-sm text-gray-700 hover:bg-gray-50"
+                  onClick={handleDeleteDetail}
+                >
+                  <HiTrash size={16} /> <span>맛집 삭제</span>
+                </button>
+              </motion.div>
+            )}
+          </div>
+        )}
+      </div>
+
+      {/* 여기에 다른 컨텐츠가 있다면 추가 */}
     </div>
   );
 }
