@@ -2,6 +2,7 @@
 import { motion } from 'framer-motion';
 import { RestaurantDetail } from '@/app/shared/types/restaurant';
 import { Button } from '@/app/shared/ui';
+import StarRating from '@/app/shared/components/StarRating';
 
 interface RestaurantInfoHeaderProps {
   restaurant: RestaurantDetail;
@@ -10,6 +11,18 @@ interface RestaurantInfoHeaderProps {
 export default function RestaurantInfoHeader({
   restaurant,
 }: RestaurantInfoHeaderProps) {
+  const avgRating = () => {
+    const reviews = restaurant.reviews;
+
+    if (reviews && reviews.length > 0) {
+      const result =
+        reviews.reduce((acc, cur) => acc + cur.rating, 0) / reviews.length;
+
+      return result.toFixed(1);
+    }
+    return '0';
+  };
+
   return (
     <div className="px-4 py-6">
       <div className="mb-4 flex items-start justify-between">
@@ -23,6 +36,17 @@ export default function RestaurantInfoHeader({
             {restaurant.name}
           </motion.h1>
 
+          <motion.p
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.4 }}
+          >
+            <StarRating rating={Number(avgRating())} />
+            <span className="text-sm text-gray-600">{avgRating()}</span>
+            <span className="text-sm text-gray-600">
+              ({restaurant.reviews.length})
+            </span>
+          </motion.p>
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
