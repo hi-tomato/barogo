@@ -1,8 +1,8 @@
-import { useQuery } from "@tanstack/react-query";
-import { useState, useEffect } from "react";
-import { queryKeys } from "@/app/shared/lib/queryKeys";
-import { NearbyRestaurant } from "@/app/shared/types";
-import { searchRestaurants } from "../api/searchRestaurantService";
+import { useQuery } from '@tanstack/react-query';
+import { useState, useEffect } from 'react';
+import { queryKeys } from '@/app/shared/lib/queryKeys';
+import { NearbyRestaurant } from '@/app/shared/types';
+import { searchRestaurants } from '../api/searchRestaurantService';
 
 interface UseRestaurantSearchProps {
   lat?: number;
@@ -10,8 +10,9 @@ interface UseRestaurantSearchProps {
 }
 
 export const useRestaurantSearch = ({ lat, lng }: UseRestaurantSearchProps) => {
-  const [query, setQuery] = useState("");
-  const [debouncedQuery, setDebouncedQuery] = useState("");
+  const [query, setQuery] = useState('');
+  const [debouncedQuery, setDebouncedQuery] = useState('');
+  const [useLocation, setUseLocation] = useState(false);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -27,13 +28,19 @@ export const useRestaurantSearch = ({ lat, lng }: UseRestaurantSearchProps) => {
     refetch,
   } = useQuery({
     queryKey: queryKeys.restaurant.search(debouncedQuery, lat!, lng),
-    queryFn: async () => searchRestaurants({ query: debouncedQuery, lat, lng }),
+    queryFn: async () =>
+      searchRestaurants({
+        query: debouncedQuery,
+        lat,
+        lng,
+        useLocation,
+      }),
     enabled: !!debouncedQuery.trim(),
   });
 
   const clearSearch = () => {
-    setQuery("");
-    setDebouncedQuery("");
+    setQuery('');
+    setDebouncedQuery('');
   };
 
   return {
@@ -41,6 +48,8 @@ export const useRestaurantSearch = ({ lat, lng }: UseRestaurantSearchProps) => {
     setQuery,
     result: result as NearbyRestaurant[],
     loading,
+    useLocation,
+    setUseLocation,
     error: error as Error | null,
     clearSearch,
     refetch,
