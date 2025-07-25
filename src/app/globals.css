@@ -65,3 +65,13 @@ div[style*='width: 150px'][style*='height: 80px'] {
   left: 50%;
   transform: translate(-50%, -50%);
 }
+
+/* 스크롤바 숨기기 */
+.scrollbar-hide {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none; /* Chrome, Safari and Opera */
+}
