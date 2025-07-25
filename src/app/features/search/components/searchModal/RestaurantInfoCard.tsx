@@ -41,7 +41,7 @@ export default function RestaurantInfoCard({
           content={restaurant.address_name}
           subContent={
             restaurant.road_address_name
-              ? `🛣️ ${restaurant.road_address_name}`
+              ? `${restaurant.road_address_name}`
               : undefined
           }
           animationDelay="0.2s"
