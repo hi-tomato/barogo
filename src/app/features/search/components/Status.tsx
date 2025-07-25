@@ -1,6 +1,14 @@
-import Button from '@/app/shared/ui/Button';
 import { Status } from '@/app/shared/ui';
+import { cn } from '@/app/shared/lib/cn';
 import React from 'react';
+import {
+  HiPlus,
+  HiArrowLeft,
+  HiLightningBolt,
+  HiCheck,
+  HiClock,
+} from 'react-icons/hi';
+import { buttonStyles, badgeStyles } from '../util/confirmModal';
 
 interface RestaurantStatusProps {
   type: 'isLoading' | 'hasServerData' | 'notServerData';
@@ -23,68 +31,132 @@ export const RestaurantStatus = ({
     switch (type) {
       case 'isLoading':
         return (
-          <div className="flex space-x-3">
-            <Button
-              text="다시 선택"
-              onClick={onClose}
-              className="flex-1 rounded-lg border border-gray-300 px-4 py-3 text-gray-700 transition-colors hover:bg-gray-50"
+          <div className="space-y-4">
+            <Status
+              type="loading"
+              title="정보를 확인하고 있습니다..."
+              size="md"
+              variant="inline"
             />
-            <button
-              disabled
-              className="flex-1 cursor-not-allowed rounded-lg bg-gray-300 px-4 py-3 text-gray-500"
-            >
-              확인 중...
-            </button>
+
+            <div className="flex space-x-3">
+              <button
+                onClick={onClose}
+                className={cn(
+                  buttonStyles.base,
+                  buttonStyles.size.md,
+                  buttonStyles.variant.outline
+                )}
+              >
+                <HiArrowLeft size={18} />
+                <span>다시 선택</span>
+              </button>
+
+              <button
+                disabled
+                className={cn(
+                  buttonStyles.base,
+                  buttonStyles.size.md,
+                  buttonStyles.variant.secondary
+                )}
+              >
+                <HiClock size={18} />
+                <span>확인 중...</span>
+              </button>
+            </div>
           </div>
         );
 
       case 'hasServerData':
         return (
-          <>
-            <button
-              onClick={onDetailView}
-              className="flex w-full items-center justify-center space-x-2 rounded-lg bg-[#1C4E80] px-4 py-3 text-white transition-colors hover:bg-[#154066]"
-            >
-              <span>상세페이지</span>
-            </button>
+          <div className="space-y-4">
+            <div className={badgeStyles.success}>
+              <HiCheck size={20} className="text-green-600" />
+              <span className="font-medium text-green-700">
+                등록된 맛집입니다!
+              </span>
+            </div>
 
-            <div className="flex space-x-3">
+            <div className="flex gap-2">
+              <button
+                onClick={onDetailView}
+                className={cn(
+                  buttonStyles.base,
+                  buttonStyles.size.lg,
+                  buttonStyles.variant.primary,
+                  buttonStyles.fullWidth
+                )}
+              >
+                <span>상세페이지 보기</span>
+              </button>
+
               <button
                 onClick={onCreateBaropot}
-                className="flex flex-1 items-center justify-center space-x-2 rounded-lg bg-gradient-to-r from-orange-400 to-red-500 px-4 py-3 text-white transition-all hover:shadow-md"
+                className={cn(
+                  buttonStyles.base,
+                  buttonStyles.size.lg,
+                  buttonStyles.variant.warning,
+                  buttonStyles.fullWidth
+                )}
               >
                 <span>바로팟 만들기</span>
               </button>
             </div>
-          </>
+          </div>
         );
 
       case 'notServerData':
         return (
-          <>
-            <button
-              onClick={onRegisterRestaurant}
-              disabled={isRegistering}
-              className="flex w-full items-center justify-center space-x-2 rounded-lg bg-green-600 px-4 py-3 text-white transition-colors hover:bg-green-700 disabled:opacity-50"
-            >
-              <span>{isRegistering ? '등록 중...' : '맛집 등록하기'}</span>
-            </button>
-
-            <div className="flex space-x-3">
-              <Button
-                text="다시 선택"
-                onClick={onClose}
-                className="flex-1 rounded-lg border border-gray-300 px-4 py-3 text-gray-700 transition-colors hover:bg-gray-50"
-              />
-              <button
-                onClick={onCreateBaropot}
-                className="flex flex-1 items-center justify-center space-x-2 rounded-lg bg-gradient-to-r from-orange-400 to-red-500 px-4 py-3 text-white transition-all hover:shadow-md"
-              >
-                <span>⚡</span>
-                <span>바로팟 만들기</span>
-              </button>
+          <div className="space-y-4">
+            <div className={badgeStyles.info}>
+              <HiPlus size={20} className="text-blue-600" />
+              <span className="font-medium text-blue-700">
+                새로운 맛집을 등록해보세요!
+              </span>
             </div>
-          </>
+
+            <div className="grid grid-cols-1 gap-2 md:grid-cols-2">
+              {/* 맛집 등록 버튼 */}
+              <button
+                onClick={onRegisterRestaurant}
+                disabled={isRegistering}
+                className={cn(
+                  buttonStyles.base,
+                  buttonStyles.size.lg,
+                  buttonStyles.variant.success,
+                  buttonStyles.fullWidth
+                )}
+              >
+                {isRegistering ? (
+                  <>
+                    <div className="h-5 w-5 animate-spin rounded-full border-b-2 border-white"></div>
+                    <span>등록 중...</span>
+                  </>
+                ) : (
+                  <>
+                    <HiPlus size={20} />
+                    <span>맛집 등록하기</span>
+                  </>
+                )}
+              </button>
+
+              {/* 하단 버튼들 */}
+              <div className="flex space-x-3">
+                <button
+                  onClick={onCreateBaropot}
+                  className={cn(
+                    buttonStyles.base,
+                    buttonStyles.size.md,
+                    buttonStyles.variant.warning,
+                    buttonStyles.fullWidth
+                  )}
+                >
+                  <HiLightningBolt size={18} />
+                  <span>바로팟 만들기</span>
+                </button>
+              </div>
+            </div>
+          </div>
         );
 
       default:
@@ -93,40 +165,4 @@ export const RestaurantStatus = ({
   };
 
   return <div className="space-y-3">{renderContent()}</div>;
-};
-
-// 검색 관련
-interface SearchStatusProps {
-  type: 'loading' | 'error' | 'emptyResults';
-  error?: string;
-  query?: string;
-}
-export const SearchStatus = ({ type, error, query }: SearchStatusProps) => {
-  if (type === 'loading') {
-    return <Status type="loading" title="검색 중..." size="lg" />;
-  }
-  if (type === 'error') {
-    return (
-      <Status
-        type="error"
-        icon="⚠️"
-        title="검색 오류"
-        message={error}
-        className="rounded-xl border border-red-200 bg-red-50 p-4"
-        size="md"
-      />
-    );
-  }
-  if (type === 'emptyResults') {
-    return (
-      <Status
-        type="empty"
-        icon="🔍"
-        title="검색에 대한 등록된 결과가 없습니다."
-        message="다른 키워드로 검색해보세요"
-        size="lg"
-      />
-    );
-  }
-  return null;
 };
