@@ -34,7 +34,7 @@ export const SearchStatus = ({ type, error, query }: SearchStatusProps) => {
       <div className="p-8 text-center">
         <Status
           type="empty"
-          icon="��"
+          icon="📍"
           title="검색에 대한 등록된 결과가 없습니다."
           message="다른 키워드로 검색해보세요"
           size="lg"
