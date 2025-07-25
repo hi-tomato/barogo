@@ -14,6 +14,8 @@ import { CreateRestaurantRequest } from '@/app/shared/types/restaurant';
 import ImageUploader from '@/app/shared/components/ImageUploader';
 import CreateFormActions from './CreateFormActions';
 import { useToast } from '@/app/shared/hooks/useToast';
+import Modal from '@/app/shared/ui/Modal';
+import SuccessModalContent from './SuccessModalContent';
 
 export default function CreateFormContainer() {
   const router = useRouter();
@@ -30,6 +32,11 @@ export default function CreateFormContainer() {
     category: '',
   });
   const [uploadUrls, setUploadUrls] = useState<string[]>([]);
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [createdRestaurant, setCreatedRestaurant] = useState<{
+    id: number;
+    name: string;
+  } | null>(null);
 
   const toast = useToast();
 
@@ -116,7 +123,12 @@ export default function CreateFormContainer() {
       onSuccess: (response) => {
         console.log('맛집 생성 성공:', response);
         sessionStorage.removeItem('selectedRestaurant');
-        router.push('/main');
+
+        setCreatedRestaurant({
+          id: response.id,
+          name: response.name,
+        });
+        setShowSuccessModal(true);
       },
       onError: (error) => {
         console.error('맛집 생성 실패:', error);
@@ -126,6 +138,19 @@ export default function CreateFormContainer() {
   };
 
   const isFormValid = formData.description.trim() && formData.category;
+
+  // Modal Handler
+  const handleCreateBaropot = () => {
+    if (createdRestaurant) {
+      setShowSuccessModal(false);
+      router.push(`/restaurants/${createdRestaurant.id}/baropot/create`);
+    }
+  };
+
+  const handleCloseModal = () => {
+    setShowSuccessModal(false);
+    router.push('/main');
+  };
 
   if (isLoading) return <CreateStatus type="isLoading" />;
   if (!restaurant) return <CreateStatus type="notFound" />;
@@ -156,6 +181,14 @@ export default function CreateFormContainer() {
         />
         <CreateStatus type="basicMessage" />
       </form>
+
+      <Modal isOpen={showSuccessModal} onClose={handleCloseModal}>
+        <SuccessModalContent
+          restaurantName={createdRestaurant?.name || ''}
+          onCloseModal={handleCloseModal}
+          onCreateBaropot={handleCreateBaropot}
+        />
+      </Modal>
     </div>
   );
 }

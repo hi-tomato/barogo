@@ -96,11 +96,12 @@ export function useBaropotFormLogic({
 
     //TODO: 실제 API 호출
     createBaropot.mutate(submitData, {
-      onSuccess: () => {
+      onSuccess: async () => {
         toast.success('✅ 바로팟이 생성되었습니다!');
         router.push('/baropot');
       },
-      onError: () => {
+      onError: (error) => {
+        console.error('바로팟 생성 에러:', error);
         toast.error('바로팟 생성에 실패했습니다. 다시 시도해주세요.');
       },
     });
