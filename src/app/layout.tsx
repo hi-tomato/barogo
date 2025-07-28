@@ -2,6 +2,25 @@ import Script from 'next/script';
 import './globals.css';
 import QueryProvider from './shared/providers/QueryProvider';
 import ErrorBoundaryProvider from '@/app/shared/providers/ErrorBoundaryProvider';
+import { Metadata, Viewport } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Barogo',
+  description: '새로운 사람들과 맛집을 함께 즐겨보세요!',
+  keywords: '맛집, 공유, 바로팟, 음식, 모임',
+  authors: [{ name: 'Barogo Team' }],
+  openGraph: {
+    title: 'Barogo',
+    description: '새로운 사람들과 맛집을 함께 즐겨보세요!',
+    type: 'website',
+  },
+};
+
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  themeColor: '#1076dd',
+};
 
 export default function RootLayout({
   children,
