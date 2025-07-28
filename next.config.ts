@@ -22,7 +22,11 @@ const nextConfig: NextConfig = {
   },
   // 성능 최적화 설정
   experimental: {
-    optimizePackageImports: ['react-icons', 'framer-motion'],
+    optimizePackageImports: [
+      'react-icons',
+      'framer-motion',
+      'react-kakao-maps-sdk',
+    ],
   },
   // 번들 최적화
   webpack: (config, { dev, isServer }) => {
