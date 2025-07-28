@@ -1,4 +1,3 @@
-'use client';
 import { RestaurantDetail } from '@/app/shared/types/restaurant';
 import RestaurantInfoHeader from './RestaurantInfoHeader';
 import RestaurantActions from './RestaurantActions';
