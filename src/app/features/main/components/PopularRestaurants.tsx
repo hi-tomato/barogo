@@ -2,11 +2,12 @@
 import { useRestaurantList } from '@/app/shared/hooks/queries/useRestaurant';
 import { LoadingSpinner } from '@/app/shared/ui';
 import Link from 'next/link';
+import Image from 'next/image';
 
 export default function PopularRestaurants() {
   const { data: restaurants = [], isLoading } = useRestaurantList();
 
-  const popularRestaurants = restaurants.slice(0, 8);
+  const popularRestaurants = restaurants.slice(0, 4);
 
   return (
     <div className="mb-6">
@@ -34,12 +35,16 @@ export default function PopularRestaurants() {
                   className="block"
                 >
                   <div className="rounded-xl border border-gray-100 bg-white p-4 shadow-sm transition-all duration-200 hover:shadow-md">
-                    <div className="mb-3 flex h-24 w-full items-center justify-center rounded-lg bg-gray-200">
+                    <div className="relative mb-3 h-24 w-full overflow-hidden rounded-lg bg-gray-200">
                       {restaurant.photos && restaurant.photos.length > 0 ? (
-                        <img
+                        <Image
                           src={restaurant.photos[0]}
                           alt={restaurant.name}
-                          className="h-full w-full rounded-lg object-cover"
+                          fill
+                          sizes="(max-width: 1024px) calc(50vw - 24px), calc(25vw - 18px)"
+                          className="object-cover"
+                          priority={index < 2}
+                          placeholder="empty"
                         />
                       ) : (
                         <span className="text-2xl">🏪</span>
