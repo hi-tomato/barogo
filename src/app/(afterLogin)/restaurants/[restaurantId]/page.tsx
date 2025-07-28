@@ -2,13 +2,30 @@
 import { useParams } from 'next/navigation';
 import { useRestaurantDetail } from '@/app/shared/hooks/queries/useRestaurant';
 import { useAuthStore } from '@/app/shared/store/useAuthStore';
-// import RestaurantHeader from '@/app/features/search/components/detail/RestaurantHeader';
-import RestaurantImages from '@/app/features/search/components/detail/RestaurantImages';
-import RestaurantInfo from '@/app/features/search/components/detail/RestaurantInfo';
-import RestaurantReviews from '@/app/features/reviews/RestaurantReviews';
-import RestaurantSection from '@/app/features/search/components/detail/RestaurantSection';
-// import RestaurantMap from '@/app/features/search/components/detail/RestaurantMap';
+import { RestaurantImage } from '@/app/features/search/components/detail/RestaurantImages';
 import { StateDisplay } from '@/app/shared/ui';
+import dynamic from 'next/dynamic';
+
+const RestaurantInfo = dynamic(
+  () => import('@/app/features/search/components/detail/RestaurantInfo'),
+  {
+    ssr: false,
+  }
+);
+
+const RestaurantReviews = dynamic(
+  () => import('@/app/features/reviews/RestaurantReviews'),
+  {
+    ssr: false,
+  }
+);
+
+const RestaurantSection = dynamic(
+  () => import('@/app/features/search/components/detail/RestaurantSection'),
+  {
+    ssr: false,
+  }
+);
 
 export default function RestaurantDetailPage() {
   const params = useParams<{ restaurantId: string }>();
@@ -31,7 +48,7 @@ export default function RestaurantDetailPage() {
 
   return (
     <div className="min-h-screen bg-[#E6EEF5] pb-24">
-      <RestaurantImages images={restaurant.photos} />
+      <RestaurantImage images={restaurant.photos} />
       <RestaurantInfo
         restaurant={restaurant}
         isOwner={restaurant.isWrittenByMe}
