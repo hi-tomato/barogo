@@ -1,5 +1,7 @@
 import Link from 'next/link';
-import { BiCloudLightning, BiHeart, BiMapPin } from 'react-icons/bi';
+import { BiCloudLightning } from 'react-icons/bi';
+import { BiHeart } from 'react-icons/bi';
+import { BiMapPin } from 'react-icons/bi';
 import { BiMap } from 'react-icons/bi';
 import { BiSearch } from 'react-icons/bi';
 import { BsArrowRight } from 'react-icons/bs';
