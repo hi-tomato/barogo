@@ -5,11 +5,15 @@ import { useAuthStore } from '@/app/shared/store/useAuthStore';
 import { RestaurantImage } from '@/app/features/search/components/detail/RestaurantImages';
 import { StateDisplay } from '@/app/shared/ui';
 import dynamic from 'next/dynamic';
+import { Suspense } from 'react';
 
 const RestaurantInfo = dynamic(
   () => import('@/app/features/search/components/detail/RestaurantInfo'),
   {
-    ssr: false,
+    ssr: true,
+    loading: () => (
+      <div className="h-32 animate-pulse rounded-lg bg-gray-100" />
+    ),
   }
 );
 
@@ -17,16 +21,21 @@ const RestaurantReviews = dynamic(
   () => import('@/app/features/reviews/RestaurantReviews'),
   {
     ssr: false,
+    loading: () => (
+      <div className="h-48 animate-pulse rounded-lg bg-gray-100" />
+    ),
   }
 );
 
 const RestaurantSection = dynamic(
   () => import('@/app/features/search/components/detail/RestaurantSection'),
   {
-    ssr: false,
+    ssr: true,
+    loading: () => (
+      <div className="h-24 animate-pulse rounded-lg bg-gray-100" />
+    ),
   }
 );
-
 export default function RestaurantDetailPage() {
   const params = useParams<{ restaurantId: string }>();
   const { user } = useAuthStore();
@@ -49,12 +58,28 @@ export default function RestaurantDetailPage() {
   return (
     <div className="min-h-screen bg-[#E6EEF5] pb-24">
       <RestaurantImage images={restaurant.photos} />
-      <RestaurantInfo
-        restaurant={restaurant}
-        isOwner={restaurant.isWrittenByMe}
-      />
-      <RestaurantReviews restaurantId={restaurantId} currentUserId={user?.id} />
-      <RestaurantSection />
+      <Suspense
+        fallback={<div className="h-32 animate-pulse rounded-lg bg-gray-100" />}
+      >
+        <RestaurantInfo
+          restaurant={restaurant}
+          isOwner={restaurant.isWrittenByMe}
+        />
+      </Suspense>
+      <Suspense
+        fallback={<div className="h-48 animate-pulse rounded-lg bg-gray-100" />}
+      >
+        <RestaurantReviews
+          restaurantId={restaurantId}
+          currentUserId={user?.id}
+        />
+      </Suspense>
+
+      <Suspense
+        fallback={<div className="h-24 animate-pulse rounded-lg bg-gray-100" />}
+      >
+        <RestaurantSection />
+      </Suspense>
     </div>
   );
 }
