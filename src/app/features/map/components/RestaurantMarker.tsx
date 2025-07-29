@@ -1,5 +1,6 @@
 import { getMarkerImage } from '@/app/features/map/hooks/useGetMarker';
 import { Restaurant } from '@/app/shared/types/restaurant';
+import { memo } from 'react';
 import { MapMarker } from 'react-kakao-maps-sdk';
 
 interface RestaurantMarkerProps {
@@ -7,10 +8,7 @@ interface RestaurantMarkerProps {
   onClick: () => void;
 }
 
-export default function RestaurantMarker({
-  restaurant,
-  onClick,
-}: RestaurantMarkerProps) {
+function RestaurantMarker({ restaurant, onClick }: RestaurantMarkerProps) {
   const markerImage = getMarkerImage(restaurant);
   return (
     <MapMarker
@@ -20,3 +18,5 @@ export default function RestaurantMarker({
     />
   );
 }
+
+export default memo(RestaurantMarker);
