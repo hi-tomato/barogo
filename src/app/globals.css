@@ -64,7 +64,7 @@ body {
   animation: float-2 infinite ease-in-out;
 }
 
-/* 카카오맵 Marker 크기 조절 */
+/* 카카오 지도 타일  */
 div[style*='width: 150px'][style*='height: 80px'] {
   width: auto !important;
   height: auto !important;
@@ -82,4 +82,22 @@ div[style*='width: 150px'][style*='height: 80px'] {
 
 .scrollbar-hide::-webkit-scrollbar {
   display: none; /* Chrome, Safari and Opera */
+}
+
+/* 카카오 지도 성능 최적화 */
+.map-container {
+  content-visibility: auto;
+  contain: layout style paint;
+}
+
+/* 지도 타일 로딩 최적화 */
+.kakao-map {
+  will-change: transform;
+  transform: translateZ(0);
+}
+
+/* 지도 마커 최적화 */
+.map-marker {
+  contain: layout style paint;
+  will-change: transform;
 }

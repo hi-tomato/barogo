@@ -31,6 +31,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ko">
+      <head>
+        <link rel="preconnect" href="http://mts.daumcdn.net" />
+        <link rel="dns-prefetch" href="http://mts.daumcdn.net" />
+      </head>
       <body>
         <ErrorBoundaryProvider>
           <QueryProvider>
