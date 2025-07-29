@@ -1,13 +1,23 @@
 'use client';
-import { useMemo, useState } from 'react';
+import { Suspense, useMemo, useState } from 'react';
 import MapHeaderBar from './MapHeaderBar';
-import KakaoMapView from './KakaoMapView';
 
 import { useFilteredRestaurants } from '@/app/features/map/hooks/useFilteredRestaurants';
 import { Restaurant } from '@/app/shared/types/restaurant';
 import { useRestaurantList } from '@/app/shared/hooks/queries/useRestaurant';
 import { useGetBaropotList } from '@/app/shared/hooks/queries/useBaropot';
 import { BaropotStatus } from '@/app/shared/types/enums';
+import dynamic from 'next/dynamic';
+import { LoadingSpinner } from '@/app/shared/ui';
+
+const KakaoMapView = dynamic(() => import('./KakaoMapView'), {
+  loading: () => (
+    <div className="flex h-full w-full items-center justify-center bg-gray-100">
+      <LoadingSpinner size="lg" />
+    </div>
+  ),
+  ssr: false,
+});
 
 export default function KaKaoContainer() {
   const [selected, setSelected] = useState<Restaurant | null>(null);
@@ -50,14 +60,14 @@ export default function KaKaoContainer() {
         resultCount={filteredRestaurants.length}
         baropotCount={baropotList.length}
       />
-
-      {/* <MapLocationButton /> */}
-      <KakaoMapView
-        restaurants={filteredRestaurants}
-        selectedRestaurant={selected}
-        onRestaurantSelect={setSelected}
-        onClosePopup={handleClosePopup}
-      />
+      <Suspense fallback={<LoadingSpinner size="lg" />}>
+        <KakaoMapView
+          restaurants={filteredRestaurants}
+          selectedRestaurant={selected}
+          onRestaurantSelect={setSelected}
+          onClosePopup={handleClosePopup}
+        />
+      </Suspense>
     </div>
   );
 }
