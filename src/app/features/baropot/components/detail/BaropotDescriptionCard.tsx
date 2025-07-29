@@ -1,5 +1,5 @@
-import { BaropotDetailResponse } from "@/app/shared/types/baropots";
-import { Card } from "@/app/shared/ui";
+import { BaropotDetailResponse } from '@/app/shared/types/baropots';
+import { motion } from 'framer-motion';
 
 interface BaropotDescriptionCardProps {
   baropot: BaropotDetailResponse;
@@ -9,22 +9,21 @@ export default function BaropotDescriptionCard({
   baropot,
 }: BaropotDescriptionCardProps) {
   return (
-    <Card
-      variant="gradient"
-      size="lg"
-      padding="lg"
-      className="mt-6"
-      animate={true}
+    <motion.div
+      className="mx-6 mt-6 rounded-xl border border-gray-200 bg-white p-6 shadow-sm"
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: 0.3 }}
     >
-      <div className="flex items-center space-x-4 mb-6">
-        <div className="w-14 h-14 bg-gradient-to-r from-[#6366F1] to-[#8B5CF6] rounded-2xl flex items-center justify-center shadow-lg">
-          <span className="text-2xl">📝</span>
+      <div className="mb-6 flex items-center space-x-4">
+        <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-blue-600 shadow-md">
+          <span className="text-xl">💬</span>
         </div>
-        <h3 className="font-bold text-[#2B2B2B] text-2xl">모임 소개</h3>
+        <h3 className="text-xl font-bold text-gray-900">모임 소개</h3>
       </div>
-      <p className="text-[#2B2B2B] leading-relaxed text-lg bg-gradient-to-r from-[#E6EEF5] to-[#EEF2FF] p-6 rounded-2xl">
+      <p className="rounded-lg border border-gray-100 bg-gray-50 p-4 text-base leading-relaxed text-gray-900">
         {baropot.description}
       </p>
-    </Card>
+    </motion.div>
   );
 }

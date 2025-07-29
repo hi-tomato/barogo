@@ -1,12 +1,12 @@
 // BaropotDetailContent.tsx
-import { containerVariants } from "@/app/shared/lib/animation";
-import { BaropotDetailResponse } from "@/app/shared/types/baropots";
-import { motion } from "framer-motion";
-import React from "react";
-import BaropotHeroCard from "./BaropotHeroCard";
-import BaropotDescriptionCard from "./BaropotDescriptionCard";
-import BaropotConditionsCard from "./BaropotConditionsCard";
-import BaropotTagsCard from "./BaropotTagsCard";
+import { containerVariants } from '@/app/shared/lib/animation';
+import { BaropotDetailResponse } from '@/app/shared/types/baropots';
+import { motion } from 'framer-motion';
+import React from 'react';
+import BaropotHeroCard from './BaropotHeroCard';
+import BaropotDescriptionCard from './BaropotDescriptionCard';
+import BaropotConditionsCard from './BaropotConditionsCard';
+import BaropotTagsCard from './BaropotTagsCard';
 
 export default function BaropotDetailContent({
   baropot,
@@ -15,7 +15,7 @@ export default function BaropotDetailContent({
 }) {
   return (
     <motion.div
-      className="pb-28 px-4"
+      className="pb-28"
       variants={containerVariants}
       initial="hidden"
       animate="visible"
