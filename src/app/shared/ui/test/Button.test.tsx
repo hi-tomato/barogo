@@ -50,6 +50,7 @@ describe('Button 컴포넌트 테스트', () => {
       'kakao',
       'popularButton',
       'nearbyButton',
+      'google',
     ];
 
     variants.forEach((v) => {
