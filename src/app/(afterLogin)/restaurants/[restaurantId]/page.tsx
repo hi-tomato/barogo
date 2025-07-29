@@ -1,85 +1,48 @@
-'use client';
-import { useParams } from 'next/navigation';
-import { useRestaurantDetail } from '@/app/shared/hooks/queries/useRestaurant';
-import { useAuthStore } from '@/app/shared/store/useAuthStore';
-import { RestaurantImage } from '@/app/features/search/components/detail/RestaurantImages';
-import { StateDisplay } from '@/app/shared/ui';
-import dynamic from 'next/dynamic';
-import { Suspense } from 'react';
+import { restaurantService } from '@/app/shared/services/restaurantService';
+import { Metadata } from 'next';
+import RestaurantDetailClient from '@/app/features/restaurant/components/RestaurantDetailClient';
 
-const RestaurantInfo = dynamic(
-  () => import('@/app/features/search/components/detail/RestaurantInfo'),
-  {
-    ssr: true,
-    loading: () => (
-      <div className="h-32 animate-pulse rounded-lg bg-gray-100" />
-    ),
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ restaurantId: string }>;
+}): Promise<Metadata> {
+  try {
+    const { restaurantId } = await params;
+    const restaurant = await restaurantService.getDetail(restaurantId);
+
+    if (!restaurant) {
+      return {
+        title: '해당 맛집을 찾을 수 없습니다.',
+        description: '요청하신 맛집을 찾을 수 없습니다.',
+      };
+    }
+
+    return {
+      title: `${restaurant.name} | Barogo`,
+      description: `${restaurant.name} - ${restaurant.address}. ${restaurant.description || '맛있는 음식을 즐겨보세요!'}`,
+      keywords: `${restaurant.name}, ${restaurant.category}, 맛집, ${restaurant.address}`,
+      openGraph: {
+        title: `${restaurant.name} | Barogo`,
+        description:
+          restaurant.description ||
+          `${restaurant.name}에서 맛있는 음식을 즐겨보세요!`,
+        images: restaurant.photos?.[0] ? [restaurant.photos[0]] : [],
+      },
+    };
+  } catch (_: unknown) {
+    return {
+      title: '해당 맛집을 찾을 수 없습니다.',
+      description: '요청하신 맛집을 찾을 수 없습니다.',
+    };
   }
-);
+}
 
-const RestaurantReviews = dynamic(
-  () => import('@/app/features/reviews/RestaurantReviews'),
-  {
-    ssr: false,
-    loading: () => (
-      <div className="h-48 animate-pulse rounded-lg bg-gray-100" />
-    ),
-  }
-);
-
-const RestaurantSection = dynamic(
-  () => import('@/app/features/search/components/detail/RestaurantSection'),
-  {
-    ssr: true,
-    loading: () => (
-      <div className="h-24 animate-pulse rounded-lg bg-gray-100" />
-    ),
-  }
-);
-export default function RestaurantDetailPage() {
-  const params = useParams<{ restaurantId: string }>();
-  const { user } = useAuthStore();
-  const restaurantId = params.restaurantId;
-
-  const {
-    data: restaurant,
-    isLoading: restaurantLoading,
-    isError: restaurantError,
-  } = useRestaurantDetail(restaurantId);
-
-  if (restaurantLoading) {
-    return <StateDisplay state="loading" size="lg" />;
-  }
-
-  if (restaurantError || !restaurant) {
-    return <StateDisplay state="error" size="lg" />;
-  }
-
-  return (
-    <div className="min-h-screen bg-[#E6EEF5] pb-24">
-      <RestaurantImage images={restaurant.photos} />
-      <Suspense
-        fallback={<div className="h-32 animate-pulse rounded-lg bg-gray-100" />}
-      >
-        <RestaurantInfo
-          restaurant={restaurant}
-          isOwner={restaurant.isWrittenByMe}
-        />
-      </Suspense>
-      <Suspense
-        fallback={<div className="h-48 animate-pulse rounded-lg bg-gray-100" />}
-      >
-        <RestaurantReviews
-          restaurantId={restaurantId}
-          currentUserId={user?.id}
-        />
-      </Suspense>
-
-      <Suspense
-        fallback={<div className="h-24 animate-pulse rounded-lg bg-gray-100" />}
-      >
-        <RestaurantSection />
-      </Suspense>
-    </div>
-  );
+export default async function RestaurantDetailPage({
+  params,
+}: {
+  params: Promise<{ restaurantId: string }>;
+}) {
+  const { restaurantId } = await params;
+  return <RestaurantDetailClient restaurantId={restaurantId} />;
 }
