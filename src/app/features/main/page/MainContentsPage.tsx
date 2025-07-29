@@ -1,6 +1,5 @@
 'use client';
 import MainTabMenu from '@/app/features/main/components/MainTabMenu';
-
 import dynamic from 'next/dynamic';
 import { LoadingSpinner } from '@/app/shared/ui';
 
