@@ -15,7 +15,7 @@ export function GoogleButton() {
         text="구글로 시작하기"
         onClick={handleGoogleLogin}
         type="button"
-        variant="secondary"
+        variant="google"
         size="lg"
         icon={<RiGoogleFill />}
         iconPosition="left"

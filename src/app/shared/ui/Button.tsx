@@ -13,6 +13,7 @@ type Variant =
   | 'text'
   | 'tabButton'
   | 'kakao'
+  | 'google'
   | 'popularButton'
   | 'nearbyButton';
 type Size = 'sm' | 'md' | 'lg' | 'icon' | 'pill';
@@ -35,7 +36,7 @@ interface ButtonProps {
 }
 
 const buttonVariants = {
-  primary: 'bg-[#1C4E80] hover:bg-[#154066] text-white transition-colors',
+  primary: 'bg-[#2767a8] hover:bg-[#154066] text-white transition-colors',
   secondary: 'bg-gray-500 hover:bg-gray-600 text-white transition-colors',
   outline:
     'border border-[#1C4E80]/15 text-[#1C4E80] hover:bg-[#1C4E80]/5 hover:border-[#1C4E80]/30 transition-all',
@@ -45,6 +46,8 @@ const buttonVariants = {
   text: 'text-[#1C4E80] text-center transition-colors bg-transparent border-none',
   tabButton: 'bg-[#1C4E80] text-white transition-colors',
   kakao: 'bg-[#FEE500] hover:bg-[#FDD835] text-black transition-colors',
+  google:
+    'bg-white hover:bg-gray-50 text-gray-700 border border-gray-300 hover:border-gray-400 transition-colors shadow-sm',
   popularButton: 'bg-[#1C4E80] hover:bg-[#154066] text-white transition-colors',
   nearbyButton:
     'bg-[#1C4E80] hover:bg-[#154066] text-white rounded-full transition-colors',
