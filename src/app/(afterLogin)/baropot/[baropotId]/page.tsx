@@ -1,47 +1,42 @@
-'use client';
-import { useParams } from 'next/navigation';
-import { useGetBaropotDetail } from '@/app/shared/hooks/queries/useBaropot';
-import BaropotDetailHeader from '@/app/features/baropot/components/detail/BaropotDetailHeader';
-import BaropotDetailContent from '@/app/features/baropot/components/detail/BaropotDetailContent';
-import BaropotDetailAction from '@/app/features/baropot/components/detail/BaropotDetailAction';
-import BaropotStatus from '@/app/features/baropot/components/detail/BaropotStatus';
-import HostManagementPanel from '@/app/features/baropot/components/host/HostManagementPanel';
-import { useAuthStore } from '@/app/shared/store/useAuthStore';
+import { Suspense } from 'react';
+import { LoadingSpinner } from '@/app/shared/ui';
+import { baropotService } from '@/app/shared/services/baropotService';
+import BaropotDetailClient from '@/app/features/baropot/components/BaropotDetailClient';
 
-export default function BaropotDetailPage() {
-  const params = useParams();
-  const baropotId = Number(params.baropotId);
-  const { user } = useAuthStore();
-  const {
-    data: baropot,
-    isLoading,
-    error,
-    isError,
-  } = useGetBaropotDetail(baropotId);
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ baropotId: number }>;
+}) {
+  try {
+    const { baropotId } = await params;
+    const baropot = await baropotService.getDetail(baropotId);
 
-  // 안전한 호스트 확인
-  const isHost =
-    user?.id && baropot?.host?.id ? user.id === baropot.host.id : false;
+    if (!baropot) {
+      return {
+        title: '해당 바로팟 상세 페이지를 찾을 수 없습니다.',
+        description: '요청하신 바로팟 상세 페이지를 찾을 수 없습니다.',
+      };
+    }
 
-  if (isLoading) {
-    return <BaropotStatus type="isLoading" />;
+    return {
+      title: `${baropot.restaurant.name} | Barogo`,
+      description: `${baropot.restaurant.name} - ${baropot.description}`,
+      keywords: `${baropot.restaurant.name}, ${baropot.description}`,
+      images: baropot.restaurant.photos ? [baropot.restaurant.photos[0]] : [],
+    };
+  } catch (_: unknown) {
+    return {
+      title: '해당 바로팟 상세 페이지를 찾을 수 없습니다.',
+      description: '요청하신 바로팟 상세 페이지를 찾을 수 없습니다.',
+    };
   }
+}
 
-  if (isError || error || !baropot) {
-    console.error('바로팟 상세 조회 실패:', error);
-    return <BaropotStatus type="isError" />;
-  }
-
+export default function BaropotDetailServer() {
   return (
-    <div className="min-h-screen bg-[#E6EEF5]">
-      <BaropotDetailHeader />
-      <BaropotDetailContent baropot={baropot} />
-      <BaropotDetailAction baropot={baropot} />
-
-      {/* 호스트인 경우에만 관리 패널 표시 */}
-      {isHost && user?.id && (
-        <HostManagementPanel baropot={baropot} currentUserId={user.id} />
-      )}
-    </div>
+    <Suspense fallback={<LoadingSpinner size="sm" />}>
+      <BaropotDetailClient />
+    </Suspense>
   );
 }
