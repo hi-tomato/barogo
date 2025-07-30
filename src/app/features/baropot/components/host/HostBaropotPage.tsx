@@ -5,14 +5,17 @@ import {
   useGetBaropotDetail,
   useGetHostBaropotList,
 } from '@/app/shared/hooks/queries/useBaropot';
+import {
+  HostBaropotSkeleton,
+  HostBaropotInfoCard,
+  HostFilterSection,
+} from './hostClient';
 import { BaropotsQueries } from '@/app/shared/types/baropots';
 import { containerVariants, itemVariants } from '@/app/shared/lib/animation';
 import { useAuthStore } from '@/app/shared/store/useAuthStore';
 import { StateDisplay } from '@/app/shared/ui';
 import HostManagementPanel from './HostManagementPanel';
-import HostBaropotSkeleton from './hostClient/HostBaropotSkeleton';
-import HostBaropotInfoCard from './hostClient/HostBaropotInfoCard';
-import HostFilterSection from './hostClient/HostFilterSection';
+import { HostHeader } from './HostHeader';
 
 export default function HostBaropotPage() {
   const { user } = useAuthStore();
@@ -36,25 +39,12 @@ export default function HostBaropotPage() {
     }));
   };
 
-  console.log('selectedBaropotDetail', selectedBaropotDetail);
-  if (error) {
-    return <StateDisplay state="error" size="sm" />;
-  }
+  if (error) return <StateDisplay state="error" size="sm" />;
 
   return (
     <div className="min-h-screen bg-[#E6EEF5]">
       {/* 헤더 */}
-      <div className="bg-white shadow-sm">
-        <div className="px-4 py-6">
-          <h1 className="text-2xl font-bold text-[#2B2B2B]">
-            내가 만든 바로팟
-          </h1>
-          <p className="mt-1 text-[#8A8A8A]">
-            호스트로 참여중인 모임을 관리해보세요
-          </p>
-        </div>
-      </div>
-
+      <HostHeader onClose={() => setSelectedBaropotId(null)} />
       <div className="px-4 py-6">
         {/* 필터 섹션 */}
         <motion.div
@@ -68,7 +58,6 @@ export default function HostBaropotPage() {
             handleFilterChange={handleFilterChange}
           />
         </motion.div>
-
         {/* 바로팟 목록 */}
         <motion.div
           variants={containerVariants}
@@ -94,7 +83,6 @@ export default function HostBaropotPage() {
           )}
         </motion.div>
       </div>
-
       {/* 호스트 관리 모달 */}
       {selectedBaropotDetail && (
         <HostManagementPanel

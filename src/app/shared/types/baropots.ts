@@ -42,6 +42,7 @@ export interface CreateBaropotRequest {
 
 export interface Host {
   id: number;
+  userId?: number;
   name: string;
 }
 
