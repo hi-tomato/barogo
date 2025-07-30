@@ -34,7 +34,7 @@ export const useCreateRestaurant = () => {
 
       //  3. 새 맛집 데이터를 상세 캐시에 저장
       queryClient.setQueryData(
-        queryKeys.restaurant.detail(response.id.toString()),
+        queryKeys.restaurant.detail(response.id),
         response
       );
     },
@@ -44,7 +44,7 @@ export const useCreateRestaurant = () => {
   });
 };
 
-export const useRestaurantDetail = (restaurantId: string) => {
+export const useRestaurantDetail = (restaurantId: number) => {
   return useQuery({
     queryKey: queryKeys.restaurant.detail(restaurantId),
     queryFn: () => restaurantService.getDetail(restaurantId),
@@ -65,7 +65,7 @@ export const useDeleteRestaurant = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (restaurantId: string) =>
+    mutationFn: (restaurantId: number) =>
       restaurantService.delete(restaurantId),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: queryKeys.restaurant.list() });
@@ -84,7 +84,7 @@ export const useUpdateRestaurant = () => {
       restaurantId,
       data,
     }: {
-      restaurantId: string;
+      restaurantId: number;
       data: UpdateRestaurantRequest;
     }) => restaurantService.update(restaurantId, data),
     onSuccess: (data, variables) => {

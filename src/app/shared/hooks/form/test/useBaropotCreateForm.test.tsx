@@ -76,7 +76,7 @@ const mockSessionStorage = {
 Object.defineProperty(window, 'sessionStorage', { value: mockSessionStorage });
 
 const mockRestaurantData: RestaurantData = {
-  id: '1004',
+  id: 1004,
   name: '바로팟 식당',
   location: '서울시 강남구 역삼동 123-45',
   category: '한식',
