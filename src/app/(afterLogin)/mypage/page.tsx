@@ -1,10 +1,49 @@
-"use client";
-import { useState } from "react";
-import { useRouter } from "next/navigation";
-import { useLogout } from "@/app/shared/hooks/queries/useAuth";
-import { useAuthStore } from "@/app/shared/store/useAuthStore";
-import LogoutConfirm from "@/app/features/mypage/components/LogoutConfirm";
-import Button from "@/app/shared/ui/Button";
+'use client';
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { useLogout } from '@/app/shared/hooks/queries/useAuth';
+import { useAuthStore } from '@/app/shared/store/useAuthStore';
+import LogoutConfirm from '@/app/features/mypage/components/LogoutConfirm';
+import Button from '@/app/shared/ui/Button';
+
+const menuItems = [
+  {
+    id: 'my-reviews',
+    title: '내 리뷰',
+    icon: '📝',
+    path: '/mypage/reviews',
+  },
+  {
+    id: 'baropot',
+    title: '바로팟',
+    icon: '⚡',
+    path: '/mypage/baropot',
+  },
+  {
+    id: 'bookmarks',
+    title: '찜한곳',
+    icon: '💙',
+    path: '/mypage/bookmarks',
+  },
+  {
+    id: 'visited',
+    title: '방문기록(지도)',
+    icon: '📍',
+    path: '/mypage/visited',
+  },
+  {
+    id: 'settings',
+    title: '설정',
+    icon: '⚙️',
+    path: '/mypage/settings',
+  },
+  {
+    id: 'history',
+    title: '히스토리',
+    icon: '📊',
+    path: '/mypage/history',
+  },
+];
 
 export default function MyPage() {
   const router = useRouter();
@@ -18,45 +57,6 @@ export default function MyPage() {
     bookmarks: 12,
   });
 
-  const menuItems = [
-    {
-      id: "my-reviews",
-      title: "내 리뷰",
-      icon: "📝",
-      path: "/mypage/reviews",
-    },
-    {
-      id: "baropot",
-      title: "바로팟",
-      icon: "⚡",
-      path: "/mypage/baropot",
-    },
-    {
-      id: "bookmarks",
-      title: "찜한곳",
-      icon: "💙",
-      path: "/mypage/bookmarks",
-    },
-    {
-      id: "visited",
-      title: "방문기록(지도)",
-      icon: "📍",
-      path: "/mypage/visited",
-    },
-    {
-      id: "settings",
-      title: "설정",
-      icon: "⚙️",
-      path: "/mypage/settings",
-    },
-    {
-      id: "history",
-      title: "히스토리",
-      icon: "📊",
-      path: "/mypage/history",
-    },
-  ];
-
   const handleMenuClick = (path: string) => {
     router.push(path);
   };
@@ -64,11 +64,11 @@ export default function MyPage() {
   return (
     <div className="min-h-screen bg-[#E6EEF5] pb-24">
       {/* 헤더 */}
-      <div className="bg-white sticky top-0 z-40 border-b border-gray-200">
+      <div className="sticky top-0 z-40 border-b border-gray-200 bg-white">
         <div className="flex items-center px-4 py-3">
           <button
             onClick={() => router.back()}
-            className="p-2 text-gray-600 hover:bg-gray-100 rounded-lg"
+            className="rounded-lg p-2 text-gray-600 hover:bg-gray-100"
           >
             ←
           </button>
@@ -79,24 +79,24 @@ export default function MyPage() {
         </div>
       </div>
 
-      <div className="px-4 py-6 space-y-6">
+      <div className="space-y-6 px-4 py-6">
         {/* 프로필 섹션 */}
-        <div className="bg-white rounded-xl p-6 shadow-sm">
+        <div className="rounded-xl bg-white p-6 shadow-sm">
           <div className="flex items-center space-x-4">
             {/* 프로필 이미지 - 실제 사용자 이름 사용 */}
-            <div className="w-16 h-16 bg-[#1C4E80] rounded-full flex items-center justify-center">
-              <span className="text-white text-2xl font-bold">
-                {user?.name?.charAt(0) || "U"}
+            <div className="flex h-16 w-16 items-center justify-center rounded-full bg-[#1C4E80]">
+              <span className="text-2xl font-bold text-white">
+                {user?.name?.charAt(0) || 'U'}
               </span>
             </div>
 
             {/* 사용자 정보 - 실제 데이터 사용 */}
             <div className="flex-1">
-              <h2 className="text-xl font-semibold text-[#2B2B2B] mb-1">
-                {user?.name || "사용자"}
+              <h2 className="mb-1 text-xl font-semibold text-[#2B2B2B]">
+                {user?.name || '사용자'}
               </h2>
-              <p className="text-[#8A8A8A] text-sm">
-                {user?.email || "맛집 탐험가"}
+              <p className="text-sm text-[#8A8A8A]">
+                {user?.email || '맛집 탐험가'}
               </p>
             </div>
           </div>
@@ -104,19 +104,19 @@ export default function MyPage() {
           {/* 통계 */}
           <div className="mt-6 grid grid-cols-3 gap-4">
             <div className="text-center">
-              <div className="text-2xl font-bold text-[#1C4E80] mb-1">
+              <div className="mb-1 text-2xl font-bold text-[#1C4E80]">
                 {userStats.reviews}
               </div>
               <div className="text-sm text-[#8A8A8A]">리뷰</div>
             </div>
             <div className="text-center">
-              <div className="text-2xl font-bold text-[#1C4E80] mb-1">
+              <div className="mb-1 text-2xl font-bold text-[#1C4E80]">
                 {userStats.baropots}
               </div>
               <div className="text-sm text-[#8A8A8A]">바로팟</div>
             </div>
             <div className="text-center">
-              <div className="text-2xl font-bold text-[#1C4E80] mb-1">
+              <div className="mb-1 text-2xl font-bold text-[#1C4E80]">
                 {userStats.bookmarks}
               </div>
               <div className="text-sm text-[#8A8A8A]">찜한곳</div>
@@ -130,21 +130,21 @@ export default function MyPage() {
             <button
               key={item.id}
               onClick={() => handleMenuClick(item.path)}
-              className="bg-white rounded-xl p-6 shadow-sm hover:shadow-md transition-all duration-200 text-center"
+              className="rounded-xl bg-white p-6 text-center shadow-sm transition-all duration-200 hover:shadow-md"
             >
-              <div className="text-3xl mb-3">{item.icon}</div>
-              <div className="text-[#2B2B2B] font-medium">{item.title}</div>
+              <div className="mb-3 text-3xl">{item.icon}</div>
+              <div className="font-medium text-[#2B2B2B]">{item.title}</div>
             </button>
           ))}
         </div>
 
         {/* 추가 정보 섹션 */}
-        <div className="bg-white rounded-xl p-4 shadow-sm">
-          <h3 className="font-semibold text-[#2B2B2B] mb-3">최근 활동</h3>
+        <div className="rounded-xl bg-white p-4 shadow-sm">
+          <h3 className="mb-3 font-semibold text-[#2B2B2B]">최근 활동</h3>
           <div className="space-y-3">
             <div className="flex items-center space-x-3">
-              <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
-                <span className="text-blue-600 text-sm">⚡</span>
+              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-blue-100">
+                <span className="text-sm text-blue-600">⚡</span>
               </div>
               <div className="flex-1">
                 <p className="text-sm text-[#2B2B2B]">
@@ -155,8 +155,8 @@ export default function MyPage() {
             </div>
 
             <div className="flex items-center space-x-3">
-              <div className="w-8 h-8 bg-orange-100 rounded-full flex items-center justify-center">
-                <span className="text-orange-600 text-sm">📝</span>
+              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-orange-100">
+                <span className="text-sm text-orange-600">📝</span>
               </div>
               <div className="flex-1">
                 <p className="text-sm text-[#2B2B2B]">
@@ -167,8 +167,8 @@ export default function MyPage() {
             </div>
 
             <div className="flex items-center space-x-3">
-              <div className="w-8 h-8 bg-red-100 rounded-full flex items-center justify-center">
-                <span className="text-red-600 text-sm">💙</span>
+              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-red-100">
+                <span className="text-sm text-red-600">💙</span>
               </div>
               <div className="flex-1">
                 <p className="text-sm text-[#2B2B2B]">홀리스 타코를 찜했어요</p>
@@ -180,10 +180,10 @@ export default function MyPage() {
 
         {/* 개선된 로그아웃 버튼 */}
         <Button
-          text={logout.isPending ? "로그아웃 중..." : "로그아웃"}
+          text={logout.isPending ? '로그아웃 중...' : '로그아웃'}
           onClick={() => setShowLogoutModal(true)}
           disabled={logout.isPending}
-          className="w-full bg-white text-red-500 font-medium py-4 rounded-xl shadow-sm hover:bg-red-50 transition-colors disabled:opacity-50"
+          className="w-full rounded-xl py-4 font-medium"
         />
       </div>
 
