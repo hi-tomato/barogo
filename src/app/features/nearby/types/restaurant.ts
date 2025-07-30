@@ -1,7 +1,15 @@
-import { BaropotItem } from "../../baropot/types/baropot";
+export interface BaropotItem {
+  id: number;
+  title: string;
+  status: string;
+  date: string;
+  time: string;
+  maxParticipants: number;
+  participantCount: number;
+}
 
 export interface RestaurantData {
-  id: string;
+  id: number;
   name: string;
   location: string;
   category: string;

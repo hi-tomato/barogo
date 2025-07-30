@@ -40,7 +40,7 @@ export class RestaurantService {
   }
 
   // 맛집 상세 조회
-  async getDetail(restaurantId: string): Promise<RestaurantDetail> {
+  async getDetail(restaurantId: number): Promise<RestaurantDetail> {
     return await apiClient.get<RestaurantDetail>(
       `/restaurants/${restaurantId}`
     );
@@ -48,7 +48,7 @@ export class RestaurantService {
 
   // 맛집 수정
   async update(
-    restaurantId: string,
+    restaurantId: number,
     updateData: UpdateRestaurantRequest
   ): Promise<RestaurantDetail> {
     return await apiClient.patch<RestaurantDetail>(
@@ -58,12 +58,12 @@ export class RestaurantService {
   }
 
   // 맛집 삭제
-  async delete(restaurantId: string): Promise<void> {
+  async delete(restaurantId: number): Promise<void> {
     return await apiClient.delete<void>(`/restaurants/${restaurantId}`);
   }
 
   // 리뷰 목록 조회
-  async getReviews(restaurantId: string): Promise<ReviewResponse> {
+  async getReviews(restaurantId: number): Promise<ReviewResponse> {
     return await apiClient.get<ReviewResponse>(
       `/restaurants/${restaurantId}/reviews`
     );
@@ -71,7 +71,7 @@ export class RestaurantService {
 
   // 리뷰 생성
   async createReview(
-    restaurantId: string,
+    restaurantId: number,
     reviewData: CreateReviewRequest
   ): Promise<CreateReviewResponse> {
     return await apiClient.post<CreateReviewResponse>(
@@ -81,7 +81,7 @@ export class RestaurantService {
   }
 
   // 리뷰 조회
-  async getReview(reviewId: string): Promise<CreateReviewResponse> {
+  async getReview(reviewId: number): Promise<CreateReviewResponse> {
     return await apiClient.get<CreateReviewResponse>(
       `/restaurants/reviews/${reviewId}`
     );
@@ -89,7 +89,7 @@ export class RestaurantService {
 
   // 리뷰 수정
   async updateReview(
-    reviewId: string,
+    reviewId: number,
     reviewData: CreateReviewRequest
   ): Promise<CreateReviewResponse> {
     return await apiClient.patch<CreateReviewResponse>(
@@ -99,7 +99,7 @@ export class RestaurantService {
   }
 
   // 리뷰 삭제
-  async deleteReview(reviewId: string): Promise<void> {
+  async deleteReview(reviewId: number): Promise<void> {
     return await apiClient.delete<void>(`/restaurants/reviews/${reviewId}`);
   }
 
