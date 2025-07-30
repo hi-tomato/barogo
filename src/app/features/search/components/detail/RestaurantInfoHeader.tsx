@@ -45,7 +45,7 @@ export default function RestaurantInfoHeader({
             <StarRating rating={Number(avgRating())} />
             <span className="text-sm text-gray-600">{avgRating()}</span>
             <span className="text-sm text-gray-600">
-              ({restaurant.reviews.length})
+              ({restaurant.reviews?.length || 0})
             </span>
           </motion.div>
           <motion.div

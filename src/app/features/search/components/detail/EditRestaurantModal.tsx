@@ -50,7 +50,7 @@ export default function EditRestaurantModal({
     try {
       updateRestaurant.mutate(
         {
-          restaurantId: restaurant.id.toString(),
+          restaurantId: restaurant.id,
           data: {
             ...formData,
             tags: formData.tags.map((tag) => tag.trim()),

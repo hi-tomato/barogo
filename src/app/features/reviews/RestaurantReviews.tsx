@@ -12,7 +12,7 @@ import ReviewList from './components/ReviewList';
 import { useToast } from '@/app/shared/hooks/useToast';
 
 interface RestaurantReviewsProps {
-  restaurantId: string;
+  restaurantId: number;
   currentUserId?: number;
 }
 
@@ -67,7 +67,7 @@ export default function RestaurantReviews({
 
     try {
       await deleteReviewMutation.mutateAsync({
-        reviewId: reviewId.toString(),
+        reviewId: reviewId,
         restaurantId,
       });
       toast.success('리뷰가 삭제되었습니다.');
