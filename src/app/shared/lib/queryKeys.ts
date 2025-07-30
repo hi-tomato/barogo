@@ -39,11 +39,11 @@ export const queryKeys = {
 
     /** 상세 관련 */
     details: () => [...queryKeys.restaurant.all, 'detail'] as const,
-    detail: (id: string) => [...queryKeys.restaurant.details(), id] as const,
+    detail: (id: number) => [...queryKeys.restaurant.details(), id] as const,
 
     /** 리뷰 관련 */
     reviews: () => [...queryKeys.restaurant.all, 'reviews'] as const,
-    review: (restaurantId: string) =>
+    review: (restaurantId: number) =>
       [...queryKeys.restaurant.reviews(), restaurantId] as const,
 
     /** 북마크 관련 */
