@@ -11,7 +11,7 @@ interface ReviewItemProps {
   isMyReview: boolean;
   onDelete: () => void;
   isDeleting: boolean;
-  restaurantId: string;
+  restaurantId: number;
 }
 
 export default function ReviewItem({
@@ -33,7 +33,7 @@ export default function ReviewItem({
   const handleEdit = async () => {
     try {
       await updateReviewMutate.mutateAsync({
-        reviewId: review.id.toString(),
+        reviewId: review.id,
         restaurantId: restaurantId,
         reviewData: newData,
       });
