@@ -1,21 +1,43 @@
 'use client';
+<<<<<<< HEAD
 import { useState, useRef, memo, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
+=======
+import { useState, useRef, useEffect } from 'react';
+import { motion } from 'framer-motion';
+import Image from 'next/image';
+import { useBaropotByRestaurant } from '@/app/shared/hooks/queries/useBaropot';
+import { BsArrowRight } from 'react-icons/bs';
+import Link from 'next/link';
+>>>>>>> 7878a14 (feat: 현재 진행중인 바로팟 툴팁 기능 추가)
 
 const defaultImages = [
   'https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=400&h=300&fit=crop',
 ];
 
 interface RestaurantImagesProps {
+  restaurantId: number;
   images?: string[];
   restaurantName?: string;
 }
 
+<<<<<<< HEAD
 export const RestaurantImage = memo(function RestaurantImage({
+=======
+export default function RestaurantImages({
+  restaurantId,
+>>>>>>> 7878a14 (feat: 현재 진행중인 바로팟 툴팁 기능 추가)
   images = [],
   restaurantName = '레스토랑',
 }: RestaurantImagesProps) {
+  const { data: baropots } = useBaropotByRestaurant(restaurantId);
+  const filterBaropot = baropots?.filter(
+    (item) => item.restaurant.id === restaurantId
+  );
+  const baropotId = filterBaropot?.map(({ id }) => id);
+  const hasActiveBaropot = filterBaropot && filterBaropot.length > 0;
+
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const displayImages = images.length > 0 ? images : defaultImages;
@@ -49,6 +71,15 @@ export const RestaurantImage = memo(function RestaurantImage({
   return (
     <div className="relative">
       {/* Container*/}
+      {hasActiveBaropot && (
+        <div className="flex items-center justify-center gap-2 bg-gradient-to-r from-orange-500/90 to-red-500/90 px-4 py-2 text-center font-medium text-white shadow-sm backdrop-blur-sm">
+          <span className="inline-block animate-pulse text-lg">🔥</span> 현재
+          진행중인 바로팟이 있습니다!
+          <Link href={`/baropot/${baropotId}`}>
+            <BsArrowRight />
+          </Link>
+        </div>
+      )}
       <div
         ref={scrollContainerRef}
         className="scrollbar-hide flex h-64 snap-x snap-mandatory overflow-x-auto"
@@ -65,9 +96,15 @@ export const RestaurantImage = memo(function RestaurantImage({
               alt={`${restaurantName} 이미지 ${index + 1}`}
               fill
               className="object-cover"
+<<<<<<< HEAD
               sizes="(max-width: 768px) 100vw, 50vw"
               priority={index === 0}
               placeholder="empty"
+=======
+              onError={() => {
+                console.error('이미지 로드 실패:', image);
+              }}
+>>>>>>> 7878a14 (feat: 현재 진행중인 바로팟 툴팁 기능 추가)
             />
             {/* 그라데이션 오버레이 */}
             <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
@@ -112,11 +149,18 @@ export const RestaurantImage = memo(function RestaurantImage({
                   src={image}
                   alt={`${restaurantName} 이미지 썸네일 ${index + 1}`}
                   fill
+<<<<<<< HEAD
                   priority={false}
                   loading="lazy"
                   placeholder="empty"
                   sizes="(max-width: 768px) 100vw, 50vw"
                   className="object-cover"
+=======
+                  className="h-full w-full object-cover"
+                  onError={(e) => {
+                    e.currentTarget.src = defaultImages[0];
+                  }}
+>>>>>>> 7878a14 (feat: 현재 진행중인 바로팟 툴팁 기능 추가)
                 />
               </motion.button>
             ))}

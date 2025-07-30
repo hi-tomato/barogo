@@ -110,7 +110,7 @@ export default function SearchPage() {
     const queryParams = urlParams.get('query');
 
     if (queryParams && !query) {
-      setQuery(queryParams); // URL의 쿼리 파라미터를 검색어로 설정
+      setQuery(queryParams);
     }
   }, []);
   return (

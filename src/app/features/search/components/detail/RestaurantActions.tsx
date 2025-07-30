@@ -52,7 +52,7 @@ export default function RestaurantActions({
   const handleDeleteDetail = () => {
     // TODO: 확인 모달 추가 필요
     if (confirm('해당 맛집을 삭제하시겠습니까?')) {
-      deleteRestaurantMutation.mutate(restaurant.id.toString());
+      deleteRestaurantMutation.mutate(restaurant.id);
       router.push('/main');
     }
   };
