@@ -1,11 +1,8 @@
 'use client';
 import { NearbyRestaurant } from '@/app/shared/types';
 import { useRouter } from 'next/navigation';
-import { RestaurantStatus } from './Status';
 import { useRestaurantSelection } from '@/app/shared/hooks/useRestaurantSelection';
 import { useToast } from '@/app/shared/hooks/useToast';
-import { HiX, HiLocationMarker, HiTag } from 'react-icons/hi';
-import { getCategoryIcon } from '../../nearby/utils/categoryHelpers';
 import RestaurantModalHeader from './searchModal/RestaurantModalHeader';
 import RestaurantInfoCard from './searchModal/RestaurantInfoCard';
 import RestaurantActionButtons from './searchModal/RestaurantActionButtons';
@@ -25,18 +22,9 @@ export default function RestaurantPreviewModal({
 }: RestaurantPreviewModalProps) {
   const toast = useToast();
   const router = useRouter();
+
   const { handleRestaurantSelection, isProcessing, findRegisteredRestaurant } =
     useRestaurantSelection({
-      onSuccess: (baropotId) => {
-        onClose();
-        toast.success('바로팟 생성을 완료하였습니다.');
-        router.push(`/baropot/${baropotId}`);
-      },
-      onBaropotFound: (baropotId) => {
-        onClose();
-        toast.success('등록된 맛집이 있습니다!');
-        router.push(`/baropot/${baropotId}`);
-      },
       onRegistrationNeeded: () => {
         onClose();
         router.push(`/restaurants/create`);
@@ -60,16 +48,7 @@ export default function RestaurantPreviewModal({
       toast.error('위치 정보가 없어서 맛집을 등록할 수 없습니다.');
       return;
     }
-    try {
-      await handleRestaurantSelection(restaurant);
-    } catch (error) {
-      console.error('맛집 등록 실패: ', error);
-    }
-  };
-
-  // 바로팟 생성 핸들러
-  const handleCreateBaropot = () => {
-    handleRegisterRestaurant();
+    handleRestaurantSelection(restaurant);
   };
 
   if (!isOpen) return null;
@@ -93,7 +72,7 @@ export default function RestaurantPreviewModal({
             hasServerData={hasServerData}
             onClose={onClose}
             handleDetailView={handleDetailView}
-            handleCreateBaropot={handleCreateBaropot}
+            handleCreateBaropot={() => handleRegisterRestaurant()}
             handleRegisterRestaurant={handleRegisterRestaurant}
           />
         </div>

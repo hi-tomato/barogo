@@ -1,13 +1,7 @@
 import { Status } from '@/app/shared/ui';
 import { cn } from '@/app/shared/lib/cn';
 import React from 'react';
-import {
-  HiPlus,
-  HiArrowLeft,
-  HiLightningBolt,
-  HiCheck,
-  HiClock,
-} from 'react-icons/hi';
+import { HiCheck } from 'react-icons/hi';
 import { buttonStyles, badgeStyles } from '../util/confirmModal';
 
 interface RestaurantStatusProps {
@@ -21,9 +15,7 @@ interface RestaurantStatusProps {
 
 export const RestaurantStatus = ({
   type,
-  onClose,
   onDetailView,
-  onCreateBaropot,
   onRegisterRestaurant,
   isRegistering = false,
 }: RestaurantStatusProps) => {
@@ -38,32 +30,6 @@ export const RestaurantStatus = ({
               size="md"
               variant="inline"
             />
-
-            <div className="flex space-x-3">
-              <button
-                onClick={onClose}
-                className={cn(
-                  buttonStyles.base,
-                  buttonStyles.size.md,
-                  buttonStyles.variant.outline
-                )}
-              >
-                <HiArrowLeft size={18} />
-                <span>다시 선택</span>
-              </button>
-
-              <button
-                disabled
-                className={cn(
-                  buttonStyles.base,
-                  buttonStyles.size.md,
-                  buttonStyles.variant.secondary
-                )}
-              >
-                <HiClock size={18} />
-                <span>확인 중...</span>
-              </button>
-            </div>
           </div>
         );
 
@@ -87,19 +53,7 @@ export const RestaurantStatus = ({
                   buttonStyles.fullWidth
                 )}
               >
-                <span>상세페이지 보기</span>
-              </button>
-
-              <button
-                onClick={onCreateBaropot}
-                className={cn(
-                  buttonStyles.base,
-                  buttonStyles.size.lg,
-                  buttonStyles.variant.warning,
-                  buttonStyles.fullWidth
-                )}
-              >
-                <span>바로팟 만들기</span>
+                상세페이지 보기
               </button>
             </div>
           </div>
@@ -109,13 +63,12 @@ export const RestaurantStatus = ({
         return (
           <div className="space-y-4">
             <div className={badgeStyles.info}>
-              <HiPlus size={20} className="text-blue-600" />
               <span className="font-medium text-blue-700">
                 새로운 맛집을 등록해보세요!
               </span>
             </div>
 
-            <div className="grid grid-cols-1 gap-2 md:grid-cols-2">
+            <div className="flex gap-2">
               {/* 맛집 등록 버튼 */}
               <button
                 onClick={onRegisterRestaurant}
@@ -127,34 +80,8 @@ export const RestaurantStatus = ({
                   buttonStyles.fullWidth
                 )}
               >
-                {isRegistering ? (
-                  <>
-                    <div className="h-5 w-5 animate-spin rounded-full border-b-2 border-white"></div>
-                    <span>등록 중...</span>
-                  </>
-                ) : (
-                  <>
-                    <HiPlus size={20} />
-                    <span>맛집 등록하기</span>
-                  </>
-                )}
+                맛집 등록하기
               </button>
-
-              {/* 하단 버튼들 */}
-              <div className="flex space-x-3">
-                <button
-                  onClick={onCreateBaropot}
-                  className={cn(
-                    buttonStyles.base,
-                    buttonStyles.size.md,
-                    buttonStyles.variant.warning,
-                    buttonStyles.fullWidth
-                  )}
-                >
-                  <HiLightningBolt size={18} />
-                  <span>바로팟 만들기</span>
-                </button>
-              </div>
             </div>
           </div>
         );
