@@ -1,17 +1,12 @@
-import {
-  useManageParticipant,
-  useUpdateBaropotStatus,
-} from '@/app/shared/hooks/queries/useBaropot';
-import { BaropotDetailResponse } from '@/app/shared/types/baropots';
 import { useState } from 'react';
-import { BaropotJoinedStatus, BaropotStatus } from '@/app/shared/types/enums';
+import { BaropotDetailResponse } from '@/app/shared/types/baropots';
 import { motion, AnimatePresence } from 'framer-motion';
 import { HostManagementButton } from './HostManagementButton';
 import { PanelHeader } from './PanelHeader';
 import { StatusManagementSection } from './StatusManagementSection';
 import { HostTabNavigation } from './HostTabNavigation';
 import { HostParticipantList } from './HostParticipantList';
-import { useToast } from '@/app/shared/hooks/useToast';
+import { useHostManagement } from '@/app/shared/hooks/useHostManagement';
 
 interface HostManagementPanelProps {
   baropot: BaropotDetailResponse;
@@ -27,15 +22,20 @@ export default function HostManagementPanel({
   onClose,
 }: HostManagementPanelProps) {
   const [isPanelOpen, setIsPanelOpen] = useState(false);
-  const [activeTab, setActiveTab] = useState('pending');
-  const [hostMemos, setHostMemos] = useState<Record<number, string>>({});
-  const toast = useToast();
 
-  const manageParticipantMutation = useManageParticipant();
-  const updateBaropotStatusMutation = useUpdateBaropotStatus();
-
-  const hostId = baropot.host?.userId;
-  const isHost = currentUserId === hostId;
+  const {
+    isHost,
+    activeTab,
+    setActiveTab,
+    hostMemos,
+    pendingParticipants,
+    approvedParticipants,
+    participantActions,
+    updateStatus,
+    updateMemo,
+    isParticipantActionPending,
+    isStatusUpdatePending,
+  } = useHostManagement({ baropot, currentUserId });
 
   const isModalOpen = isOpen !== undefined ? isOpen : isPanelOpen;
 
@@ -47,109 +47,10 @@ export default function HostManagementPanel({
     }
   };
 
-  const pendingParticipants = baropot.participants.filter(
-    (p) => p.joinedStatus === BaropotJoinedStatus.PENDING
-  );
-  const approvedParticipants = baropot.participants.filter(
-    (p) => p.joinedStatus === BaropotJoinedStatus.APPROVED
-  );
-
-  const handleApprove = (participantUserId: number) => {
-    try {
-      manageParticipantMutation.mutate(
-        {
-          baropotId: baropot.id,
-          participantData: {
-            participantUserId,
-            joinedStatus: BaropotJoinedStatus.APPROVED,
-            hostMemo: hostMemos[participantUserId] || '',
-          },
-        },
-        {
-          onSuccess: () => {
-            toast.success('참가자를 승인했습니다!');
-            setHostMemos((prev) => ({
-              ...prev,
-              [participantUserId]: '',
-            }));
-          },
-        }
-      );
-    } catch (error) {
-      console.error('참가자 승인 실패', error);
-    }
-  };
-
-  const handleReject = (participantUserId: number) => {
-    try {
-      manageParticipantMutation.mutate(
-        {
-          baropotId: baropot.id,
-          participantData: {
-            participantUserId,
-            joinedStatus: BaropotJoinedStatus.REJECTED,
-            hostMemo: '호스트에 의해 강제 퇴장',
-          },
-        },
-        {
-          onSuccess: () => {
-            toast.success('참가자를 거절했습니다!');
-          },
-        }
-      );
-    } catch (error) {
-      console.error('참가자 거절 실패', error);
-    }
-  };
-
-  const handleRemove = (participantUserId: number) => {
-    console.log(participantUserId);
-    try {
-      manageParticipantMutation.mutate(
-        {
-          baropotId: baropot.id,
-          participantData: {
-            participantUserId,
-            joinedStatus: BaropotJoinedStatus.REJECTED,
-            hostMemo: '호스트에 의해 퇴장',
-          },
-        },
-        {
-          onSuccess: () => {
-            toast.success('참가자를 퇴장시켰습니다!');
-          },
-        }
-      );
-    } catch (error) {
-      console.error('참가자 퇴장 실패', error);
-    }
-  };
-
-  const handleStatusChange = (newStatus: BaropotStatus) => {
-    if (newStatus === baropot.status) return;
-    console.log(newStatus);
-    try {
-      updateBaropotStatusMutation.mutate({
-        baropotId: baropot.id,
-        status: { status: newStatus },
-      });
-    } catch (error) {
-      console.error('바로팟 상태 변경 실패', error);
-    }
-  };
-
-  const handleMemoChange = (userId: number, memo: string) => {
-    setHostMemos((prev) => ({
-      ...prev,
-      [userId]: memo,
-    }));
-  };
-
   if (!isHost) return null;
 
   return (
     <>
-      {/* 외부에서 제어하지 않는 경우에만 버튼 표시 */}
       {isOpen === undefined && (
         <HostManagementButton onClick={() => setIsPanelOpen(true)} />
       )}
@@ -157,7 +58,6 @@ export default function HostManagementPanel({
       <AnimatePresence>
         {isModalOpen && (
           <>
-            {/* 백드롭 */}
             <motion.div
               className="fixed inset-0 z-50 bg-[#000000af]"
               initial={{ opacity: 0 }}
@@ -166,7 +66,6 @@ export default function HostManagementPanel({
               onClick={handleClose}
             />
 
-            {/* 슬라이드 패널 */}
             <motion.div
               className="fixed inset-x-0 bottom-0 z-50 max-h-[90vh] overflow-hidden"
               initial={{ y: '100%' }}
@@ -181,8 +80,8 @@ export default function HostManagementPanel({
                   <div className="space-y-6 px-6 py-6">
                     <StatusManagementSection
                       baropot={baropot}
-                      onStatusChange={handleStatusChange}
-                      isPending={updateBaropotStatusMutation.isPending}
+                      onStatusChange={updateStatus}
+                      isPending={isStatusUpdatePending}
                     />
 
                     <HostTabNavigation
@@ -197,11 +96,11 @@ export default function HostManagementPanel({
                       pendingParticipants={pendingParticipants}
                       approvedParticipants={approvedParticipants}
                       hostMemos={hostMemos}
-                      onMemoChange={handleMemoChange}
-                      onApprove={handleApprove}
-                      onReject={handleReject}
-                      onRemove={handleRemove}
-                      isPending={manageParticipantMutation.isPending}
+                      onMemoChange={updateMemo}
+                      onApprove={participantActions.approve}
+                      onReject={participantActions.reject}
+                      onRemove={participantActions.remove}
+                      isPending={isParticipantActionPending}
                       formatTime={formatTime}
                       baropotCreatedAt={baropot.createdAt}
                     />
@@ -216,7 +115,6 @@ export default function HostManagementPanel({
   );
 }
 
-// 시간 포맷팅
 export const formatTime = (dateString: string) => {
   const date = new Date(dateString);
   return date.toLocaleString('ko-KR', {
