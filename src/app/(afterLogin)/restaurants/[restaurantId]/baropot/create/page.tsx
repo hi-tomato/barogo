@@ -13,7 +13,7 @@ import { Button, StateDisplay } from '@/app/shared/ui';
 export default function CreateRestaurantBaropotPage() {
   const params = useParams<{ restaurantId: string }>();
   const router = useRouter();
-  const restaurantId = params.restaurantId;
+  const restaurantId = Number(params.restaurantId);
 
   const {
     data: restaurant,
@@ -23,7 +23,7 @@ export default function CreateRestaurantBaropotPage() {
 
   const restaurantData = restaurant
     ? {
-        id: restaurant.id.toString(),
+        id: restaurant.id,
         name: restaurant.name,
         location: restaurant.address,
         category: restaurant.category,
