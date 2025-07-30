@@ -147,16 +147,16 @@ export interface CreateReviewRequest {
 
 // API 파라미터 타입들
 export interface CreateReviewParams {
-  restaurantId: string;
+  restaurantId: number;
   reviewData: CreateReviewRequest;
 }
 
 export interface DeleteReviewParams {
   reviewId: string;
-  restaurantId: string;
+  restaurantId: number;
 }
 
 export interface UpdateRestaurantParams {
-  restaurantId: string;
+  restaurantId: number;
   data: UpdateRestaurantRequest;
 }

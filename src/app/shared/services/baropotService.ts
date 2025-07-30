@@ -1,5 +1,3 @@
-// import { get, patch, post } from '../api/client';
-
 import {
   BaropotsQueries,
   CreateBaropotRequest,
@@ -35,7 +33,7 @@ export class BaropotService {
     restaurantID: number
   ): Promise<BaropotListResponse[]> {
     return await apiClient.get<BaropotListResponse[]>(
-      `/baropots?restaurantId=${restaurantID}&status=RECRUITING`
+      `/baropots?restaurantId=${restaurantID}`
     );
   }
 
