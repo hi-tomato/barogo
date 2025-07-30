@@ -29,7 +29,6 @@ export default function HostBaropotPage() {
   const { data: selectedBaropotDetail } = useGetBaropotDetail(
     selectedBaropotId ?? 0
   );
-
   const { data: baropots, isLoading, error } = useGetHostBaropotList(queries);
 
   const handleFilterChange = (key: keyof BaropotsQueries, value: any) => {
