@@ -5,8 +5,17 @@ import {
   useGetBaropotEdit,
 } from '@/app/shared/hooks/queries/useBaropot';
 import { useState, useEffect } from 'react';
-import { BaropotDetailResponse } from '@/app/shared/types/baropots';
+import {
+  BaropotDetailResponse,
+  BaropotEditRequest,
+} from '@/app/shared/types/baropots';
 import { Input } from '@/app/shared/ui';
+import {
+  ParticipantGender,
+  ParticipantAgeGroup,
+  ContactMethod,
+  PaymentMethod,
+} from '@/app/shared/types/enums';
 
 export default function BaropotEditPage() {
   const params = useParams();
@@ -16,12 +25,20 @@ export default function BaropotEditPage() {
   const { data: baropot, isError } = useGetBaropotDetail(baropotId);
   const updateBaropotMutation = useGetBaropotEdit();
 
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<BaropotEditRequest>({
     title: '',
     description: '',
     date: '',
     time: '',
     maxParticipants: 4,
+    location: '',
+    participantGender: ParticipantGender.ANY,
+    participantAgeGroup: ParticipantAgeGroup.ANY,
+    contactMethod: ContactMethod.KAKAO_TALK,
+    paymentMethod: PaymentMethod.DUTCH_PAY,
+    tags: [],
+    estimatedCostPerPerson: 0,
+    rule: '',
   });
 
   // 데이터 로드 시 폼 초기화
@@ -33,6 +50,15 @@ export default function BaropotEditPage() {
         date: baropot.date || '',
         time: baropot.time || '',
         maxParticipants: baropot.maxParticipants || 4,
+        location: baropot.location || '',
+        participantGender: baropot.participantGender || ParticipantGender.ANY,
+        participantAgeGroup:
+          baropot.participantAgeGroup || ParticipantAgeGroup.ANY,
+        contactMethod: baropot.contactMethod || ContactMethod.KAKAO_TALK,
+        paymentMethod: baropot.paymentMethod || PaymentMethod.DUTCH_PAY,
+        tags: baropot.tags || [],
+        estimatedCostPerPerson: baropot.estimatedCostPerPerson || 0,
+        rule: baropot.rule || '',
       });
     }
   }, [baropot]);

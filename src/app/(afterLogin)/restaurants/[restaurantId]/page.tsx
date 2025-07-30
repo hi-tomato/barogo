@@ -9,7 +9,7 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   try {
     const { restaurantId } = await params;
-    const restaurant = await restaurantService.getDetail(restaurantId);
+    const restaurant = await restaurantService.getDetail(Number(restaurantId));
 
     if (!restaurant) {
       return {
