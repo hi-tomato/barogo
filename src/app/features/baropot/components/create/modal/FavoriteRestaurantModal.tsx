@@ -17,7 +17,7 @@ export default function FavoriteRestaurantModal({
 
   const handleSelect = (restaurant: Restaurant) => {
     const restaurantData: RestaurantData = {
-      id: restaurant.id.toString(),
+      id: restaurant.id,
       name: restaurant.name,
       location: restaurant.address,
       category: restaurant.category,

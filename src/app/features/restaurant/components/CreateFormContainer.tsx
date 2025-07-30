@@ -139,6 +139,8 @@ export default function CreateFormContainer() {
 
   const isFormValid = formData.description.trim() && formData.category;
 
+  console.log('createdRestaurant', createdRestaurant);
+  console.log('restaurant', restaurant?.id);
   // Modal Handler
   const handleCreateBaropot = () => {
     if (createdRestaurant) {
@@ -185,7 +187,6 @@ export default function CreateFormContainer() {
       <Modal isOpen={showSuccessModal} onClose={handleCloseModal}>
         <SuccessModalContent
           restaurantName={createdRestaurant?.name || ''}
-          onCloseModal={handleCloseModal}
           onCreateBaropot={handleCreateBaropot}
         />
       </Modal>
