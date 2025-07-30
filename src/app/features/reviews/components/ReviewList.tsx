@@ -7,7 +7,7 @@ interface ReviewListProps {
   isLoading: boolean;
   error: Error | null;
   currentUserId: number;
-  restaurantId: string; // 추가
+  restaurantId: number; // 추가
   onDeleteReview: (reviewId: number) => void;
   onRetry: () => void;
   isDeleting: boolean;
