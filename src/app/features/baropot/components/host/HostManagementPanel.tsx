@@ -34,10 +34,20 @@ export default function HostManagementPanel({
   const manageParticipantMutation = useManageParticipant();
   const updateBaropotStatusMutation = useUpdateBaropotStatus();
 
-  const isHost = currentUserId === baropot.host.id;
+  // const isHost = true;
+  console.log(baropot.host.id);
+  // 디버깅 로그 추가
+  console.log('HostManagementPanel Debug:', {
+    currentUserId,
+    hostId: baropot.host.id,
+    isHost,
+    isOpen,
+    isModalOpen: isOpen !== undefined ? isOpen : isPanelOpen,
+  });
 
   // 외부에서 제어하는 경우와 내부에서 제어하는 경우를 구분
   const isModalOpen = isOpen !== undefined ? isOpen : isPanelOpen;
+
   const handleClose = () => {
     if (onClose) {
       onClose();
@@ -144,18 +154,8 @@ export default function HostManagementPanel({
     }));
   };
 
-  // 시간 포맷팅
-  const formatTime = (dateString: string) => {
-    const date = new Date(dateString);
-    return date.toLocaleString('ko-KR', {
-      month: 'short',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit',
-    });
-  };
-
   if (!isHost) {
+    console.log('isHost가 false');
     return null;
   }
 
@@ -227,3 +227,14 @@ export default function HostManagementPanel({
     </>
   );
 }
+
+// 시간 포맷팅
+export const formatTime = (dateString: string) => {
+  const date = new Date(dateString);
+  return date.toLocaleString('ko-KR', {
+    month: 'short',
+    day: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+  });
+};
