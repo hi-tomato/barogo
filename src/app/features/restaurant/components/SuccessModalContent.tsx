@@ -3,13 +3,11 @@ import React from 'react';
 
 interface SuccessModalContentProps {
   restaurantName: string;
-  onCloseModal: () => void;
   onCreateBaropot: () => void;
 }
 
 export default function SuccessModalContent({
   restaurantName,
-  onCloseModal,
   onCreateBaropot,
 }: SuccessModalContentProps) {
   return (
@@ -39,12 +37,6 @@ export default function SuccessModalContent({
           text="바로팟 만들기"
           onClick={onCreateBaropot}
           className="w-full rounded-lg bg-gradient-to-r from-orange-400 to-red-500 py-3 font-medium text-white transition-all hover:shadow-lg"
-        />
-
-        <Button
-          text="메인으로 돌아가기"
-          onClick={onCloseModal}
-          className="w-full rounded-lg border border-gray-300 bg-white py-3 font-medium text-gray-900 transition-colors hover:bg-gray-50"
         />
       </div>
     </div>
