@@ -34,18 +34,9 @@ export default function HostManagementPanel({
   const manageParticipantMutation = useManageParticipant();
   const updateBaropotStatusMutation = useUpdateBaropotStatus();
 
-  // const isHost = true;
-  console.log(baropot.host.id);
-  // 디버깅 로그 추가
-  console.log('HostManagementPanel Debug:', {
-    currentUserId,
-    hostId: baropot.host.id,
-    isHost,
-    isOpen,
-    isModalOpen: isOpen !== undefined ? isOpen : isPanelOpen,
-  });
+  const hostId = baropot.host?.userId;
+  const isHost = currentUserId === hostId;
 
-  // 외부에서 제어하는 경우와 내부에서 제어하는 경우를 구분
   const isModalOpen = isOpen !== undefined ? isOpen : isPanelOpen;
 
   const handleClose = () => {
@@ -154,10 +145,7 @@ export default function HostManagementPanel({
     }));
   };
 
-  if (!isHost) {
-    console.log('isHost가 false');
-    return null;
-  }
+  if (!isHost) return null;
 
   return (
     <>
