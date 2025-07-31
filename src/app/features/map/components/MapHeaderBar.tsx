@@ -1,6 +1,6 @@
-// 'use client';
 import { Input } from '@/app/shared/ui';
 import { useRouter } from 'next/navigation';
+import { memo } from 'react';
 
 interface MapHeaderBarProps {
   categoryFilter: string;
@@ -9,7 +9,7 @@ interface MapHeaderBarProps {
   baropotCount: number;
 }
 
-export default function MapHeaderBar({
+export const MapHeaderBar = memo(function MapHeaderBar({
   categoryFilter,
   onCategoryChange,
   resultCount,
@@ -54,7 +54,7 @@ export default function MapHeaderBar({
       </div>
     </div>
   );
-}
+});
 
 const categories = [
   '전체',
@@ -65,3 +65,6 @@ const categories = [
   '카페',
   '술집',
 ] as const;
+
+MapHeaderBar.displayName = 'MapHeaderBar';
+export default MapHeaderBar;

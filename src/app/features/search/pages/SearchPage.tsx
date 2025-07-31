@@ -42,18 +42,8 @@ export default function SearchPage() {
       !restaurant.category_name ||
       !restaurant.x ||
       !restaurant.y
-    ) {
-      console.error('필수 데이터 누락:', {
-        id: restaurant.id,
-        place_name: restaurant.place_name,
-        address_name: restaurant.address_name,
-        category_name: restaurant.category_name,
-        x: restaurant.x,
-        y: restaurant.y,
-      });
-      console.error('맛집 정보가 불완전합니다. 다시 선택해주세요.');
-      return;
-    }
+    )
+      return null;
 
     // 서버에 등록된 맛집인지 확인
     const existingRestaurant = restaurantList?.find(
@@ -106,13 +96,13 @@ export default function SearchPage() {
 
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
-    const category = urlParams.get('category');
     const queryParams = urlParams.get('query');
 
     if (queryParams && !query) {
       setQuery(queryParams);
     }
-  }, []);
+  }, [query, setQuery]);
+
   return (
     <div className="min-h-screen bg-white">
       <SearchHeader query={query} setQuery={setQuery} loading={loading} />

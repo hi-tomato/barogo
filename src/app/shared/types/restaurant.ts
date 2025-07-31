@@ -24,6 +24,25 @@ export interface Restaurant {
 
 export type RestaurantList = Restaurant[];
 
+// 레스토랑 상세에서 사용하는 바로팟 응답 타입
+export interface RestaurantDetailBaropotResponse {
+  id: number;
+  host: {
+    userId: number;
+    name: string;
+  };
+  participantCount: number;
+  pendingParticipantCount: number;
+  participants: {
+    userId: number;
+    name: string;
+    isHost: boolean;
+    joinedStatus: string;
+    joinMessage: string;
+    hostMemo: string;
+  }[];
+}
+
 // 레스토랑 상세 정보 (리뷰 포함)
 export interface RestaurantDetail {
   id: number;
@@ -43,6 +62,7 @@ export interface RestaurantDetail {
   reviews: Review[];
   reviewCount: number;
   isBookmarked: boolean;
+  baropots?: RestaurantDetailBaropotResponse[];
 }
 
 // 레스토랑 생성/수정
