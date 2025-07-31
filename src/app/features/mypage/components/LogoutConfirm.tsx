@@ -1,4 +1,3 @@
-import { useAuthStore } from '@/app/shared/store/useAuthStore';
 import { useLogout } from '@/app/shared/hooks/queries/useAuth';
 import { LoadingSpinner } from '@/app/shared/ui';
 

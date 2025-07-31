@@ -1,5 +1,5 @@
-import { UseFormRegister, FieldErrors, UseFormSetValue } from "react-hook-form";
-import { BaropotFormData } from "../../types/baropot";
+import { UseFormRegister, FieldErrors, UseFormSetValue } from 'react-hook-form';
+import { BaropotFormData } from '../../types/baropot';
 
 interface ParticipantConditionsSectionProps {
   register: UseFormRegister<BaropotFormData>;
@@ -8,40 +8,37 @@ interface ParticipantConditionsSectionProps {
   watchAgeGroup: string[];
   setValue: UseFormSetValue<BaropotFormData>;
   toggleArrayField: (
-    field: "gender" | "ageGroup" | "tags",
+    field: 'gender' | 'ageGroup' | 'tags',
     value: string
   ) => void;
 }
 
 export default function ParticipantConditionsSection({
-  register,
-  errors,
   watchGender,
   watchAgeGroup,
-  setValue,
   toggleArrayField,
 }: ParticipantConditionsSectionProps) {
-  const Genders = ["남자", "여자", "무관"] as const;
-  const Ages = ["20대", "30대", "40대", "무관"] as const;
+  const Genders = ['남자', '여자', '무관'] as const;
+  const Ages = ['20대', '30대', '40대', '무관'] as const;
   return (
-    <div className="bg-white rounded-xl p-4 shadow-sm space-y-4">
-      <h2 className="font-semibold text-[#2B2B2B] border-b border-gray-100 pb-2">
+    <div className="space-y-4 rounded-xl bg-white p-4 shadow-sm">
+      <h2 className="border-b border-gray-100 pb-2 font-semibold text-[#2B2B2B]">
         👥 참가자 조건
       </h2>
 
       <div>
-        <h3 className="text-sm font-medium text-[#2B2B2B] mb-3">성별</h3>
+        <h3 className="mb-3 text-sm font-medium text-[#2B2B2B]">성별</h3>
         <div className="flex gap-3">
           {Genders.map((gender) => (
             <label
               key={gender}
-              className="flex items-center space-x-2 cursor-pointer"
+              className="flex cursor-pointer items-center space-x-2"
             >
               <input
                 type="checkbox"
                 checked={watchGender.includes(gender)}
-                onChange={() => toggleArrayField("gender", gender)}
-                className="w-4 h-4 text-[#1C4E80] border-gray-300 rounded focus:ring-[#1C4E80]"
+                onChange={() => toggleArrayField('gender', gender)}
+                className="h-4 w-4 rounded border-gray-300 text-[#1C4E80] focus:ring-[#1C4E80]"
               />
               <span className="text-sm text-gray-700">{gender}</span>
             </label>
@@ -50,18 +47,18 @@ export default function ParticipantConditionsSection({
       </div>
 
       <div>
-        <h3 className="text-sm font-medium text-[#2B2B2B] mb-3">나이대</h3>
-        <div className="flex gap-3 flex-wrap">
+        <h3 className="mb-3 text-sm font-medium text-[#2B2B2B]">나이대</h3>
+        <div className="flex flex-wrap gap-3">
           {Ages.map((age) => (
             <label
               key={age}
-              className="flex items-center space-x-2 cursor-pointer"
+              className="flex cursor-pointer items-center space-x-2"
             >
               <input
                 type="checkbox"
                 checked={watchAgeGroup.includes(age)}
-                onChange={() => toggleArrayField("ageGroup", age)}
-                className="w-4 h-4 text-[#1C4E80] border-gray-300 rounded focus:ring-[#1C4E80]"
+                onChange={() => toggleArrayField('ageGroup', age)}
+                className="h-4 w-4 rounded border-gray-300 text-[#1C4E80] focus:ring-[#1C4E80]"
               />
               <span className="text-sm text-gray-700">{age}</span>
             </label>

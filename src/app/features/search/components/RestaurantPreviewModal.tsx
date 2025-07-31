@@ -18,7 +18,6 @@ export default function RestaurantPreviewModal({
   restaurant,
   isOpen,
   onClose,
-  onConfirm,
 }: RestaurantPreviewModalProps) {
   const toast = useToast();
   const router = useRouter();

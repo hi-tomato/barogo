@@ -54,8 +54,6 @@ const nextConfig: NextConfig = {
   },
   // 압축 설정
   compress: true,
-  // 정적 최적화
-  swcMinify: true,
 };
 
 export default nextConfig;

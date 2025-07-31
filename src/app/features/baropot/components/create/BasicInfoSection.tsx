@@ -5,7 +5,11 @@ import { Input } from '@/app/shared/ui';
 interface BasicInfoSectionProps {
   register: UseFormRegister<BaropotFormData>;
   errors: FieldErrors<BaropotFormData>;
-  restaurantData?: any;
+  restaurantData?: {
+    name: string;
+    location: string;
+    category: string;
+  } | null;
 }
 
 export default function BasicInfoSection({

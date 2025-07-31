@@ -1,7 +1,7 @@
 import { useImageUpload } from '@/app/shared/hooks/queries/useImageUpload';
 import Image from 'next/image';
 import { useState } from 'react';
-import { HiCamera, HiX } from 'react-icons/hi';
+import { HiX } from 'react-icons/hi';
 import { LoadingSpinner } from '@/app/shared/ui';
 
 interface PhotoUploaderProps {

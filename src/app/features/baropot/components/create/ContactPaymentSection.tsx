@@ -21,7 +21,6 @@ export default function ContactPaymentSection({
   register,
   errors,
   watchContactMethod,
-  setValue,
 }: ContactPaymentSectionProps) {
   return (
     <div className="space-y-4 rounded-xl bg-white p-4 shadow-sm">

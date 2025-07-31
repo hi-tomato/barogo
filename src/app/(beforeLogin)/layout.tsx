@@ -1,14 +1,20 @@
-import { ReactNode } from 'react';
+import { Metadata } from 'next';
 import ToastContainer from '@/app/shared/ui/toast/ToastContainer';
-import ToastContextProvider from '@/app/shared/ui/toast/ToastContext';
 
-export default function layout({ children }: { children: ReactNode }) {
+export const metadata: Metadata = {
+  title: 'Barogo',
+  description: '새로운 사람들과 맛집을 함께 즐겨보세요!',
+};
+
+export default function BeforeLoginLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
-    <div className="bg-gradient-to-br from-white to-gray-50">
-      <ToastContextProvider>
-        {children}
-        <ToastContainer />
-      </ToastContextProvider>
-    </div>
+    <>
+      {children}
+      <ToastContainer />
+    </>
   );
 }
