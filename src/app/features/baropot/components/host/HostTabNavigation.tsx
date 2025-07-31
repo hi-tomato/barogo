@@ -1,5 +1,5 @@
-import { motion } from "framer-motion";
-import { HiCheckCircle, HiExclamationCircle } from "react-icons/hi";
+import { motion } from 'framer-motion';
+import { HiCheckCircle, HiExclamationCircle } from 'react-icons/hi';
 
 interface HostTabNavigationProps {
   activeTab: string;
@@ -20,13 +20,13 @@ export function HostTabNavigation({
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.2 }}
     >
-      <div className="flex bg-white rounded-xl p-1 shadow-sm">
+      <div className="flex rounded-lg bg-gray-100 p-1">
         <button
-          onClick={() => onTabChange("pending")}
-          className={`flex-1 py-3 px-4 rounded-lg text-sm font-semibold transition-all ${
-            activeTab === "pending"
-              ? "bg-[#1C4E80] text-white shadow-md"
-              : "text-gray-600 hover:text-gray-800"
+          onClick={() => onTabChange('pending')}
+          className={`flex-1 rounded-md px-4 py-3 text-sm font-medium transition-all ${
+            activeTab === 'pending'
+              ? 'bg-white text-blue-600 shadow-sm'
+              : 'text-gray-600 hover:text-gray-800'
           }`}
         >
           <div className="flex items-center justify-center space-x-2">
@@ -35,11 +35,11 @@ export function HostTabNavigation({
           </div>
         </button>
         <button
-          onClick={() => onTabChange("approved")}
-          className={`flex-1 py-3 px-4 rounded-lg text-sm font-semibold transition-all ${
-            activeTab === "approved"
-              ? "bg-[#1C4E80] text-white shadow-md"
-              : "text-gray-600 hover:text-gray-800"
+          onClick={() => onTabChange('approved')}
+          className={`flex-1 rounded-md px-4 py-3 text-sm font-medium transition-all ${
+            activeTab === 'approved'
+              ? 'bg-white text-blue-600 shadow-sm'
+              : 'text-gray-600 hover:text-gray-800'
           }`}
         >
           <div className="flex items-center justify-center space-x-2">

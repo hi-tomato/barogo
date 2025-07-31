@@ -1,7 +1,7 @@
-import { motion } from "framer-motion";
-import { ParticipantCard } from "./HostParicipantCard";
-import { HiCheckCircle, HiExclamationCircle } from "react-icons/hi";
-import { EmptyState } from "./EmptyState";
+import { motion } from 'framer-motion';
+import { ParticipantCard } from './HostParicipantCard';
+import { HiCheckCircle, HiExclamationCircle } from 'react-icons/hi';
+import { EmptyState } from './EmptyState';
 
 interface HostParticipantListProps {
   activeTab: string;
@@ -32,12 +32,12 @@ export function HostParticipantList({
 }: HostParticipantListProps) {
   return (
     <motion.div
-      className="space-y-4"
+      className="space-y-3"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ delay: 0.3 }}
     >
-      {activeTab === "pending" && (
+      {activeTab === 'pending' && (
         <>
           {pendingParticipants.length === 0 ? (
             <EmptyState type="pending" icon={HiExclamationCircle} />
@@ -61,7 +61,7 @@ export function HostParticipantList({
         </>
       )}
 
-      {activeTab === "approved" && (
+      {activeTab === 'approved' && (
         <>
           {approvedParticipants.length === 0 ? (
             <EmptyState type="approved" icon={HiCheckCircle} />
