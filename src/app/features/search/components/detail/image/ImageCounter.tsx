@@ -1,5 +1,3 @@
-'use client';
-import { memo } from 'react';
 import { motion } from 'framer-motion';
 
 interface ImageCounterProps {
@@ -7,7 +5,7 @@ interface ImageCounterProps {
   displayImages: string[];
 }
 
-const ImageCounter = memo(function ImageCounter({
+export default function ImageCounter({
   currentImageIndex,
   displayImages,
 }: ImageCounterProps) {
@@ -21,8 +19,4 @@ const ImageCounter = memo(function ImageCounter({
       {currentImageIndex + 1} / {displayImages.length}
     </motion.div>
   );
-});
-
-ImageCounter.displayName = 'ImageCounter';
-
-export default ImageCounter;
+}
