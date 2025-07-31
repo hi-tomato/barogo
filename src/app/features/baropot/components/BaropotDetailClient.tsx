@@ -20,7 +20,9 @@ export default function BaropotDetailClient() {
   } = useGetBaropotDetail(baropotId);
 
   const isHost =
-    user?.id && baropot?.host?.id ? user.id === baropot.host.id : false;
+    user?.id && baropot?.host?.userId
+      ? user?.id && baropot?.host?.userId
+      : false;
 
   if (isLoading) {
     return <BaropotStatus type="isLoading" />;
