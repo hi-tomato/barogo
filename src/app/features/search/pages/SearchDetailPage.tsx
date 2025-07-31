@@ -7,7 +7,7 @@ import RestaurantMap from '../components/detail/RestaurantMap';
 import { useRestaurantDetail } from '@/app/shared/hooks/queries/useRestaurant';
 import { useParams } from 'next/navigation';
 import { useAuthStore } from '@/app/shared/store/useAuthStore';
-import { RestaurantImages } from '../components/detail/RestaurantImages';
+import { ImageSlider } from '../components/detail/image';
 
 export default function SearchDetailPage() {
   const params = useParams<{ id: string }>();
@@ -51,9 +51,10 @@ export default function SearchDetailPage() {
   return (
     <div>
       <RestaurantHeader restaurant={restaurant} />
-      <RestaurantImages
-        restaurantId={Number(restaurant.id)}
-        images={restaurant.photos}
+      <ImageSlider
+        displayImages={restaurant.photos}
+        restaurantName={restaurant.name}
+        onScroll={() => {}}
       />
       <RestaurantInfo
         restaurant={restaurant}

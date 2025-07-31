@@ -1,5 +1,4 @@
-'use client';
-import { memo, useCallback } from 'react';
+import { useCallback } from 'react';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 
@@ -10,7 +9,7 @@ interface ImageThumbnailsProps {
   onThumbnailClick: (index: number) => void;
 }
 
-const ImageThumbnails = memo(function ImageThumbnails({
+export default function ImageThumbnails({
   displayImages,
   currentImageIndex,
   restaurantName,
@@ -52,9 +51,7 @@ const ImageThumbnails = memo(function ImageThumbnails({
               src={image}
               alt={`${restaurantName} 이미지 썸네일 ${index + 1}`}
               fill
-              priority={false}
               loading="lazy"
-              placeholder="empty"
               sizes="(max-width: 768px) 100vw, 50vw"
               className="object-cover"
               onError={(e) => {
@@ -67,8 +64,4 @@ const ImageThumbnails = memo(function ImageThumbnails({
       </div>
     </motion.div>
   );
-});
-
-ImageThumbnails.displayName = 'ImageThumbnails';
-
-export default ImageThumbnails;
+}
