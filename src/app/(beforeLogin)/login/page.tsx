@@ -17,10 +17,6 @@ export default function LoginForm() {
     loginError,
   } = useLoginForm();
 
-  const handleGoogleLogin = () => {
-    window.location.href = `${process.env.NEXT_PUBLIC_API_URL}/auth/signin/google`;
-  };
-
   return (
     <div className="flex min-h-screen items-center justify-center px-4 py-12">
       <motion.div

@@ -1,6 +1,6 @@
 'use client';
-import { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { useState } from 'react';
+import { motion } from 'framer-motion';
 import { HiLocationMarker } from 'react-icons/hi';
 import { RestaurantDetail } from '@/app/shared/types/restaurant';
 import { Button, StateDisplay } from '@/app/shared/ui';
@@ -30,7 +30,7 @@ export default function LocationCard({ restaurant }: LocationCardProps) {
       await getCurrentLocation();
       setShowDistance(true);
       toast.success('현재의 위치를 성공적으로 찾았습니다.');
-    } catch (_) {
+    } catch {
       toast.error('현재 위치를 찾을 수 없습니다.');
     }
   };

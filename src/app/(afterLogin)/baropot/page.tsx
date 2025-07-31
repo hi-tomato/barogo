@@ -1,5 +1,5 @@
 'use client';
-import { useEffect } from 'react';
+
 import { useRouter } from 'next/navigation';
 import { HiPlus } from 'react-icons/hi';
 import BaropotList from '@/app/features/baropot/components/BaropotList';

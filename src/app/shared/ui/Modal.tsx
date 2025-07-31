@@ -1,25 +1,24 @@
-"use client";
-import { motion, AnimatePresence } from "framer-motion";
-import { useEffect } from "react";
-import { HiX } from "react-icons/hi";
-import Button from "./Button";
+'use client';
+import { motion, AnimatePresence } from 'framer-motion';
+import { useEffect } from 'react';
+import { HiX } from 'react-icons/hi';
 
 interface ModalProps {
   isOpen: boolean;
   onClose: () => void;
   title?: string;
   children: React.ReactNode;
-  size?: "sm" | "md" | "lg" | "xl";
+  size?: 'sm' | 'md' | 'lg' | 'xl';
   showCloseButton?: boolean;
   closeOnOverlayClick?: boolean;
   className?: string;
 }
 
 const modalSizes = {
-  sm: "max-w-md",
-  md: "max-w-lg",
-  lg: "max-w-2xl",
-  xl: "max-w-4xl",
+  sm: 'max-w-md',
+  md: 'max-w-lg',
+  lg: 'max-w-2xl',
+  xl: 'max-w-4xl',
 };
 
 export default function Modal({
@@ -27,27 +26,27 @@ export default function Modal({
   onClose,
   title,
   children,
-  size = "md",
+  size = 'md',
   showCloseButton = true,
   closeOnOverlayClick = true,
-  className = "",
+  className = '',
 }: ModalProps) {
   // ESC 키로 모달 닫기
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
-      if (e.key === "Escape" && isOpen) {
+      if (e.key === 'Escape' && isOpen) {
         onClose();
       }
     };
 
     if (isOpen) {
-      document.addEventListener("keydown", handleEscape);
-      document.body.style.overflow = "hidden";
+      document.addEventListener('keydown', handleEscape);
+      document.body.style.overflow = 'hidden';
     }
 
     return () => {
-      document.removeEventListener("keydown", handleEscape);
-      document.body.style.overflow = "unset";
+      document.removeEventListener('keydown', handleEscape);
+      document.body.style.overflow = 'unset';
     };
   }, [isOpen, onClose]);
 
@@ -74,19 +73,19 @@ export default function Modal({
             initial={{ opacity: 0, scale: 0.95, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
-            transition={{ type: "spring", damping: 25, stiffness: 300 }}
-            className={`relative bg-white rounded-3xl shadow-2xl w-full ${modalSizes[size]} ${className}`}
+            transition={{ type: 'spring', damping: 25, stiffness: 300 }}
+            className={`relative w-full rounded-3xl bg-white shadow-2xl ${modalSizes[size]} ${className}`}
           >
             {/* 헤더 */}
             {(title || showCloseButton) && (
-              <div className="flex items-center justify-between p-6 border-b border-gray-100">
+              <div className="flex items-center justify-between border-b border-gray-100 p-6">
                 {title && (
                   <h2 className="text-xl font-bold text-[#2B2B2B]">{title}</h2>
                 )}
                 {showCloseButton && (
                   <motion.button
                     onClick={onClose}
-                    className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-full transition-colors"
+                    className="rounded-full p-2 text-gray-400 transition-colors hover:bg-gray-100 hover:text-gray-600"
                     whileHover={{ scale: 1.1 }}
                     whileTap={{ scale: 0.9 }}
                   >

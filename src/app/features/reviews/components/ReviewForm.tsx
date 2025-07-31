@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { HiStar, HiOutlineStar } from 'react-icons/hi';
 import { CreateReviewRequest } from '@/app/shared/types/restaurant';
-import PhotoUploader from './PhotoUploader';
+
 import ImageUploader from '@/app/shared/components/ImageUploader';
 import { LoadingSpinner } from '@/app/shared/ui';
 import { useToast } from '@/app/shared/hooks/useToast';

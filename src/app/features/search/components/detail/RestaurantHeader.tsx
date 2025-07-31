@@ -1,8 +1,6 @@
 'use client';
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
-import { Button, StateDisplay } from '@/app/shared/ui';
+import { Button } from '@/app/shared/ui';
 import { RestaurantDetail } from '@/app/shared/types/restaurant';
 
 interface RestaurantHeaderProps {
@@ -12,9 +10,6 @@ interface RestaurantHeaderProps {
 export default function RestaurantHeader({
   restaurant,
 }: RestaurantHeaderProps) {
-  const router = useRouter();
-  const [showMenu, setShowMenu] = useState(false);
-
   if (!restaurant) {
     return null;
   }

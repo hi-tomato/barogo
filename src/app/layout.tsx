@@ -2,6 +2,7 @@ import Script from 'next/script';
 import './globals.css';
 import QueryProvider from './shared/providers/QueryProvider';
 import ErrorBoundaryProvider from '@/app/shared/providers/ErrorBoundaryProvider';
+import ToastContextProvider from '@/app/shared/ui/toast/ToastContext';
 import { Metadata, Viewport } from 'next';
 
 export const metadata: Metadata = {
@@ -38,8 +39,10 @@ export default function RootLayout({
       <body>
         <ErrorBoundaryProvider>
           <QueryProvider>
-            {children}
-            {modal}
+            <ToastContextProvider>
+              {children}
+              {modal}
+            </ToastContextProvider>
             <Script
               src={`//dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.NEXT_PUBLIC_KAKAO_JAVASCRIPT_KEY}&libraries=services,clusterer&autoload=false`}
               strategy="beforeInteractive"
