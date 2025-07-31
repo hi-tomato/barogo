@@ -1,7 +1,7 @@
 'use client';
 import { useNotification } from '@/app/shared/hooks/queries/useNotification';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { HiSearch, HiBell } from 'react-icons/hi';
 import { Input } from '@/app/shared/ui';
 import NotificationModal from './NotificationModal';
@@ -11,9 +11,10 @@ export default function MainHeader() {
   const { unreadCount, isLoading } = useNotification();
   const [isNotificationOpen, setIsNotificationOpen] = useState(false);
 
-  const handleNotificationClick = () => {
-    setIsNotificationOpen(!isNotificationOpen);
-  };
+  const handleNotificationClick = useCallback(
+    () => setIsNotificationOpen(!isNotificationOpen),
+    [isNotificationOpen]
+  );
 
   return (
     <header className="sticky top-0 z-40 bg-white">

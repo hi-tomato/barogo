@@ -1,5 +1,6 @@
 import { BaropotListResponse } from '@/app/shared/types/baropots';
 import { BaropotStatus } from '@/app/shared/types/enums';
+import { useMemo } from 'react';
 
 interface BaropotTableStatsProps {
   baropotList: BaropotListResponse[];
@@ -8,14 +9,16 @@ interface BaropotTableStatsProps {
 export default function BaropotTableStats({
   baropotList,
 }: BaropotTableStatsProps) {
-  const stats = {
-    total: baropotList.length,
-    recruiting: baropotList.filter((b) => b.status === BaropotStatus.OPEN)
-      .length,
-    full: baropotList.filter((b) => b.status === BaropotStatus.FULL).length,
-    closed: baropotList.filter((b) => b.status === BaropotStatus.COMPLETED)
-      .length,
-  };
+  const stats = useMemo(() => {
+    return {
+      total: baropotList.length,
+      recruiting: baropotList.filter((b) => b.status === BaropotStatus.OPEN)
+        .length,
+      full: baropotList.filter((b) => b.status === BaropotStatus.FULL).length,
+      closed: baropotList.filter((b) => b.status === BaropotStatus.COMPLETED)
+        .length,
+    };
+  }, [baropotList]);
 
   return (
     <div className="mx-4 mt-4 rounded-xl border border-gray-100 bg-white p-4 shadow-sm">
