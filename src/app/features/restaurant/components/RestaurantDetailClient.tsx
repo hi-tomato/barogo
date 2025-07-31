@@ -1,7 +1,6 @@
 'use client';
 import { useRestaurantDetail } from '@/app/shared/hooks/queries/useRestaurant';
 import { useAuthStore } from '@/app/shared/store/useAuthStore';
-// import RestaurantImages from '@/app/features/search/components/detail/RestaurantImages';
 import { StateDisplay } from '@/app/shared/ui';
 import dynamic from 'next/dynamic';
 import { Suspense } from 'react';
