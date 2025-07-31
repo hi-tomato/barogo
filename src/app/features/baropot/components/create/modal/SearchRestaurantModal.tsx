@@ -56,7 +56,7 @@ export default function SearchRestaurantModal({
   const handleSelect = async (restaurant: KakaoRestaurant) => {
     if (onSelect) {
       const restaurantData = {
-        id: restaurant.id,
+        id: Number(restaurant.id),
         name: restaurant.place_name,
         location: restaurant.address_name,
         category: restaurant.category_name,

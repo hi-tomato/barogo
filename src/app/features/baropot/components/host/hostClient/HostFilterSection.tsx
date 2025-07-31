@@ -1,6 +1,7 @@
 import { BaropotStatus, baropotStatusKorean } from '@/app/shared/types/enums';
 import { Input } from '@/app/shared/ui';
 import { BaropotsQueries } from '@/app/shared/types/baropots';
+import { useId, useMemo } from 'react';
 
 export default function HostFilterSection({
   queries,
@@ -9,6 +10,15 @@ export default function HostFilterSection({
   queries: BaropotsQueries;
   handleFilterChange: (key: keyof BaropotsQueries, value: any) => void;
 }) {
+  const baseId = useId();
+
+  const statusOptions = useMemo(() => {
+    return Object.values(BaropotStatus).map((status) => ({
+      value: status,
+      label: baropotStatusKorean[status as BaropotStatus],
+    }));
+  }, []);
+
   return (
     <>
       <h2 className="mb-4 text-lg font-semibold text-[#2B2B2B]">필터</h2>
@@ -23,11 +33,12 @@ export default function HostFilterSection({
             value={queries.statusList || ''}
             onChange={(e) => handleFilterChange('statusList', e.target.value)}
             className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:border-transparent focus:ring-2 focus:ring-[#1C4E80]"
+            id={`${baseId}-status-select`}
           >
             <option value="">전체</option>
-            {Object.values(BaropotStatus).map((status) => (
-              <option key={status} value={status}>
-                {baropotStatusKorean[status as BaropotStatus]}
+            {statusOptions.map((option) => (
+              <option key={option.value} value={option.value}>
+                {option.label}
               </option>
             ))}
           </select>
@@ -40,6 +51,7 @@ export default function HostFilterSection({
           value={queries.title || ''}
           onChange={(e) => handleFilterChange('title', e.target.value)}
           label="제목 검색"
+          id={`${baseId}-title-input`}
         />
 
         {/* 맛집 이름 검색 */}
@@ -49,6 +61,7 @@ export default function HostFilterSection({
           value={queries.restaurantName || ''}
           onChange={(e) => handleFilterChange('restaurantName', e.target.value)}
           label="맛집 이름"
+          id={`${baseId}-restaurant-name-input`}
         />
       </div>
     </>

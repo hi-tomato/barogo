@@ -1,5 +1,5 @@
 'use client';
-import { Suspense, useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import MapHeaderBar from './MapHeaderBar';
 
 import { useFilteredRestaurants } from '@/app/features/map/hooks/useFilteredRestaurants';
@@ -27,47 +27,78 @@ export default function KaKaoContainer() {
   const { data: restaurants = [] } = useRestaurantList();
   const { data: baropotList = [] } = useGetBaropotList();
 
+  const baropotByRestaurantId = useMemo(() => {
+    const map = new Map<number, number>();
+    baropotList.forEach((baropot) => {
+      if (baropot.restaurant?.id && baropot.status === BaropotStatus.OPEN) {
+        const restaurantId = baropot.restaurant.id;
+        const currentCount = map.get(restaurantId) || 0;
+        map.set(restaurantId, currentCount + 1);
+      }
+    });
+
+    return map;
+  }, [baropotList]);
+
   const restaurantsWithBaropot = useMemo(() => {
     return restaurants.map((restaurant) => {
-      const hasBaropot = baropotList.some(
-        (baropot) =>
-          baropot.restaurant?.id === restaurant.id &&
-          baropot.status === BaropotStatus.OPEN
-      );
+      const baropotCount = baropotByRestaurantId.get(restaurant.id) || 0;
 
-      const baropotLength = baropotList.filter(
-        (baropot) =>
-          baropot.restaurant?.id === restaurant.id &&
-          baropot.status === BaropotStatus.OPEN
-      );
-
-      return { ...restaurant, hasBaropot, baropotLength };
+      return {
+        ...restaurant,
+        hasBaropot: baropotCount > 0,
+        baropotLength: baropotCount,
+      };
     });
-  }, [restaurants, baropotList]);
+  }, [restaurants, baropotByRestaurantId]);
+
+  const totalBaropotCount = useMemo(() => {
+    return baropotList.filter(
+      (baropot) => baropot.status === BaropotStatus.OPEN
+    ).length;
+  }, [baropotList]);
+
+  // const restaurantsWithBaropot = useMemo(() => {
+  //   return restaurants.map((restaurant) => {
+  //     const hasBaropot = baropotList.some(
+  //       (baropot) =>
+  //         baropot.restaurant?.id === restaurant.id &&
+  //         baropot.status === BaropotStatus.OPEN
+  //     );
+
+  //     const baropotLength = baropotList.filter(
+  //       (baropot) =>
+  //         baropot.restaurant?.id === restaurant.id &&
+  //         baropot.status === BaropotStatus.OPEN
+  //     );
+
+  //     return { ...restaurant, hasBaropot, baropotLength };
+  //   });
+  // }, [restaurants, baropotList]);
 
   const filteredRestaurants = useFilteredRestaurants(
     restaurantsWithBaropot,
     categoryFilter
   );
-  const handleClosePopup = () => {
+
+  const handleClosePopup = useCallback(() => {
     setSelected(null);
-  };
+  }, []);
+
   return (
     <div className="relative h-screen w-full">
       <MapHeaderBar
         categoryFilter={categoryFilter}
         onCategoryChange={setCategoryFilter}
         resultCount={filteredRestaurants.length}
-        baropotCount={baropotList.length}
+        baropotCount={totalBaropotCount}
       />
-      <Suspense fallback={<LoadingSpinner size="lg" />}>
-        <KakaoMapView
-          restaurants={filteredRestaurants}
-          selectedRestaurant={selected}
-          onRestaurantSelect={setSelected}
-          onClosePopup={handleClosePopup}
-        />
-      </Suspense>
+      <KakaoMapView
+        restaurants={filteredRestaurants}
+        selectedRestaurant={selected}
+        onRestaurantSelect={setSelected}
+        onClosePopup={handleClosePopup}
+      />
     </div>
   );
 }

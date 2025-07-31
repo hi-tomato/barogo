@@ -1,10 +1,11 @@
 'use client';
 import { useRestaurantDetail } from '@/app/shared/hooks/queries/useRestaurant';
 import { useAuthStore } from '@/app/shared/store/useAuthStore';
-import { RestaurantImage } from '@/app/features/search/components/detail/RestaurantImages';
+// import RestaurantImages from '@/app/features/search/components/detail/RestaurantImages';
 import { StateDisplay } from '@/app/shared/ui';
 import dynamic from 'next/dynamic';
 import { Suspense } from 'react';
+import { RestaurantImages } from '../../search/components/detail/RestaurantImages';
 
 const RestaurantInfo = dynamic(
   () => import('@/app/features/search/components/detail/RestaurantInfo'),
@@ -38,7 +39,7 @@ const RestaurantSection = dynamic(
 export default function RestaurantDetailClient({
   restaurantId,
 }: {
-  restaurantId: string;
+  restaurantId: number;
 }) {
   const { user } = useAuthStore();
 
@@ -58,7 +59,10 @@ export default function RestaurantDetailClient({
 
   return (
     <div className="min-h-screen bg-[#E6EEF5] pb-24">
-      <RestaurantImage images={restaurant.photos} />
+      <RestaurantImages
+        restaurantId={restaurantId}
+        images={restaurant.photos}
+      />
       <Suspense
         fallback={<div className="h-32 animate-pulse rounded-lg bg-gray-100" />}
       >
