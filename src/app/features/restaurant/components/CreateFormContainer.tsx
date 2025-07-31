@@ -1,5 +1,5 @@
 'use client';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useReducer, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useCreateRestaurant } from '@/app/shared/hooks/queries/useRestaurant';
 import { FormData, RestaurantData } from '../types';
@@ -16,21 +16,14 @@ import CreateFormActions from './CreateFormActions';
 import { useToast } from '@/app/shared/hooks/useToast';
 import Modal from '@/app/shared/ui/Modal';
 import SuccessModalContent from './SuccessModalContent';
+import useFormReducer, { initialState } from '../hooks/useFormReducer';
 
 export default function CreateFormContainer() {
   const router = useRouter();
-  const createRestaurant = useCreateRestaurant();
   const [restaurant, setRestaurant] = useState<RestaurantData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [formData, setFormData] = useState<FormData>({
-    description: '',
-    images: [],
-    tags: '',
-    openingTime: '09:00',
-    closingTime: '21:00',
-    lastOrderTime: '20:30',
-    category: '',
-  });
+  const [formData, dispatch] = useReducer(useFormReducer, initialState);
+
   const [uploadUrls, setUploadUrls] = useState<string[]>([]);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [createdRestaurant, setCreatedRestaurant] = useState<{
@@ -40,6 +33,8 @@ export default function CreateFormContainer() {
 
   const toast = useToast();
 
+  const createRestaurant = useCreateRestaurant();
+
   useEffect(() => {
     try {
       const data = sessionStorage.getItem('selectedRestaurant');
@@ -48,11 +43,11 @@ export default function CreateFormContainer() {
         setRestaurant(restaurantData);
 
         if (restaurantData.x && restaurantData.y) {
-          setFormData((prev) => ({
-            ...prev,
+          dispatch({
+            type: 'SET_LOCATION',
             lat: parseFloat(restaurantData.y),
             lng: parseFloat(restaurantData.x),
-          }));
+          });
         }
       }
     } catch (error) {
@@ -69,19 +64,20 @@ export default function CreateFormContainer() {
     >
   ) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+    dispatch({
+      type: 'UPDATE_FIELD',
+      field: name as keyof FormData,
+      value,
+    });
   };
 
   const addTag = (tag: string) => {
-    const currentTags = formData.tags.split(' ').filter((t) => t.length > 0);
+    const currentTags = formData.tags.split(',').filter((t) => t.length > 0);
     if (!currentTags.includes(tag)) {
-      setFormData((prev) => ({
-        ...prev,
-        tags: [...currentTags, tag].join(' '),
-      }));
+      dispatch({
+        type: 'ADD_TAG',
+        tag,
+      });
     }
   };
 
@@ -100,7 +96,7 @@ export default function CreateFormContainer() {
     }
 
     const cleanPhoneNumber = (phone: string) => {
-      return phone.replace(/[-\s]/g, ''); // 하이픈과 공백 제거
+      return phone.replace(/[-\s]/g, '');
     };
 
     const photos: string[] = uploadUrls;
@@ -115,7 +111,7 @@ export default function CreateFormContainer() {
       openingTime: formData.openingTime,
       closingTime: formData.closingTime,
       lastOrderTime: formData.lastOrderTime,
-      tags: formData.tags.split(' ').filter((tag) => tag.trim().length > 0),
+      tags: formData.tags.split(',').filter((tag) => tag.trim().length > 0),
       photos: photos,
     };
 
