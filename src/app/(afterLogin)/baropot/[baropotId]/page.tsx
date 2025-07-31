@@ -25,7 +25,7 @@ export async function generateMetadata({
       keywords: `${baropot.restaurant.name}, ${baropot.description}`,
       images: baropot.restaurant.photos ? [baropot.restaurant.photos[0]] : [],
     };
-  } catch (_: unknown) {
+  } catch {
     return {
       title: '해당 바로팟 상세 페이지를 찾을 수 없습니다.',
       description: '요청하신 바로팟 상세 페이지를 찾을 수 없습니다.',

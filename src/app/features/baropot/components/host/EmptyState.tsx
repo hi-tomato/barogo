@@ -3,7 +3,7 @@ export function EmptyState({
   icon: Icon,
 }: {
   type: 'pending' | 'approved';
-  icon: React.ComponentType<any>;
+  icon: React.ComponentType<{ size?: number; className?: string }>;
 }) {
   const messages = {
     pending: '대기중인 참가 신청이 없습니다',

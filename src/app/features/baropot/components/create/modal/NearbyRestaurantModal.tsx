@@ -32,7 +32,7 @@ export default function NearbyRestaurantModal({
 
   const handleSelect = (restaurant: NearbyRestaurant) => {
     const restaurantData: RestaurantData = {
-      id: restaurant.id,
+      id: Number(restaurant.id),
       name: restaurant.place_name,
       location: restaurant.address_name,
       category: restaurant.category_name,

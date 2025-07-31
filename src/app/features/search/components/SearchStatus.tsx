@@ -6,7 +6,7 @@ interface SearchStatusProps {
   query?: string;
 }
 
-export const SearchStatus = ({ type, error, query }: SearchStatusProps) => {
+export const SearchStatus = ({ type, error }: SearchStatusProps) => {
   if (type === 'loading') {
     return (
       <div className="flex items-center justify-center p-8">

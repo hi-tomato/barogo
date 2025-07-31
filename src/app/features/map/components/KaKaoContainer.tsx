@@ -58,24 +58,6 @@ export default function KaKaoContainer() {
     ).length;
   }, [baropotList]);
 
-  // const restaurantsWithBaropot = useMemo(() => {
-  //   return restaurants.map((restaurant) => {
-  //     const hasBaropot = baropotList.some(
-  //       (baropot) =>
-  //         baropot.restaurant?.id === restaurant.id &&
-  //         baropot.status === BaropotStatus.OPEN
-  //     );
-
-  //     const baropotLength = baropotList.filter(
-  //       (baropot) =>
-  //         baropot.restaurant?.id === restaurant.id &&
-  //         baropot.status === BaropotStatus.OPEN
-  //     );
-
-  //     return { ...restaurant, hasBaropot, baropotLength };
-  //   });
-  // }, [restaurants, baropotList]);
-
   const filteredRestaurants = useFilteredRestaurants(
     restaurantsWithBaropot,
     categoryFilter

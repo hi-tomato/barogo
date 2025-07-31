@@ -30,7 +30,7 @@ export async function generateMetadata({
         images: restaurant.photos?.[0] ? [restaurant.photos[0]] : [],
       },
     };
-  } catch (_: unknown) {
+  } catch {
     return {
       title: '해당 맛집을 찾을 수 없습니다.',
       description: '요청하신 맛집을 찾을 수 없습니다.',
@@ -44,5 +44,5 @@ export default async function RestaurantDetailPage({
   params: Promise<{ restaurantId: string }>;
 }) {
   const { restaurantId } = await params;
-  return <RestaurantDetailClient restaurantId={restaurantId} />;
+  return <RestaurantDetailClient restaurantId={Number(restaurantId)} />;
 }

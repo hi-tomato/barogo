@@ -1,7 +1,7 @@
 'use client';
 import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
-import { HiSearch, HiFire } from 'react-icons/hi';
+import { HiSearch } from 'react-icons/hi';
 import { HiMapPin } from 'react-icons/hi2';
 
 const exploreOptions = [

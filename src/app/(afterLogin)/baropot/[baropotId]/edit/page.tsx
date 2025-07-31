@@ -5,10 +5,7 @@ import {
   useGetBaropotEdit,
 } from '@/app/shared/hooks/queries/useBaropot';
 import { useState, useEffect } from 'react';
-import {
-  BaropotDetailResponse,
-  BaropotEditRequest,
-} from '@/app/shared/types/baropots';
+import { BaropotEditRequest } from '@/app/shared/types/baropots';
 import { Input } from '@/app/shared/ui';
 import {
   ParticipantGender,
@@ -22,7 +19,7 @@ export default function BaropotEditPage() {
   const router = useRouter();
   const baropotId = Number(params.baropotId);
 
-  const { data: baropot, isError } = useGetBaropotDetail(baropotId);
+  const { data: baropot } = useGetBaropotDetail(baropotId);
   const updateBaropotMutation = useGetBaropotEdit();
 
   const [formData, setFormData] = useState<BaropotEditRequest>({

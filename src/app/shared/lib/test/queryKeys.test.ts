@@ -1,4 +1,4 @@
-import { describe, it, expect, test } from 'vitest';
+import { describe, expect, test } from 'vitest';
 import { queryKeys } from '../queryKeys';
 import { BaropotsQueries } from '../../types/baropots';
 import {

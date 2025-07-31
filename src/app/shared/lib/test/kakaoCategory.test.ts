@@ -1,4 +1,4 @@
-import { describe, it, expect, test } from 'vitest';
+import { describe, expect, test } from 'vitest';
 import { getCategoryDisplayName, isValidCategory } from '../kakaoCategory';
 
 describe('kakaoCategory', () => {

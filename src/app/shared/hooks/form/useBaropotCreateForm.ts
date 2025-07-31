@@ -3,10 +3,7 @@ import { RestaurantData } from '@/app/features/restaurant/types';
 import { useFormBase } from './useFormBase';
 import { BaropotFormData } from '@/app/features/baropot/types/baropot';
 import { useCreateBaropot } from '@/app/shared/hooks/queries/useBaropot';
-import {
-  CreateBaropotRequest,
-  BaropotListResponse,
-} from '@/app/shared/types/baropots';
+import { CreateBaropotRequest } from '@/app/shared/types/baropots';
 import { ContactMethod } from '@/app/shared/types/enums';
 import { BAROPOT_CREATE_FORM_VALIDATE_RULES } from '@/app/shared/lib/validate';
 import {
@@ -16,7 +13,6 @@ import {
   mapPaymentMethodToEnum,
 } from '@/app/shared/lib/createBaropotHelper';
 import { useToast } from '@/app/shared/hooks/useToast';
-import { baropotService } from '@/app/shared/services/baropotService';
 
 const defaultValues = {
   gender: [],

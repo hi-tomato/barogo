@@ -36,7 +36,6 @@ export default function CreateRestaurantBaropotPage() {
   const {
     register,
     handleSubmit,
-    watch,
     setValue,
     control,
     errors,
@@ -45,7 +44,6 @@ export default function CreateRestaurantBaropotPage() {
     watchAgeGroup,
     watchTags,
     toggleArrayField,
-    BAROPOT_CREATE_FORM_VALIDATE_RULES,
     isCreating,
   } = useBaropotCreateForm(restaurantData);
 
@@ -83,7 +81,7 @@ export default function CreateRestaurantBaropotPage() {
         <BasicInfoSection
           register={register}
           errors={errors}
-          restaurantData={restaurantData}
+          restaurantData={restaurantData ?? undefined}
         />
 
         <ScheduleSection register={register} errors={errors} />
