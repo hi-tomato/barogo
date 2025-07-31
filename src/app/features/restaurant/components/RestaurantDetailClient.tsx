@@ -3,8 +3,7 @@ import { useRestaurantDetail } from '@/app/shared/hooks/queries/useRestaurant';
 import { useAuthStore } from '@/app/shared/store/useAuthStore';
 import { StateDisplay } from '@/app/shared/ui';
 import dynamic from 'next/dynamic';
-import { Suspense } from 'react';
-import { RestaurantImages } from '../../search/components/detail/RestaurantImages';
+import RestaurantImages from '../../search/components/detail/RestaurantImages';
 
 const RestaurantInfo = dynamic(
   () => import('@/app/features/search/components/detail/RestaurantInfo'),
@@ -62,28 +61,14 @@ export default function RestaurantDetailClient({
         restaurantId={restaurantId}
         images={restaurant.photos}
       />
-      <Suspense
-        fallback={<div className="h-32 animate-pulse rounded-lg bg-gray-100" />}
-      >
-        <RestaurantInfo
-          restaurant={restaurant}
-          isOwner={restaurant.isWrittenByMe}
-        />
-      </Suspense>
-      <Suspense
-        fallback={<div className="h-48 animate-pulse rounded-lg bg-gray-100" />}
-      >
-        <RestaurantReviews
-          restaurantId={restaurantId}
-          currentUserId={user?.id}
-        />
-      </Suspense>
+      <RestaurantInfo
+        restaurant={restaurant}
+        isOwner={restaurant.isWrittenByMe}
+      />
 
-      <Suspense
-        fallback={<div className="h-24 animate-pulse rounded-lg bg-gray-100" />}
-      >
-        <RestaurantSection />
-      </Suspense>
+      <RestaurantReviews restaurantId={restaurantId} currentUserId={user?.id} />
+
+      <RestaurantSection />
     </div>
   );
 }

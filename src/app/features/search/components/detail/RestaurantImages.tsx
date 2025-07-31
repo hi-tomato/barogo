@@ -1,10 +1,11 @@
-'use client';
-import { useState, useRef, memo, useCallback, useMemo } from 'react';
+import { useState, useRef, useCallback, useMemo } from 'react';
 import { useRestaurantDetail } from '@/app/shared/hooks/queries/useRestaurant';
-import ImageSlider from './image/ImageSlider';
-import BaropotToolTip from './image/BaropotToolTip';
-import ImageCounter from './image/ImageCounter';
-import ImageThumbnails from './image/ImageThumbnails';
+import {
+  BaropotToolTip,
+  ImageSlider,
+  ImageCounter,
+  ImageThumbnails,
+} from './image';
 
 const defaultImages = [
   'https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=400&h=300&fit=crop',
@@ -16,7 +17,7 @@ interface RestaurantImagesProps {
   restaurantName?: string;
 }
 
-export const RestaurantImages = memo(function RestaurantImages({
+export default function RestaurantImages({
   restaurantId,
   images = [],
   restaurantName = '레스토랑',
@@ -68,7 +69,6 @@ export const RestaurantImages = memo(function RestaurantImages({
 
       {/* 이미지 슬라이더 */}
       <ImageSlider
-        ref={sliderRef}
         displayImages={displayImages}
         restaurantName={restaurantName}
         onScroll={handleScroll}
@@ -99,6 +99,4 @@ export const RestaurantImages = memo(function RestaurantImages({
       `}</style>
     </div>
   );
-});
-
-RestaurantImages.displayName = 'RestaurantImages';
+}
