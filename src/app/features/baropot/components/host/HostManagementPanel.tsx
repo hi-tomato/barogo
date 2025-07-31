@@ -59,7 +59,7 @@ export default function HostManagementPanel({
         {isModalOpen && (
           <>
             <motion.div
-              className="fixed inset-0 z-50 bg-[#000000af]"
+              className="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
@@ -73,11 +73,11 @@ export default function HostManagementPanel({
               exit={{ y: '100%' }}
               transition={{ type: 'spring', stiffness: 300, damping: 30 }}
             >
-              <div className="overflow-hidden rounded-t-3xl bg-[#E6EEF5] shadow-2xl">
+              <div className="overflow-hidden rounded-t-2xl bg-white shadow-2xl">
                 <PanelHeader onClose={handleClose} />
 
-                <div className="max-h-[70vh] overflow-y-auto pb-6">
-                  <div className="space-y-6 px-6 py-6">
+                <div className="max-h-[70vh] overflow-y-auto">
+                  <div className="space-y-4 p-6">
                     <StatusManagementSection
                       baropot={baropot}
                       onStatusChange={updateStatus}
