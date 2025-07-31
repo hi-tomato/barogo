@@ -1,10 +1,10 @@
-"use client";
-import { useNotification } from "@/app/shared/hooks/queries/useNotification";
-import { Notification } from "@/app/shared/types/notification";
-import { useRouter } from "next/navigation";
-import React from "react";
-import { HiBell, HiX } from "react-icons/hi";
-import { formatTime } from "@/app/features/main/util/formatTime";
+'use client';
+import { useNotification } from '@/app/shared/hooks/queries/useNotification';
+import { Notification } from '@/app/shared/types/notification';
+import { useRouter } from 'next/navigation';
+import React, { useCallback } from 'react';
+import { HiBell, HiX } from 'react-icons/hi';
+import { formatTime } from '@/app/features/main/util/formatTime';
 
 export default function NotificationModal({
   setIsNotificationOpen,
@@ -15,13 +15,16 @@ export default function NotificationModal({
   const { isLoading, notifications, unreadCount, markAsRead, markAllAsRead } =
     useNotification();
 
-  const handleMarkAsRead = async (notificationId: number) => {
-    await markAsRead(notificationId);
-  };
+  const handleMarkAsRead = useCallback(
+    async (notificationId: number) => {
+      await markAsRead(notificationId);
+    },
+    [markAsRead]
+  );
 
-  const handleMarkAllAsRead = async () => {
+  const handleMarkAllAsRead = useCallback(async () => {
     await markAllAsRead();
-  };
+  }, [markAllAsRead]);
 
   return (
     <div className="fixed inset-0 z-50 flex justify-end">
@@ -31,7 +34,7 @@ export default function NotificationModal({
         onClick={() => setIsNotificationOpen(false)}
       />
       {/* 알림 패널 */}
-      <div className="relative w-80 h-full bg-white shadow-xl transform transition-transform duration-300 ease-in-out flex flex-col">
+      <div className="relative flex h-full w-80 transform flex-col bg-white shadow-xl transition-transform duration-300 ease-in-out">
         {/* 헤더 */}
         <div className="flex items-center justify-between p-4">
           <h2 className="text-lg font-bold">알림</h2>
@@ -46,7 +49,7 @@ export default function NotificationModal({
             )}
             <button
               onClick={() => setIsNotificationOpen(false)}
-              className="p-1 hover:bg-gray-100 rounded"
+              className="rounded p-1 hover:bg-gray-100"
             >
               <HiX size={20} />
             </button>
@@ -55,11 +58,11 @@ export default function NotificationModal({
         {/* 알림 목록 */}
         <div className="flex-1 overflow-y-auto">
           {isLoading ? (
-            <div className="flex items-center justify-center h-32">
+            <div className="flex h-32 items-center justify-center">
               <div className="text-gray-500">로딩 중...</div>
             </div>
           ) : notifications.length === 0 ? (
-            <div className="flex flex-col items-center justify-center h-32 text-gray-500">
+            <div className="flex h-32 flex-col items-center justify-center text-gray-500">
               <HiBell size={48} className="mb-2 opacity-50" />
               <p>새로운 알림이 없습니다</p>
             </div>
@@ -68,10 +71,10 @@ export default function NotificationModal({
               {notifications.slice(0, 10).map((notification: Notification) => (
                 <div
                   key={notification.id}
-                  className={`p-3 rounded-lg mb-2 cursor-pointer transition-colors ${
+                  className={`mb-2 cursor-pointer rounded-lg p-3 transition-colors ${
                     notification.isRead
-                      ? "bg-gray-50 hover:bg-gray-100"
-                      : "bg-blue-50 hover:bg-blue-100"
+                      ? 'bg-gray-50 hover:bg-gray-100'
+                      : 'bg-blue-50 hover:bg-blue-100'
                   }`}
                   onClick={() => handleMarkAsRead(notification.id)}
                 >
@@ -80,23 +83,23 @@ export default function NotificationModal({
                       <p
                         className={`text-sm ${
                           notification.isRead
-                            ? "text-gray-600"
-                            : "text-gray-900 font-medium"
+                            ? 'text-gray-600'
+                            : 'font-medium text-gray-900'
                         }`}
                       >
                         {notification.message}
                       </p>
                       {notification.restaurant && (
-                        <p className="text-xs text-gray-500 mt-1">
+                        <p className="mt-1 text-xs text-gray-500">
                           {notification.restaurant.name}
                         </p>
                       )}
-                      <p className="text-xs text-gray-400 mt-1">
+                      <p className="mt-1 text-xs text-gray-400">
                         {formatTime(notification.createdAt)}
                       </p>
                     </div>
                     {!notification.isRead && (
-                      <div className="w-2 h-2 bg-blue-500 rounded-full ml-2 flex-shrink-0" />
+                      <div className="ml-2 h-2 w-2 flex-shrink-0 rounded-full bg-blue-500" />
                     )}
                   </div>
                 </div>
@@ -106,13 +109,13 @@ export default function NotificationModal({
         </div>
         {/* 푸터 */}
         {notifications.length > 10 && (
-          <div className="p-4 border-t">
+          <div className="border-t p-4">
             <button
               onClick={() => {
                 setIsNotificationOpen(false);
-                router.push("/notifications");
+                router.push('/notifications');
               }}
-              className="w-full py-2 text-center text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+              className="w-full rounded-lg py-2 text-center text-blue-600 transition-colors hover:bg-blue-50"
             >
               모든 알림 보기
             </button>

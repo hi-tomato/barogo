@@ -10,7 +10,7 @@ import { useGeolocation } from '@/app/shared/hooks/useGeolocation';
 import { useRestaurantSearch } from '@/app/features/search/hooks/useSearch';
 import { useRestaurantList } from '@/app/shared/hooks/queries/useRestaurant';
 import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { NearbyRestaurant } from '@/app/shared/types';
 
 export default function SearchPage() {
@@ -28,10 +28,10 @@ export default function SearchPage() {
   // 서버에 등록된 맛집 목록 조회
   const { data: restaurantList } = useRestaurantList({});
 
-  const handleSelectRestaurant = (restaurant: NearbyRestaurant) => {
+  const handleSelectRestaurant = useCallback((restaurant: NearbyRestaurant) => {
     setSelectedRestaurant(restaurant);
     setShowPreview(true);
-  };
+  }, []);
 
   // 서버에 등록된 맛집 ID 확인 및 처리
   const handleConfirmSelection = (restaurant: NearbyRestaurant) => {
