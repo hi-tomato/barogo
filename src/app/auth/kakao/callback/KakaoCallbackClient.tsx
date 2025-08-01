@@ -4,7 +4,7 @@ import { setAccessToken } from '@/app/shared/lib/authToken';
 import { useAuthStore } from '@/app/shared/store/useAuthStore';
 import { LoadingSpinner } from '@/app/shared/ui';
 import { useRouter, useSearchParams } from 'next/navigation';
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 
 export default function KakaoCallbackClient() {
   const router = useRouter();
@@ -28,7 +28,7 @@ export default function KakaoCallbackClient() {
     };
 
     handleKakaoCallback();
-  }, [searchParams, initialize, router, toast]);
+  }, [searchParams, initialize, router]);
 
   return <LoadingSpinner />;
 }
