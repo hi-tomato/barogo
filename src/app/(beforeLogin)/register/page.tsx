@@ -1,5 +1,5 @@
 import { Metadata } from 'next';
-import RegisterContainer from './components/RegisterContainer';
+import RegisterContainer from '@/app/features/register/components/RegisterContainer';
 
 export const metadata: Metadata = {
   title:
