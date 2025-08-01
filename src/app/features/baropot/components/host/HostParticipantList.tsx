@@ -2,11 +2,12 @@ import { motion } from 'framer-motion';
 import { ParticipantCard } from './HostParicipantCard';
 import { HiCheckCircle, HiExclamationCircle } from 'react-icons/hi';
 import { EmptyState } from './EmptyState';
+import { Participant } from '@/app/shared/types/baropots';
 
 interface HostParticipantListProps {
   activeTab: string;
-  pendingParticipants: any[];
-  approvedParticipants: any[];
+  pendingParticipants: Participant[];
+  approvedParticipants: Participant[];
   hostMemos: Record<number, string>;
   onMemoChange: (userId: number, memo: string) => void;
   onApprove: (userId: number) => void;

@@ -8,7 +8,10 @@ export default function HostFilterSection({
   handleFilterChange,
 }: {
   queries: BaropotsQueries;
-  handleFilterChange: (key: keyof BaropotsQueries, value: any) => void;
+  handleFilterChange: (
+    key: keyof BaropotsQueries,
+    value: string | number | undefined
+  ) => void;
 }) {
   const baseId = useId();
 

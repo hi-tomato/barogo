@@ -16,8 +16,8 @@ describe('kakaoCategory', () => {
     });
 
     test('null/undefined 인자는 false를 반환해야 한다.', () => {
-      expect(isValidCategory(null as any)).toBe(false);
-      expect(isValidCategory(undefined as any)).toBe(false);
+      expect(isValidCategory(null as unknown as string)).toBe(false);
+      expect(isValidCategory(undefined as unknown as string)).toBe(false);
     });
   });
 });

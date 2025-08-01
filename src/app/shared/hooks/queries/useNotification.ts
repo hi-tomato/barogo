@@ -55,7 +55,7 @@ export const useNotification = () => {
         }
       };
 
-      newEventSource.onerror = (e) => {
+      newEventSource.onerror = () => {
         console.error('SSE 서버가 준비되지 않음');
         newEventSource.close();
         return null;
@@ -115,7 +115,7 @@ export const useNotification = () => {
         eventSource.close();
       }
     };
-  }, [userToken]);
+  }, [userToken, setUpSSE, fetchNotifications, eventSource]);
 
   useEffect(() => {
     return () => {

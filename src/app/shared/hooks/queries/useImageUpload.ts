@@ -1,10 +1,10 @@
-import { useMutation } from "@tanstack/react-query";
-import { imageUploadService } from "../../services/imageUploadService";
+import { useMutation } from '@tanstack/react-query';
+import { imageUploadService } from '../../services/imageUploadService';
 import {
   errorHandler,
   FILE_CONFIG,
   fileValidator,
-} from "../../lib/ImageUpload";
+} from '../../lib/ImageUpload';
 
 interface UploadResponse {
   url: string;
@@ -44,27 +44,26 @@ export const useImageUpload = (options: UseImageUploadOptions = {}) => {
         // Presigned URL 받기
         const { presignedUrl, key, url } =
           await imageUploadService.getPresignedUrl(extension);
-        console.log("🔗 Presigned URL 받음, S3 업로드 시작...");
+        console.log('🔗 Presigned URL 받음, S3 업로드 시작...');
 
         // S3에 파일 업로드
         await imageUploadService.uploadToS3(presignedUrl, file);
-        console.log("✅ S3 업로드 완료:", { url, key });
+        console.log('✅ S3 업로드 완료:', { url, key });
 
         return {
           data: { url, key },
           originalFile: file,
         };
-      } catch (error: any) {
-        console.error("❌ 이미지 업로드 실패:", error);
+      } catch (error: unknown) {
         throw new Error(errorHandler.getErrorMessage(error));
       }
     },
     onSuccess: ({ data, originalFile }) => {
-      console.log("이미지 업로드 성공:", data);
+      console.log('이미지 업로드 성공:', data);
       onSuccess?.(data, originalFile);
     },
     onError: (error, file) => {
-      console.error("이미지 업로드 에러:", error);
+      console.error('이미지 업로드 에러:', error);
       onError?.(error as Error, file);
     },
   });

@@ -1,5 +1,6 @@
 'use client';
 import { useRestaurantList } from '@/app/shared/hooks/queries/useRestaurant';
+import Image from 'next/image';
 import Link from 'next/link';
 import { BiRestaurant, BiRightArrow } from 'react-icons/bi';
 import { BsArrowRight } from 'react-icons/bs';
@@ -45,10 +46,12 @@ export default function NewRestaurants() {
                     <div className="flex items-center space-x-3">
                       <div className="flex h-12 w-12 items-center justify-center rounded-lg">
                         {restaurant.photos && restaurant.photos.length > 0 ? (
-                          <img
+                          <Image
                             src={restaurant.photos[0]}
                             alt={restaurant.name}
                             className="h-full w-full rounded-lg object-cover"
+                            width={48}
+                            height={48}
                           />
                         ) : (
                           <span className="text-lg">
