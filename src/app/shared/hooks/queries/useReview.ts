@@ -41,14 +41,9 @@ export const useDeleteReview = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: ({
-      reviewId,
-      restaurantId,
-    }: {
-      reviewId: number;
-      restaurantId: number;
-    }) => restaurantService.deleteReview(reviewId),
-    onSuccess: (data, variables) => {
+    mutationFn: ({ reviewId }: { reviewId: number; restaurantId: number }) =>
+      restaurantService.deleteReview(reviewId),
+    onSuccess: (_, variables) => {
       queryClient.invalidateQueries({
         queryKey: queryKeys.restaurant.review(variables.restaurantId),
       });
@@ -56,9 +51,6 @@ export const useDeleteReview = () => {
       queryClient.invalidateQueries({
         queryKey: queryKeys.restaurant.detail(variables.restaurantId),
       });
-    },
-    onError: (error) => {
-      console.error('리뷰 삭제 실패:', error);
     },
   });
 };
@@ -69,7 +61,6 @@ export const useUpdateReview = () => {
   return useMutation({
     mutationFn: ({
       reviewId,
-      restaurantId,
       reviewData,
     }: {
       reviewId: number;

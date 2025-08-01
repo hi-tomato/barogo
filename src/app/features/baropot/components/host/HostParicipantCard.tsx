@@ -1,8 +1,9 @@
 import { motion } from 'framer-motion';
+import { Participant } from '@/app/shared/types/baropots';
 import { HiCheckCircle, HiXCircle } from 'react-icons/hi';
 
 interface ParticipantCardProps {
-  participant: any;
+  participant: Participant;
   index: number;
   type: 'pending' | 'approved';
   hostMemo?: string;

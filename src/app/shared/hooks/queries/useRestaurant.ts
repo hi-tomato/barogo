@@ -6,6 +6,7 @@ import {
   SearchQueries,
   UpdateRestaurantRequest,
 } from '../../types/restaurant';
+import { AxiosError } from 'axios';
 
 export const useRestaurantList = (query?: SearchQueries) => {
   return useQuery({
@@ -52,8 +53,8 @@ export const useRestaurantDetail = (restaurantId: number) => {
     throwOnError: false,
     staleTime: 1000 * 60 * 5,
     gcTime: 1000 * 60 * 10,
-    retry: (failureCount, error: any) => {
-      if (error?.response?.status === 404) {
+    retry: (failureCount, error: unknown) => {
+      if (error instanceof AxiosError && error.response?.status === 404) {
         return false;
       }
       return failureCount < 2;

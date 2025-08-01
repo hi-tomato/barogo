@@ -1,6 +1,5 @@
 'use client';
 import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
 import { BaropotEditRequest } from '@/app/shared/types/baropots';
 import { Input } from '@/app/shared/ui';
 import {
@@ -11,21 +10,18 @@ import {
 } from '@/app/shared/types/enums';
 
 interface BaropotEditFormProps {
-  baropotId: number;
-  initialData?: any;
+  initialData?: BaropotEditRequest;
   onSubmit: (data: BaropotEditRequest) => void;
   onCancel: () => void;
   isLoading?: boolean;
 }
 
 export default function BaropotEditForm({
-  baropotId,
   initialData,
   onSubmit,
   onCancel,
   isLoading = false,
 }: BaropotEditFormProps) {
-  const router = useRouter();
   const [formData, setFormData] = useState<BaropotEditRequest>({
     title: '',
     description: '',

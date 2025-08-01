@@ -1,23 +1,34 @@
 'use client';
+import {
+  UseFormRegister,
+  UseFormSetValue,
+  FieldErrors,
+  Control,
+} from 'react-hook-form';
 import BasicInfoSection from '@/app/features/baropot/components/create/BasicInfoSection';
 import ScheduleSection from '@/app/features/baropot/components/create/ScheduleSection';
 import ParticipantConditionsSection from '@/app/features/baropot/components/create/ParticipantConditionsSection';
 import ContactPaymentSection from '@/app/features/baropot/components/create/ContactPaymentSection';
 import DetailedInfoSection from '@/app/features/baropot/components/create/DetailedInfoSection';
 import TagsSection from '@/app/features/baropot/components/create/TagsSection';
+import { BaropotFormData } from '@/app/features/baropot/types/baropot';
+import { RestaurantData } from '@/app/features/restaurant/types';
 
 interface BaropotCreateFormProps {
-  register: any;
-  handleSubmit: any;
-  setValue: any;
-  control: any;
-  errors: any;
-  watchContactMethod: any;
-  watchGender: any;
-  watchAgeGroup: any;
-  watchTags: any;
-  toggleArrayField: any;
-  restaurantData?: any;
+  register: UseFormRegister<BaropotFormData>;
+  handleSubmit: (e: React.FormEvent) => void;
+  setValue: UseFormSetValue<BaropotFormData>;
+  control: Control<BaropotFormData>;
+  errors: FieldErrors<BaropotFormData>;
+  watchContactMethod: string;
+  watchGender: string[];
+  watchAgeGroup: string[];
+  watchTags: string[];
+  toggleArrayField: (
+    fieldName: keyof Pick<BaropotFormData, 'gender' | 'ageGroup' | 'tags'>,
+    value: string
+  ) => void;
+  restaurantData?: RestaurantData | null;
 }
 
 export default function BaropotCreateForm({

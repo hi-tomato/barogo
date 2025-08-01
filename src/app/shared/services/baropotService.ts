@@ -19,7 +19,7 @@ export class BaropotService {
 
     const entries = Object.entries(queries);
     const queryString = entries
-      .filter(([_, value]) => value !== '')
+      .filter(([, value]) => value !== '')
       .map(([key, value]) => `${key}=${value}`)
       .join('&');
 
@@ -100,7 +100,7 @@ export class BaropotService {
     const queryString = queries
       ? Object.entries(queries)
           .filter(
-            ([_, value]) =>
+            ([, value]) =>
               value !== '' &&
               value != null &&
               value !== undefined &&
