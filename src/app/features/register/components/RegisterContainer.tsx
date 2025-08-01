@@ -3,7 +3,7 @@ import { useRegisterForm } from '@/app/shared/hooks/form/useRegisterForm';
 import RegisterHeader from './RegisterHeader';
 import RegisterForm from './RegisterForm';
 import RegisterFooter from './RegisterFooter';
-import SignUpSuccessModal from '../../_components/SignUpSuccessModal';
+import SignUpSuccessModal from '@/app/(beforeLogin)/_components/SignUpSuccessModal';
 
 export default function RegisterContainer() {
   const {

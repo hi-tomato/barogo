@@ -23,7 +23,7 @@ interface ValidationRules {
   };
   confirmPassword: {
     required: string;
-    validate: (value: string, password: string) => boolean | string;
+    validate: (value: string, formData: RegisterFormData) => boolean | string;
   };
   terms: {
     required: string;

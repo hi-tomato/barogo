@@ -2,7 +2,10 @@
 import { Button, Input } from '@/app/shared/ui';
 import { motion } from 'framer-motion';
 import { containerVariants, itemVariants } from '@/app/shared/lib/animation';
-import { GoogleButton, KakaoButton } from '../../_components/SocialLoginButton';
+import {
+  GoogleButton,
+  KakaoButton,
+} from '@/app/(beforeLogin)/_components/SocialLoginButton';
 import { LoginFormProps } from '../types';
 
 export default function LoginForm({

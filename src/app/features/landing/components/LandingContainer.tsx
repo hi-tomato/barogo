@@ -1,3 +1,4 @@
+'use client';
 import { motion } from 'framer-motion';
 import { containerVariants } from '@/app/shared/lib/animation';
 import LandingHeader from './LandingHeader';

@@ -1,5 +1,5 @@
 import { Metadata } from 'next';
-import LoginContainer from './components/LoginContainer';
+import LoginContainer from '@/app/features/login/components/LoginContainer';
 
 export const metadata: Metadata = {
   title: '바로고 | 혼밥하기 싫다면, 파티원을 구해서 바로고!',
