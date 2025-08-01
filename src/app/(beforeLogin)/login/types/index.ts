@@ -5,7 +5,6 @@ export interface LoginFormData {
   password: string;
 }
 
-// ValidationRule 타입 정의
 interface ValidationRule {
   required?: string;
   pattern?: { value: RegExp; message: string };
@@ -18,7 +17,7 @@ interface LoginValidationRules {
 
 export interface LoginFormProps {
   register: UseFormRegister<LoginFormData>;
-  handleSubmit: any;
+  handleSubmit: () => void;
   errors: FieldErrors<LoginFormData>;
   isLoginPending: boolean;
   LOGIN_FORM_VALIDATE_RULES: LoginValidationRules;
