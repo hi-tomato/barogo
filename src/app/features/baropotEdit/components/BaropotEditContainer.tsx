@@ -56,7 +56,6 @@ export default function BaropotEditContainer() {
     <div className="min-h-screen bg-[#E6EEF5]">
       <BaropotEditHeader />
       <BaropotEditForm
-        baropotId={baropotId}
         initialData={baropot}
         onSubmit={handleSubmit}
         onCancel={handleCancel}

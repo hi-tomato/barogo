@@ -55,6 +55,7 @@ describe('Button 컴포넌트 테스트', () => {
 
     variants.forEach((v) => {
       const { container } = render(
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         <Button variant={v as any}>Variable Button</Button>
       );
       expect(container.firstChild).toMatchSnapshot(`button-${v}`);

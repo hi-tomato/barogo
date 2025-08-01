@@ -23,8 +23,8 @@ interface StatusProps {
     loading?: boolean;
   };
   className?: string;
-  size?: 'sm' | 'md' | 'lg';
-  variant?: 'default' | 'centered' | 'inline';
+  size?: Size;
+  variant?: Variant;
 }
 
 const defaultMessages = {

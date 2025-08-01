@@ -20,7 +20,7 @@ export class RestaurantService {
 
     const entries = Object.entries(query);
     const queries = entries
-      .filter(([_, value]) => value !== '')
+      .filter(([, value]) => value !== '')
       .map(([keys, value]) => `${keys}=${value}`)
       .join('&');
 
