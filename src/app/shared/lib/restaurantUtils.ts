@@ -1,3 +1,5 @@
+import { Restaurant } from '../types/restaurant';
+
 export const formatTime = (time: string) => {
   if (!time) return '정보 없음';
   return time;
@@ -12,7 +14,7 @@ export const formatPhoneNumber = (phone: string) => {
   return phone;
 };
 
-export const isCurrentlyOpen = (restaurant: any) => {
+export const isCurrentlyOpen = (restaurant: Restaurant) => {
   if (!restaurant.openingTime || !restaurant.closingTime) return null;
 
   const now = new Date();
