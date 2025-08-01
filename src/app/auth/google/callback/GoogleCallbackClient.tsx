@@ -22,19 +22,13 @@ export default function GoogleCallbackClient() {
           await initialize();
           toast.success('로그인 완료');
           router.push('/main');
-        } catch (err) {
-          console.error('구글 로그인 처리 실패', err);
+        } catch {
           toast.error('로그인 처리 중 오류가 발생하였습니다');
-          router.push('/');
         }
-      } else {
-        toast.error('구글 로그인에 실패하였습니다');
-        router.push('/');
       }
     };
-
     handleGoogleCallback();
-  }, [searchParams, initialize, router, toast]);
+  }, [searchParams]);
 
   return <LoadingSpinner />;
 }
