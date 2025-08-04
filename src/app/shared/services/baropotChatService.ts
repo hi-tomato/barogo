@@ -29,24 +29,44 @@ export class BaropotChatService {
   ): Promise<ChatRoomResponse> {
     return await apiClient.post<ChatRoomResponse>('/baropot-chat', request);
   }
-  /** 바로팟 채팅방 조회 */
+  /** TODO: 사용자가 바로팟 채팅방을 전체 조회하는 API */
   async getChatRoomInfo(chatRoomId: number): Promise<GetChatRoomResponse> {
     return await apiClient.get<GetChatRoomResponse>(
       `/baropot-chat/${chatRoomId}`
     );
   }
   /** 바로팟 채팅 서비스 연결 */
-  async connect(token: string): Promise<void> {
+  // TODO: 08.04 유저의 아이디를 보내기 (SenderId)
+  async connect(token: string, senderId: number): Promise<void> {
     return new Promise((resolve, reject) => {
       this.socket = io(API_URL, {
-        query: { token },
+        query: { token, senderId },
         transports: ['websocket'],
         forceNew: true,
+        // TODO: 08.04 재연결 로직 추가
+        reconnection: true,
+        reconnectionDelay: 1000,
+        reconnectionDelayMax: 5000,
+        reconnectionAttempts: 5,
       });
       /** Socket Connection Success */
       this.socket.on('connect', () => {
         this.isConnected = true;
+        console.log('채팅 서비스 연결 성공');
         resolve();
+      });
+
+      this.socket.on('reconnect', (attemptNumber: number) => {
+        console.log(`채팅 서비스 재연결 성공 ${attemptNumber}번째`);
+      });
+
+      this.socket.on('reconnect_error', (attemptNumber: number) => {
+        console.log(`채팅 서비스 재연결 실패 ${attemptNumber}번째`);
+      });
+
+      this.socket.on('reconnect_failed', () => {
+        this.isConnected = false;
+        console.log(`채팅 서비스 재연결 실패`);
       });
 
       /** Socket Connection Error */
@@ -58,7 +78,7 @@ export class BaropotChatService {
       /** Socket Disconnect */
       this.socket.on('disconnect', () => {
         this.isConnected = false;
-        reject(new Error('연결이 끊어졌습니다.'));
+        console.log('연결이 끊김');
       });
 
       /** Socket Unauthorized (401) */
