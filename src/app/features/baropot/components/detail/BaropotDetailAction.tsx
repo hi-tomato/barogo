@@ -1,8 +1,10 @@
-import { useParams } from 'next/navigation';
+'use client';
+import { useParams, useRouter } from 'next/navigation';
 import { BaropotDetailResponse } from '@/app/shared/types/baropots';
 import { motion } from 'framer-motion';
 import { useJoinBaropot } from '@/app/shared/hooks/queries/useBaropot';
 import { useToast } from '@/app/shared/hooks/useToast';
+import { useCreateChatRoom } from '@/app/shared/hooks/queries/useBaropotChat';
 
 interface BaropotDetailActionProps {
   baropot: BaropotDetailResponse;
@@ -15,7 +17,7 @@ export default function BaropotDetailAction({
   const baropotId = Number(params.baropotId);
   const toast = useToast();
   const joinBaropotMutation = useJoinBaropot();
-
+  const router = useRouter();
   const handleJoinBaropot = () => {
     switch (baropot.status) {
       case 'OPEN':
@@ -48,6 +50,27 @@ export default function BaropotDetailAction({
     }
   };
 
+  const createChatRoomMutation = useCreateChatRoom();
+  // TODO: 채팅방을 입장하는 API
+  const handleJoinChat = async () => {
+    console.log('채팅방을 입장합니다.');
+    await createChatRoomMutation.mutateAsync(
+      {
+        baropotId,
+        name: baropot.title,
+      },
+      {
+        onSuccess: (data) => {
+          console.log(data);
+          router.push(`/baropot/chat/${data.BaropotChatRoomId}`);
+        },
+        onError: (error) => {
+          console.log(error);
+        },
+      }
+    );
+  };
+
   return (
     <motion.div
       className="fixed right-0 bottom-0 left-0 z-50 border-t border-gray-200 bg-white/95 p-6 backdrop-blur-xl"
@@ -56,6 +79,15 @@ export default function BaropotDetailAction({
       transition={{ delay: 0.3, type: 'spring', stiffness: 100 }}
     >
       <div className="mx-auto flex max-w-lg space-x-4">
+        {baropot.status === 'OPEN' && (
+          <motion.button
+            onClick={handleJoinChat}
+            className="group relative z-99 flex-1 overflow-hidden rounded-xl bg-blue-600 px-6 py-4 font-bold text-white transition-all duration-200 hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50"
+          >
+            채팅방 입장
+          </motion.button>
+        )}
+
         <motion.button
           onClick={handleJoinBaropot}
           disabled={baropot.status !== 'OPEN'}
