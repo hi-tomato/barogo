@@ -15,7 +15,7 @@ export class RestaurantService {
   // 맛집 검색
   async search(query?: SearchQueries): Promise<RestaurantList> {
     if (!query || Object.keys(query).length === 0) {
-      return await apiClient.get<RestaurantList>('/restaurants');
+      return await apiClient.get<RestaurantList>('/restaurants/v2');
     }
 
     const entries = Object.entries(query);
@@ -25,7 +25,7 @@ export class RestaurantService {
       .join('&');
 
     return await apiClient.get<RestaurantList>(
-      `/restaurants${queries ? `?${queries}` : ''}`
+      `/restaurants/v2${queries ? `?${queries}` : ''}`
     );
   }
 
