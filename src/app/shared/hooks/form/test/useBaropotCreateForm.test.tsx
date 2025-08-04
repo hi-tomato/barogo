@@ -188,6 +188,6 @@ describe('바로팟 생성 폼 테스트', () => {
     });
 
     expect(mocks.mockToast.success).toHaveBeenCalled();
-    expect(mocks.mockPush).toHaveBeenCalledWith('/baropot');
+    expect(mocks.mockPush).toHaveBeenCalledWith('/baropot/host');
   });
 });
