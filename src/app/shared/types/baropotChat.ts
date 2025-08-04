@@ -78,3 +78,13 @@ export interface GetChatRoomResponse {
   };
   participants: string[];
 }
+
+export interface ChatMessage {
+  id: string;
+  content: string;
+  senderId: number | string;
+  senderName?: string;
+  timestamp: string;
+  isMyMessage: boolean;
+  baropotChatRoomId?: number;
+}
