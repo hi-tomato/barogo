@@ -82,7 +82,7 @@ export const useBaropotCreateForm = (restaurantData: RestaurantData | null) => {
       createBaropot(submitData, {
         onSuccess: async () => {
           toast.success('✅ 바로팟이 생성되었습니다!');
-          router.push('/baropot');
+          router.push(`/baropot/host`);
         },
         onError: () => {
           toast.error('바로팟 생성에 실패했습니다. 다시 시도해주세요.');
