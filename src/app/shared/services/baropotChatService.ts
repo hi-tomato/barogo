@@ -89,7 +89,7 @@ export class BaropotChatService {
     });
   }
   /** 바로팟 채팅방 입장 */
-  async joinRoom(baropotChatRoomId: number): Promise<string> {
+  async joinRoom(baropotChatRoomId: number): Promise<JoinRoomResponse> {
     this.checkConnection();
 
     return new Promise((resolve, reject) => {
@@ -99,7 +99,7 @@ export class BaropotChatService {
         (response: JoinRoomResponse) => {
           console.log(response);
           if (response.success) {
-            resolve(response.message);
+            resolve(response);
           } else {
             reject(
               new Error(response.message || '채팅방 입장에 실패하였습니다.')
@@ -110,7 +110,7 @@ export class BaropotChatService {
     });
   }
   /** 바로팟 채팅방 퇴장 */
-  async leaveRoom(baropotChatRoomId: number): Promise<string> {
+  async leaveRoom(baropotChatRoomId: number): Promise<LeaveRoomResponse> {
     this.checkConnection();
     return new Promise((resolve, reject) => {
       this.socket?.emit(
@@ -118,7 +118,7 @@ export class BaropotChatService {
         { baropotChatRoomId },
         (response: LeaveRoomResponse) => {
           if (response.success) {
-            resolve(response.message);
+            resolve(response);
           } else {
             reject(
               new Error(response.message || '채팅방 퇴장에 실패하였습니다.')
@@ -132,7 +132,7 @@ export class BaropotChatService {
   async sendMessage({
     baropotChatRoomId,
     content,
-  }: SendMessageRequest): Promise<string> {
+  }: SendMessageRequest): Promise<SendMessageResponse> {
     console.log('Socket emit SEND_MESSAGE 시도');
     this.checkConnection();
     return new Promise((resolve, reject) => {
@@ -142,7 +142,7 @@ export class BaropotChatService {
         (response: SendMessageResponse) => {
           console.log('SEND_MESSAGE 응답:', response);
           if (response.success) {
-            resolve(response.messageId || '');
+            resolve(response);
           } else {
             reject(
               new Error(response.message || '메시지 전송에 실패하였습니다.')
