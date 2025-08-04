@@ -4,57 +4,83 @@ import {
   NewMessageEvent,
   ReadMessageEvent,
 } from '@/app/shared/types/baropotChat';
+import { useAuthStore } from '../../store/useAuthStore';
+import { getAccessToken } from '../../lib/authToken';
 
 interface WebSocketConfig {
-  token: string;
   onNewMessageEvent?: (message: NewMessageEvent) => void;
   onMessagesReadEvent?: (data: ReadMessageEvent) => void;
 }
 
 export const useWebSocket = ({
-  token,
   onNewMessageEvent,
   onMessagesReadEvent,
 }: WebSocketConfig) => {
   const [isConnected, setIsConnected] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const chatServiceRef = useRef<BaropotChatService | null>(null);
-  /** 바로팟 채팅 Connection 연결 */
+  const isConnectedRef = useRef(false);
+  const onNewMessageRef = useRef(onNewMessageEvent);
+  const onMessageReadRef = useRef(onMessagesReadEvent);
+
+  const user = useAuthStore((state) => state.user);
+  const senderId = user?.id;
+  const token = getAccessToken();
+
+  console.log('senderId', user?.id);
+
   useEffect(() => {
-    if (!chatServiceRef.current) {
-      chatServiceRef.current = new BaropotChatService();
-    }
+    onNewMessageRef.current = onNewMessageEvent;
+    onMessageReadRef.current = onMessagesReadEvent;
+  });
 
-    const services = chatServiceRef.current;
-
-    const attachConnection = async () => {
-      try {
-        await services.connect(token);
-        setIsConnected(true);
-        setError(null);
-      } catch (error) {
-        setError(
-          error instanceof Error ? error.message : '채팅 연결에 실패하였습니다.'
-        );
+  /** 바로팟 채팅 Connection 연결 */
+  useEffect(
+    function connectWebSocket() {
+      if (!token || !senderId) {
+        console.log('토큰 또는 senderId가 없음:', { token: !!token, senderId });
+        return;
       }
-    };
 
-    attachConnection();
-
-    if (onNewMessageEvent) {
-      services.onNewMessage(onNewMessageEvent);
-    }
-
-    if (onMessagesReadEvent) {
-      services.onMessagesReceived(onMessagesReadEvent);
-    }
-    // Clean up
-    return () => {
-      if (services) {
-        services.disconnect();
+      if (!chatServiceRef.current) {
+        chatServiceRef.current = new BaropotChatService();
       }
-    };
-  }, [token, onNewMessageEvent, onMessagesReadEvent]);
+
+      const services = chatServiceRef.current;
+
+      const attachConnection = async () => {
+        try {
+          await services.connect(token || '', senderId);
+          setIsConnected(true);
+          setError(null);
+        } catch (error) {
+          setError(
+            error instanceof Error
+              ? error.message
+              : '채팅 연결에 실패하였습니다.'
+          );
+        }
+      };
+
+      attachConnection();
+
+      services.onNewMessage((message) => {
+        onNewMessageRef.current?.(message);
+      });
+
+      services.onMessagesReceived((data) => {
+        onMessageReadRef.current?.(data);
+      });
+
+      // Clean up
+      return () => {
+        if (services) {
+          services.disconnect();
+        }
+      };
+    },
+    [token, senderId]
+  );
 
   const joinRoom = useCallback(
     async (baropotChatRoomId: number) => {
