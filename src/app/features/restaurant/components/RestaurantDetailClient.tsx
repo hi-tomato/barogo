@@ -3,7 +3,16 @@ import { useRestaurantDetail } from '@/app/shared/hooks/queries/useRestaurant';
 import { useAuthStore } from '@/app/shared/store/useAuthStore';
 import { StateDisplay } from '@/app/shared/ui';
 import dynamic from 'next/dynamic';
-import RestaurantImages from '../../search/components/detail/RestaurantImages';
+
+const RestaurantImages = dynamic(
+  () => import('@/app/features/search/components/detail/RestaurantImages'),
+  {
+    ssr: false,
+    loading: () => (
+      <div className="h-64 animate-pulse rounded-lg bg-gray-200" />
+    ),
+  }
+);
 
 const RestaurantInfo = dynamic(
   () => import('@/app/features/search/components/detail/RestaurantInfo'),
@@ -34,6 +43,7 @@ const RestaurantSection = dynamic(
     ),
   }
 );
+
 export default function RestaurantDetailClient({
   restaurantId,
 }: {

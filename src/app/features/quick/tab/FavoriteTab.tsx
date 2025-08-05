@@ -31,14 +31,14 @@ export default function FavoriteTab() {
           >
             <div className="flex items-start gap-3">
               {/* 맛집 이미지 */}
-              <div className="flex-shrink-0">
+              <div className="relative h-20 w-20 flex-shrink-0">
                 {restaurant.photos[0] ? (
                   <Image
                     src={restaurant.photos[0] || '/default-restaurant.jpg'}
                     alt={restaurant.name}
-                    width={80}
-                    height={80}
+                    fill
                     className="rounded-lg object-cover"
+                    sizes="80px"
                   />
                 ) : (
                   <div className="flex h-20 w-20 items-center justify-center rounded-lg border border-blue-200 bg-gradient-to-br from-blue-50 to-indigo-100">
