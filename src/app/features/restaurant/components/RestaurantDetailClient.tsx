@@ -58,7 +58,11 @@ export default function RestaurantDetailClient({
   } = useRestaurantDetail(restaurantId);
 
   if (restaurantLoading) {
-    return <StateDisplay state="loading" size="lg" />;
+    return (
+      <div className="flex h-screen items-center justify-center">
+        <StateDisplay state="loading" size="lg" />
+      </div>
+    );
   }
 
   if (restaurantError || !restaurant) {
