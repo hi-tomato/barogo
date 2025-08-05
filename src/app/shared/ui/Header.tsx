@@ -38,9 +38,9 @@ export default function Header({
       transition={{ duration: 0.3 }}
       className={`sticky top-0 z-40 ${headerVariants[variant]} ${className}`}
     >
-      <div className="flex items-center justify-between px-4 py-3">
+      <div className="grid grid-cols-3 items-center px-4 py-3">
         {/* 왼쪽 영역 */}
-        <div className="flex items-center space-x-3">
+        <div className="flex items-center justify-start">
           {showBack && (
             <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
               <Button
@@ -56,9 +56,9 @@ export default function Header({
         </div>
 
         {/* 중앙 제목 */}
-        <div className="flex-1 text-center">
+        <div className="flex items-center justify-center">
           <motion.h1
-            className={`mx-auto max-w-[200px] truncate text-lg font-semibold ${
+            className={`text-center text-lg font-semibold ${
               variant === 'gradient' ? 'text-white' : 'text-[#2B2B2B]'
             }`}
             initial={{ opacity: 0, y: 10 }}
@@ -70,7 +70,7 @@ export default function Header({
         </div>
 
         {/* 오른쪽 영역 */}
-        <div className="flex items-center space-x-2">
+        <div className="flex items-center justify-end space-x-2">
           {rightContent}
           {showMenu && onMenuClick && (
             <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
