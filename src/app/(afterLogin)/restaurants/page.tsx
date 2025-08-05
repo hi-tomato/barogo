@@ -39,7 +39,7 @@ export default function RestaurantsPage() {
   }, [activeTab]);
 
   return (
-    <div className="min-h-screen bg-[#E6EEF5] pt-16 pb-24">
+    <div className="min-h-screen bg-[#E6EEF5] pt-0 pb-24">
       <Header title="바로팟 만들기" showBack={true} />
 
       <div className="space-y-6 p-4">
