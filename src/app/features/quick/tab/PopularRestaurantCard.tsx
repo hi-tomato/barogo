@@ -47,14 +47,14 @@ export default function PopularRestaurantCard({
         </div>
 
         {/* 이미지 */}
-        <div className="flex-shrink-0">
+        <div className="relative h-20 w-20 flex-shrink-0">
           {item.photos[0] ? (
             <Image
               src={item.photos[0]}
               alt={item.name}
-              width={80}
-              height={80}
+              fill
               className="rounded-lg object-cover"
+              sizes="80px"
             />
           ) : (
             <div className="flex h-20 w-20 items-center justify-center rounded-lg border border-gray-200 bg-gradient-to-br from-gray-100 to-gray-200">

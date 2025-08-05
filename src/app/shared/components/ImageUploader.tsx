@@ -1,6 +1,6 @@
-import { useState } from "react";
-import { useImageUpload } from "@/app/shared/hooks/queries/useImageUpload";
-import ImagePreview from "./ImagePreview";
+import { useState, useEffect, useRef } from 'react';
+import { useImageUpload } from '@/app/shared/hooks/queries/useImageUpload';
+import ImagePreview from './ImagePreview';
 
 interface ImageFile {
   file: File;
@@ -15,7 +15,7 @@ interface ImageUploaderProps {
   onImagesChange: (urls: string[]) => void;
   maxFiles?: number;
   maxSize?: number;
-  layout?: "grid" | "horizontal";
+  layout?: 'grid' | 'horizontal';
   disabled?: boolean;
 }
 
@@ -23,10 +23,11 @@ export default function ImageUploader({
   onImagesChange,
   maxFiles = 5,
   maxSize = 10,
-  layout = "grid",
+  layout = 'grid',
   disabled = false,
 }: ImageUploaderProps) {
   const [images, setImages] = useState<ImageFile[]>([]);
+  const prevImagesRef = useRef<ImageFile[]>([]);
 
   const { uploadImage, isUploading } = useImageUpload({
     onSuccess: (data) => {
@@ -38,12 +39,6 @@ export default function ImageUploader({
           }
           return img;
         });
-
-        // 업로드된 URL들만 필터링해서 부모에게 전달
-        const uploadedUrls = newImages
-          .filter((img) => img.url)
-          .map((img) => img.url!);
-        onImagesChange(uploadedUrls);
 
         return newImages;
       });
@@ -86,15 +81,7 @@ export default function ImageUploader({
   };
 
   const removeImage = (id: string) => {
-    setImages((prev) => {
-      const updated = prev.filter((img) => img.id !== id);
-
-      // URL 목록 업데이트
-      const urls = updated.filter((img) => img.url).map((img) => img.url!);
-      onImagesChange(urls);
-
-      return updated;
-    });
+    setImages((prev) => prev.filter((img) => img.id !== id));
   };
 
   const retryUpload = (id: string) => {
@@ -110,15 +97,21 @@ export default function ImageUploader({
     uploadImage(image.file);
   };
 
+  // 이미지 상태가 변경될 때마다 부모에게 URL 목록 전달
+  useEffect(() => {
+    const uploadedUrls = images.filter((img) => img.url).map((img) => img.url!);
+    onImagesChange(uploadedUrls);
+  }, [images, onImagesChange]);
+
   const canUploadMore = !disabled && images.length < maxFiles && !isUploading;
 
   return (
     <div className="space-y-4">
       {/* 업로드 영역 */}
-      <div className="border-2 border-dashed border-gray-200 rounded-lg p-6 text-center hover:border-blue-300 transition-colors">
+      <div className="rounded-lg border-2 border-dashed border-gray-200 p-6 text-center transition-colors hover:border-blue-300">
         <label
-          className={`cursor-pointer block ${
-            !canUploadMore ? "opacity-50 cursor-not-allowed" : ""
+          className={`block cursor-pointer ${
+            !canUploadMore ? 'cursor-not-allowed opacity-50' : ''
           }`}
         >
           <div className="space-y-2">
@@ -155,7 +148,7 @@ export default function ImageUploader({
       {/* 이미지 목록 */}
       {images.length > 0 && (
         <div>
-          <div className="flex justify-between items-center mb-3">
+          <div className="mb-3 flex items-center justify-between">
             <span className="text-sm text-gray-600">
               {images.length}/{maxFiles}장 선택됨
             </span>
@@ -163,7 +156,6 @@ export default function ImageUploader({
               type="button"
               onClick={() => {
                 setImages([]);
-                onImagesChange([]);
               }}
               className="text-xs text-red-500 hover:underline"
             >
@@ -173,9 +165,9 @@ export default function ImageUploader({
 
           <div
             className={
-              layout === "grid"
-                ? "grid grid-cols-3 gap-3"
-                : "flex space-x-2 overflow-x-auto"
+              layout === 'grid'
+                ? 'grid grid-cols-3 gap-3'
+                : 'flex space-x-2 overflow-x-auto'
             }
           >
             {images.map((image) => (
@@ -184,7 +176,7 @@ export default function ImageUploader({
                 image={image}
                 onRemove={() => removeImage(image.id)}
                 onRetry={() => retryUpload(image.id)}
-                compact={layout === "horizontal"}
+                compact={layout === 'horizontal'}
               />
             ))}
           </div>
