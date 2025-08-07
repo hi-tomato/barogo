@@ -20,7 +20,7 @@ const ImageSlide = memo(function ImageSlide({
         alt={`${restaurantName} 이미지 ${index + 1}`}
         fill
         className="object-cover"
-        sizes="(max-width: 768px) 100vw, 50vw"
+        sizes="(max-width: 640px) 100vw, (max-width: 768px) 100vw, (max-width: 1024px) 100vw, (max-width: 1280px) 100vw, 100vw"
         priority={index === 0}
         placeholder="empty"
         onError={() => {

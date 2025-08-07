@@ -35,7 +35,7 @@ export default function ImageSlider({
 
   return (
     <div
-      className="scrollbar-hide flex h-64 snap-x snap-mandatory overflow-x-auto"
+      className="scrollbar-hide flex h-48 snap-x snap-mandatory overflow-x-auto sm:h-56 md:h-64 lg:h-72 xl:h-80"
       onScroll={handleScroll}
       style={{
         scrollSnapType: 'x mandatory',

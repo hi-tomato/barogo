@@ -9,7 +9,7 @@ const RestaurantImages = dynamic(
   {
     ssr: false,
     loading: () => (
-      <div className="h-64 animate-pulse rounded-lg bg-gray-200" />
+      <div className="h-48 animate-pulse rounded-lg bg-gray-200 sm:h-56 md:h-64 lg:h-72 xl:h-80" />
     ),
   }
 );

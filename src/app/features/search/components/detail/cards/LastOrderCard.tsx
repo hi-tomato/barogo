@@ -16,16 +16,18 @@ export default function LastOrderCard({ restaurant }: LastOrderCardProps) {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.4 }}
-      className="group relative overflow-hidden rounded-2xl border border-orange-200 bg-gradient-to-r from-orange-50 to-amber-50 transition-all duration-300 hover:shadow-lg"
+      className="group relative h-full min-h-[100px] overflow-hidden rounded-2xl border border-orange-200 bg-gradient-to-r from-orange-50 to-amber-50 transition-all duration-300 hover:shadow-lg"
     >
-      <div className="p-4">
+      <div className="flex h-full flex-col justify-center p-3 sm:p-4">
         <div className="flex items-center space-x-3">
-          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-r from-orange-500 to-amber-500 transition-transform duration-300 group-hover:scale-110">
-            <HiClock className="text-white" size={18} />
+          <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-gradient-to-r from-orange-500 to-amber-500 transition-transform duration-300 group-hover:scale-110 sm:h-10 sm:w-10">
+            <HiClock className="text-white sm:text-lg" size={16} />
           </div>
           <div>
-            <p className="text-sm font-medium text-gray-600">라스트 오더</p>
-            <p className="font-semibold text-gray-800">
+            <p className="text-xs font-medium text-gray-600 sm:text-sm">
+              라스트 오더
+            </p>
+            <p className="text-sm font-semibold text-gray-800 sm:text-base">
               {formatTime(restaurant.lastOrderTime)}
             </p>
           </div>

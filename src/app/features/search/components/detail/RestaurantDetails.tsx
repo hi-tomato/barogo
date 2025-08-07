@@ -34,9 +34,9 @@ export default function RestaurantDetails({
   }, [activeTab, restaurant]);
 
   return (
-    <div className="px-4">
+    <div className="px-3 sm:px-4 md:px-6 lg:px-4">
       {/* 탭 네비게이션 */}
-      <div className="mb-6">
+      <div className="mb-4 sm:mb-5 md:mb-6 lg:mb-4">
         <div className="flex space-x-1 rounded-2xl bg-gray-100 p-1">
           {tabs.map((tab) => {
             const Icon = tab.icon;
@@ -44,7 +44,7 @@ export default function RestaurantDetails({
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id as TabType)}
-                className={`flex flex-1 items-center justify-center space-x-2 rounded-xl px-4 py-3 text-sm font-medium transition-all duration-200 ${
+                className={`flex flex-1 items-center justify-center space-x-2 rounded-xl px-3 py-2 text-sm font-medium transition-all duration-200 sm:px-4 sm:py-3 md:px-4 md:py-3 lg:px-3 lg:py-2 ${
                   activeTab === tab.id
                     ? 'bg-white text-blue-600 shadow-sm'
                     : 'text-gray-600 hover:text-gray-800'

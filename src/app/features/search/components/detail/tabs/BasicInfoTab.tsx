@@ -18,9 +18,12 @@ export default function BasicInfoTab({ restaurant }: BasicInfoTabProps) {
       exit={{ opacity: 0 }}
       className="space-y-4"
     >
-      <BusinessStatusCard restaurant={restaurant} />
-      <CategoryCard restaurant={restaurant} />
-      <LastOrderCard restaurant={restaurant} />
+      <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
+        <BusinessStatusCard restaurant={restaurant} />
+        <CategoryCard restaurant={restaurant} />
+        <LastOrderCard restaurant={restaurant} />
+      </div>
+
       <TagsCard restaurant={restaurant} />
     </motion.div>
   );

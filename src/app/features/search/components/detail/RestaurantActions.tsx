@@ -62,11 +62,11 @@ export default function RestaurantActions({
 
   return (
     <div className="flex flex-col gap-4">
-      <div className="flex items-center gap-2 px-4 py-6">
+      <div className="flex items-center gap-2 px-3 py-4 sm:px-4 sm:py-5 md:px-6 md:py-6 lg:px-4 lg:py-5">
         <motion.button
           onClick={handleBookmarkToggle}
           disabled={isBookmarkLoading}
-          className={`relative rounded-full border-2 p-3 transition-all ${
+          className={`relative rounded-full border-2 p-2 transition-all sm:p-3 md:p-3 lg:p-2 ${
             isBookmarked
               ? 'border-red-200 bg-red-50 text-red-500'
               : 'border-gray-200 bg-gray-50 text-gray-400 hover:border-red-200 hover:text-red-400'
@@ -76,11 +76,14 @@ export default function RestaurantActions({
         >
           {bookmarked ? (
             <FaHeartCircleCheck
-              className="cursor-pointer text-red-400"
-              size={26}
+              className="cursor-pointer text-red-400 sm:text-2xl md:text-3xl lg:text-xl"
+              size={22}
             />
           ) : (
-            <FaHeartCircleXmark className="cursor-pointer" size={26} />
+            <FaHeartCircleXmark
+              className="cursor-pointer sm:text-2xl md:text-3xl lg:text-xl"
+              size={22}
+            />
           )}
         </motion.button>
 
@@ -89,11 +92,14 @@ export default function RestaurantActions({
           <div className="relative">
             <motion.button
               onClick={() => setShowOwnerMenu(!showOwnerMenu)}
-              className="rounded-full border-2 border-orange-200 bg-orange-50 p-3 text-orange-500 transition-all hover:bg-orange-100"
+              className="rounded-full border-2 border-orange-200 bg-orange-50 p-2 text-orange-500 transition-all hover:bg-orange-100 sm:p-3 md:p-3 lg:p-2"
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.9 }}
             >
-              <HiDotsVertical size={20} />
+              <HiDotsVertical
+                size={18}
+                className="sm:text-xl md:text-2xl lg:text-lg"
+              />
             </motion.button>
 
             {showOwnerMenu && (

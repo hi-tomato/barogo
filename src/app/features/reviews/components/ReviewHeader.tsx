@@ -16,7 +16,7 @@ export default function ReviewHeader({
   return (
     <div
       className={cn(
-        !reviewCount
+        reviewCount
           ? 'border-none px-4 py-6'
           : 'min-h-[200px] border-b border-gray-100 px-4 py-6'
       )}
