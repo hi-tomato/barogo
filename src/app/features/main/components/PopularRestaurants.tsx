@@ -10,18 +10,17 @@ export default function PopularRestaurants() {
   const popularRestaurants = restaurants.slice(0, 4);
 
   return (
-    <div className="mb-6">
-      <h2 className="mb-4 flex items-center text-lg font-semibold text-[#2B2B2B]">
-        <span className="mr-2 text-xl">🍽️</span>
+    <div className="mb-4 sm:mb-5 md:mb-6 lg:mb-4">
+      <h2 className="mb-3 flex items-center text-base font-semibold text-[#2B2B2B] sm:mb-4 sm:text-lg md:text-xl lg:text-lg">
         오늘의 인기 맛집
       </h2>
-      <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
+      <div className="grid grid-cols-2 gap-3 sm:gap-4 md:gap-5 lg:grid-cols-4 lg:gap-4">
         {isLoading
           ? // 로딩 상태
             Array.from({ length: 4 }).map((_, index) => (
               <div
                 key={index}
-                className="rounded-xl border border-gray-100 bg-white p-4 shadow-sm"
+                className="rounded-xl border border-gray-100 bg-white p-3 shadow-sm sm:p-4 md:p-5 lg:p-3"
               >
                 <LoadingSpinner size="lg" />
               </div>
@@ -34,14 +33,14 @@ export default function PopularRestaurants() {
                   href={`/restaurants/${restaurant.id}`}
                   className="block"
                 >
-                  <div className="rounded-xl border border-gray-100 bg-white p-4 shadow-sm transition-all duration-200 hover:shadow-md">
-                    <div className="relative mb-3 h-24 w-full overflow-hidden rounded-lg bg-gray-200">
+                  <div className="rounded-xl border border-gray-100 bg-white p-3 shadow-sm transition-all duration-200 hover:shadow-md sm:p-4 md:p-5 lg:p-3">
+                    <div className="relative mb-2 aspect-[4/3] w-full overflow-hidden rounded-lg bg-gray-200 sm:mb-3 sm:aspect-[3/2] md:aspect-[4/3] lg:aspect-[8/5]">
                       {restaurant.photos && restaurant.photos.length > 0 ? (
                         <Image
                           src={restaurant.photos[0]}
                           alt={restaurant.name}
                           fill
-                          sizes="(max-width: 1024px) calc(50vw - 24px), calc(25vw - 18px)"
+                          sizes="(max-width: 640px) calc(50vw - 24px), (max-width: 768px) calc(50vw - 24px), (max-width: 1024px) calc(25vw - 18px), calc(25vw - 18px)"
                           className="object-cover"
                           priority={index < 2}
                           placeholder="empty"
@@ -50,7 +49,7 @@ export default function PopularRestaurants() {
                         <span className="text-2xl">🏪</span>
                       )}
                     </div>
-                    <h3 className="mb-1 line-clamp-1 text-sm font-medium text-[#2B2B2B]">
+                    <h3 className="mb-1 line-clamp-1 text-xs font-medium text-[#2B2B2B] sm:text-sm md:text-base lg:text-sm">
                       {restaurant.name}
                     </h3>
                     <p className="text-xs text-[#8A8A8A]">
@@ -65,9 +64,9 @@ export default function PopularRestaurants() {
               Array.from({ length: 4 }).map((_, index) => (
                 <div
                   key={index}
-                  className="rounded-xl border border-gray-100 bg-white p-4 shadow-sm"
+                  className="rounded-xl border border-gray-100 bg-white p-3 shadow-sm sm:p-4 md:p-5 lg:p-3"
                 >
-                  <div className="mb-3 flex h-24 w-full items-center justify-center rounded-lg bg-gray-100">
+                  <div className="mb-2 flex aspect-[4/3] w-full items-center justify-center rounded-lg bg-gray-100 sm:mb-3 sm:aspect-[3/2] md:aspect-[4/3] lg:aspect-[8/5]">
                     <span className="text-gray-400">🏪</span>
                   </div>
                   <div className="mb-2 h-4 rounded bg-gray-100"></div>

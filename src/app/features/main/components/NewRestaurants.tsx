@@ -11,20 +11,20 @@ export default function NewRestaurants() {
   const newRestaurants = restaurants.sort((a, b) => b.id - a.id).slice(0, 2);
 
   return (
-    <div className="mb-6">
-      <h2 className="mb-4 flex items-center text-lg font-semibold text-[#2B2B2B]">
+    <div className="mb-4 sm:mb-5 md:mb-6 lg:mb-4">
+      <h2 className="mb-3 flex items-center text-base font-semibold text-[#2B2B2B] sm:mb-4 sm:text-lg md:text-xl lg:text-lg">
         새로 등록된 맛집
       </h2>
-      <div className="grid grid-cols-1 gap-3 lg:grid-cols-2">
+      <div className="grid grid-cols-1 gap-3 sm:gap-4 md:gap-5 lg:grid-cols-2 lg:gap-4">
         {isLoading
           ? // 로딩 상태
             Array.from({ length: 2 }).map((_, index) => (
               <div
                 key={index}
-                className="rounded-xl border border-gray-100 bg-white p-4 shadow-sm"
+                className="rounded-xl border border-gray-100 bg-white p-3 shadow-sm sm:p-4 md:p-5 lg:p-3"
               >
                 <div className="flex items-center space-x-3">
-                  <div className="h-12 w-12 animate-pulse rounded-lg bg-gray-200"></div>
+                  <div className="aspect-square w-12 animate-pulse rounded-lg bg-gray-200 sm:w-14 md:w-16 lg:w-12"></div>
                   <div className="flex-1">
                     <div className="mb-2 h-4 animate-pulse rounded bg-gray-200"></div>
                     <div className="h-3 w-2/3 animate-pulse rounded bg-gray-200"></div>
@@ -42,9 +42,9 @@ export default function NewRestaurants() {
                   href={`/restaurants/${restaurant.id}`}
                   className="block"
                 >
-                  <div className="rounded-xl border border-gray-100 bg-white p-4 shadow-sm transition-all duration-200 hover:shadow-md">
+                  <div className="rounded-xl border border-gray-100 bg-white p-3 shadow-sm transition-all duration-200 hover:shadow-md sm:p-4 md:p-5 lg:p-3">
                     <div className="flex items-center space-x-3">
-                      <div className="flex h-12 w-12 items-center justify-center rounded-lg">
+                      <div className="flex aspect-square w-12 items-center justify-center rounded-lg sm:w-14 md:w-16 lg:w-12">
                         {restaurant.photos && restaurant.photos.length > 0 ? (
                           <Image
                             src={restaurant.photos[0]}
@@ -60,10 +60,10 @@ export default function NewRestaurants() {
                         )}
                       </div>
                       <div className="flex-1">
-                        <h3 className="mb-1 line-clamp-1 font-medium text-[#2B2B2B]">
+                        <h3 className="mb-1 line-clamp-1 text-sm font-medium text-[#2B2B2B] sm:text-base md:text-lg lg:text-sm">
                           {restaurant.name}
                         </h3>
-                        <p className="text-sm text-[#8A8A8A]">
+                        <p className="text-xs text-[#8A8A8A] sm:text-sm md:text-base lg:text-xs">
                           📍{' '}
                           {restaurant.address
                             ?.split(' ')
@@ -83,10 +83,10 @@ export default function NewRestaurants() {
               Array.from({ length: 2 }).map((_, index) => (
                 <div
                   key={index}
-                  className="rounded-xl border border-gray-100 bg-white p-4 shadow-sm"
+                  className="rounded-xl border border-gray-100 bg-white p-3 shadow-sm sm:p-4 md:p-5 lg:p-3"
                 >
                   <div className="flex items-center space-x-3">
-                    <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-gray-100">
+                    <div className="flex aspect-square w-12 items-center justify-center rounded-lg bg-gray-100 sm:w-14 md:w-16 lg:w-12">
                       <span className="text-gray-400">🏪</span>
                     </div>
                     <div className="flex-1">

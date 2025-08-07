@@ -33,12 +33,11 @@ const NewRestaurants = dynamic(
 
 export default function MainContentsPage() {
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 sm:space-y-5 md:space-y-6 lg:space-y-4">
       <MainTabMenu />
       <LiveBaropotStatus />
       <CategoryExplorer />
       <NewRestaurants />
-
       <PopularRestaurants />
     </div>
   );
