@@ -11,7 +11,7 @@ const menuItems = [
     href: '/nearby',
     icon: <BiMapPin size={26} />,
     title: '내 주변 맛집',
-    description: '현재 기준으로 가까운 맛집',
+    description: '가까운 맛집',
     color: 'text-blue-500',
   },
   {
@@ -32,7 +32,7 @@ const menuItems = [
     href: '/map',
     icon: <BiMap size={26} />,
     title: '지도 보기',
-    description: '지도에서 맛집을 한눈에 확인',
+    description: '맛집을 한눈에 확인',
     color: 'text-green-500',
   },
   {
