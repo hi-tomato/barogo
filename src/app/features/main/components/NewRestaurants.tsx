@@ -69,7 +69,7 @@ export default function NewRestaurants() {
                             ?.split(' ')
                             .slice(0, 2)
                             .join(' ') || '주소 정보 없음'}{' '}
-                          • ⭐ {restaurant.rating || '4.0'}
+                          {restaurant.rating ? `• ⭐ ${restaurant.rating}` : ''}
                         </p>
                       </div>
                       <div className="text-[#1C4E80]">

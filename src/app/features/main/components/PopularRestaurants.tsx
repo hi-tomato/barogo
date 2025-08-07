@@ -54,8 +54,9 @@ export default function PopularRestaurants() {
                       {restaurant.name}
                     </h3>
                     <p className="text-xs text-[#8A8A8A]">
-                      ⭐ {restaurant.rating || '4.0'} (
-                      {restaurant.reviewCount || 0}개 리뷰)
+                      {restaurant.rating
+                        ? `• ⭐ ${restaurant.rating}`
+                        : '등록된 리뷰가 없습니다.'}
                     </p>
                   </div>
                 </Link>
