@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState, useRef } from 'react';
 import { getAccessToken } from '@/app/shared/lib/authToken';
 import { notificationsServices } from '../../services/notificationsServices';
 import { Notification } from '@/app/shared/types/notification';
@@ -8,16 +8,30 @@ export const useNotification = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [eventSource, setEventSource] = useState<EventSource | null>(null);
+  const [sseError, setSseError] = useState(false);
+  const retryCountRef = useRef(0);
+  const maxRetries = 3;
+  const isFetchingRef = useRef(false);
 
   const userToken = getAccessToken();
 
   const fetchNotifications = useCallback(async () => {
     if (!userToken) {
+      console.log('알림 조회: 토큰이 없습니다');
       return;
     }
+
+    // 이미 요청 중이면 중복 요청 방지
+    if (isFetchingRef.current) {
+      console.log('알림 조회: 이미 요청 중입니다');
+      return;
+    }
+
+    isFetchingRef.current = true;
     setIsLoading(true);
 
     try {
+      console.log('알림 조회 시작:', process.env.NEXT_PUBLIC_API_URL);
       const response = await notificationsServices.get({
         headers: {
           Authorization: `Bearer ${userToken}`,
@@ -26,42 +40,84 @@ export const useNotification = () => {
       const data = Array.isArray(response) ? response : [];
       setNotifications(data);
       setUnreadCount(data.filter((n: Notification) => !n.isRead).length);
+      console.log('알림 조회 성공:', data.length);
     } catch (error) {
       console.error('알림 조회 실패하였습니다', error);
+      // 에러 발생 시 빈 배열로 설정하여 UI가 깨지지 않도록 함
+      setNotifications([]);
+      setUnreadCount(0);
     } finally {
       setIsLoading(false);
+      isFetchingRef.current = false;
     }
   }, [userToken]);
 
   const setUpSSE = useCallback(() => {
     if (!userToken) return;
 
+    // 프로덕션 환경에서만 SSE 설정
+    if (process.env.NODE_ENV !== 'production') {
+      console.log('개발 환경: SSE 비활성화');
+      return;
+    }
+
+    // 최대 재시도 횟수 초과 시 SSE 비활성화
+    if (retryCountRef.current >= maxRetries) {
+      console.log('SSE 최대 재시도 횟수 초과, SSE 비활성화');
+      setSseError(true);
+      return;
+    }
+
     setEventSource((prev) => {
       if (prev) {
         prev.close();
       }
 
-      const newEventSource = new EventSource(
-        `/api/notifications/stream?token=${userToken}`
-      );
+      try {
+        console.log(`SSE 연결 시도 ${retryCountRef.current + 1}/${maxRetries}`);
+        const newEventSource = new EventSource(
+          `/api/notifications/stream?token=${userToken}`
+        );
 
-      newEventSource.onmessage = (e) => {
-        try {
-          const notification = JSON.parse(e.data);
-          setNotifications((prev) => [notification, ...prev]);
-          setUnreadCount((prev) => prev + 1);
-        } catch (error) {
-          console.error('알림 데이터 파싱 실패:', error);
-        }
-      };
+        newEventSource.onopen = () => {
+          console.log('SSE 연결 성공');
+          retryCountRef.current = 0; // 연결 성공 시 재시도 카운트 리셋
+          setSseError(false);
+        };
 
-      newEventSource.onerror = () => {
-        console.error('SSE 서버가 준비되지 않음');
-        newEventSource.close();
+        newEventSource.onmessage = (e) => {
+          try {
+            const notification = JSON.parse(e.data);
+            setNotifications((prev) => [notification, ...prev]);
+            setUnreadCount((prev) => prev + 1);
+          } catch (error) {
+            console.error('알림 데이터 파싱 실패:', error);
+          }
+        };
+
+        newEventSource.onerror = (error) => {
+          console.error('SSE 연결 오류:', error);
+          newEventSource.close();
+          retryCountRef.current += 1;
+
+          // 3초 후 재시도
+          setTimeout(() => {
+            if (retryCountRef.current < maxRetries) {
+              setUpSSE();
+            } else {
+              setSseError(true);
+            }
+          }, 3000);
+
+          return null;
+        };
+
+        return newEventSource;
+      } catch (error) {
+        console.error('SSE 설정 실패:', error);
+        retryCountRef.current += 1;
         return null;
-      };
-
-      return newEventSource;
+      }
     });
   }, [userToken]);
 
@@ -97,14 +153,25 @@ export const useNotification = () => {
       setUnreadCount(0);
     } catch (error) {
       console.error('모든 알림 읽음 처리 실패:', error);
+      // 에러가 발생해도 UI는 업데이트
       setNotifications((prev) => prev.map((n) => ({ ...n, isRead: true })));
       setUnreadCount(0);
     }
   }, [userToken, notifications]);
 
+  // SSE 재연결 함수
+  const reconnectSSE = useCallback(() => {
+    retryCountRef.current = 0;
+    setSseError(false);
+    setUpSSE();
+  }, [setUpSSE]);
+
   useEffect(() => {
     if (userToken) {
+      // 초기 알림 로드
       fetchNotifications();
+
+      // 프로덕션 환경에서만 SSE 설정
       if (process.env.NODE_ENV === 'production') {
         setUpSSE();
       }
@@ -115,7 +182,7 @@ export const useNotification = () => {
         eventSource.close();
       }
     };
-  }, [userToken, setUpSSE, fetchNotifications, eventSource]);
+  }, [userToken]); // 의존성 배열에서 setUpSSE, fetchNotifications, eventSource 제거
 
   useEffect(() => {
     return () => {
@@ -132,5 +199,7 @@ export const useNotification = () => {
     markAsRead,
     markAllAsRead,
     refetch: fetchNotifications,
+    sseError,
+    reconnectSSE,
   };
 };
