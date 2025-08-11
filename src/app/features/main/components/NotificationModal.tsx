@@ -2,14 +2,8 @@
 import { useNotification } from '@/app/shared/hooks/queries/useNotification';
 import { Notification } from '@/app/shared/types/notification';
 import { useRouter } from 'next/navigation';
-import React, { useCallback, useState } from 'react';
-import {
-  HiBell,
-  HiX,
-  HiRefresh,
-  HiWifi,
-  HiExclamationCircle,
-} from 'react-icons/hi';
+import React, { useCallback } from 'react';
+import { HiBell, HiX } from 'react-icons/hi';
 import { formatTime } from '@/app/features/main/util/formatTime';
 
 export default function NotificationModal({
@@ -18,118 +12,59 @@ export default function NotificationModal({
   setIsNotificationOpen: (value: boolean) => void;
 }) {
   const router = useRouter();
-  const {
-    isLoading,
-    notifications,
-    markAsRead,
-    markAllAsRead,
-    refetch,
-    sseError,
-    reconnectSSE,
-  } = useNotification();
-  const [hasError, setHasError] = useState(false);
+  const { isLoading, notifications, unreadCount, markAsRead, markAllAsRead } =
+    useNotification();
 
   const handleMarkAsRead = useCallback(
     async (notificationId: number) => {
-      try {
-        await markAsRead(notificationId);
-      } catch (error) {
-        console.error('알림 읽음 처리 실패:', error);
-      }
+      await markAsRead(notificationId);
     },
     [markAsRead]
   );
 
   const handleMarkAllAsRead = useCallback(async () => {
-    try {
-      await markAllAsRead();
-    } catch (error) {
-      console.error('모든 알림 읽음 처리 실패:', error);
-    }
+    await markAllAsRead();
   }, [markAllAsRead]);
 
-  const handleRetry = useCallback(async () => {
-    setHasError(false);
-    try {
-      await refetch();
-    } catch (error) {
-      console.error('알림 재시도 실패:', error);
-      setHasError(true);
-    }
-  }, [refetch]);
-
-  const handleReconnectSSE = useCallback(() => {
-    reconnectSSE();
-  }, [reconnectSSE]);
-
   return (
-    <div className="bg-opacity-50 fixed inset-0 z-50 flex items-center justify-center bg-black">
-      <div className="w-full max-w-md rounded-xl bg-white shadow-lg">
+    <div className="fixed inset-0 z-50 flex justify-end">
+      {/* 배경 오버레이 */}
+      <div
+        className="absolute inset-0 bg-[#0000003c]"
+        onClick={() => setIsNotificationOpen(false)}
+      />
+      {/* 알림 패널 */}
+      <div className="relative flex h-full w-80 transform flex-col bg-white shadow-xl transition-transform duration-300 ease-in-out">
         {/* 헤더 */}
-        <div className="flex items-center justify-between border-b p-4">
+        <div className="flex items-center justify-between p-4">
+          <h2 className="text-lg font-bold">알림</h2>
           <div className="flex items-center gap-2">
-            <h2 className="text-lg font-semibold text-gray-900">알림</h2>
-            {sseError && (
-              <div className="flex items-center gap-1 rounded-full bg-yellow-100 px-2 py-1 text-xs text-yellow-800">
-                <HiExclamationCircle size={12} />
-                <span>실시간 연결 끊김</span>
-              </div>
-            )}
-          </div>
-          <div className="flex items-center gap-2">
-            {hasError && (
+            {unreadCount > 0 && (
               <button
-                onClick={handleRetry}
-                className="rounded-lg p-1 text-gray-500 transition-colors hover:bg-gray-100"
-                title="새로고침"
+                onClick={handleMarkAllAsRead}
+                className="text-sm text-blue-600 hover:text-blue-800"
               >
-                <HiRefresh size={20} />
-              </button>
-            )}
-            {sseError && (
-              <button
-                onClick={handleReconnectSSE}
-                className="rounded-lg p-1 text-blue-500 transition-colors hover:bg-blue-100"
-                title="실시간 연결 재시도"
-              >
-                <HiWifi size={20} />
+                모두 읽기
               </button>
             )}
             <button
               onClick={() => setIsNotificationOpen(false)}
-              className="rounded-lg p-1 text-gray-500 transition-colors hover:bg-gray-100"
+              className="rounded p-1 hover:bg-gray-100"
             >
-              <HiX size={24} />
+              <HiX size={20} />
             </button>
           </div>
         </div>
-
-        {/* 내용 */}
+        {/* 알림 목록 */}
         <div className="flex-1 overflow-y-auto">
           {isLoading ? (
             <div className="flex h-32 items-center justify-center">
               <div className="text-gray-500">로딩 중...</div>
             </div>
-          ) : hasError ? (
-            <div className="flex h-32 flex-col items-center justify-center text-gray-500">
-              <HiBell size={48} className="mb-2 opacity-50" />
-              <p className="mb-2">알림을 불러올 수 없습니다</p>
-              <button
-                onClick={handleRetry}
-                className="rounded-lg bg-blue-500 px-4 py-2 text-sm text-white transition-colors hover:bg-blue-600"
-              >
-                다시 시도
-              </button>
-            </div>
           ) : notifications.length === 0 ? (
             <div className="flex h-32 flex-col items-center justify-center text-gray-500">
               <HiBell size={48} className="mb-2 opacity-50" />
               <p>새로운 알림이 없습니다</p>
-              {sseError && (
-                <p className="mt-2 text-xs text-yellow-600">
-                  실시간 알림이 비활성화되었습니다
-                </p>
-              )}
             </div>
           ) : (
             <div className="p-2">
