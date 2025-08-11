@@ -16,9 +16,7 @@ export const useRestaurantSelection = (
 ) => {
   const router = useRouter();
   const [isProcessing, setIsProcessing] = useState(false);
-  const [selectedRestaurant, setSelectedRestaurant] = useState<number | null>(
-    null
-  );
+  const [selectedRestaurant] = useState<number | null>(null);
   // Create, Fetching Hooks
   const { data: restaurantList = [] } = useRestaurantList({});
   const createBaropotMutation = useCreateBaropot();

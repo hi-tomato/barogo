@@ -21,7 +21,6 @@ export default function NotificationModal({
   const {
     isLoading,
     notifications,
-    unreadCount,
     markAsRead,
     markAllAsRead,
     refetch,

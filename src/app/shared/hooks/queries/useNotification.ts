@@ -7,11 +7,12 @@ export const useNotification = () => {
   const [unreadCount, setUnreadCount] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
   const [notifications, setNotifications] = useState<Notification[]>([]);
-  const [eventSource, setEventSource] = useState<EventSource | null>(null);
   const [sseError, setSseError] = useState(false);
+
+  const eventSourceRef = useRef<EventSource | null>(null);
   const retryCountRef = useRef(0);
-  const maxRetries = 3;
   const isFetchingRef = useRef(false);
+  const maxRetries = 3;
 
   const userToken = getAccessToken();
 
@@ -21,7 +22,6 @@ export const useNotification = () => {
       return;
     }
 
-    // 이미 요청 중이면 중복 요청 방지
     if (isFetchingRef.current) {
       console.log('알림 조회: 이미 요청 중입니다');
       return;
@@ -43,7 +43,6 @@ export const useNotification = () => {
       console.log('알림 조회 성공:', data.length);
     } catch (error) {
       console.error('알림 조회 실패하였습니다', error);
-      // 에러 발생 시 빈 배열로 설정하여 UI가 깨지지 않도록 함
       setNotifications([]);
       setUnreadCount(0);
     } finally {
@@ -51,6 +50,13 @@ export const useNotification = () => {
       isFetchingRef.current = false;
     }
   }, [userToken]);
+
+  const closeEventSource = useCallback(() => {
+    if (eventSourceRef.current) {
+      eventSourceRef.current.close();
+      eventSourceRef.current = null;
+    }
+  }, []);
 
   const setUpSSE = useCallback(() => {
     if (!userToken) return;
@@ -61,65 +67,58 @@ export const useNotification = () => {
       return;
     }
 
-    // 최대 재시도 횟수 초과 시 SSE 비활성화
     if (retryCountRef.current >= maxRetries) {
       console.log('SSE 최대 재시도 횟수 초과, SSE 비활성화');
       setSseError(true);
       return;
     }
 
-    setEventSource((prev) => {
-      if (prev) {
-        prev.close();
-      }
+    closeEventSource();
 
-      try {
-        console.log(`SSE 연결 시도 ${retryCountRef.current + 1}/${maxRetries}`);
-        const newEventSource = new EventSource(
-          `/api/notifications/stream?token=${userToken}`
-        );
+    try {
+      console.log(`SSE 연결 시도 ${retryCountRef.current + 1}/${maxRetries}`);
+      const newEventSource = new EventSource(
+        `/api/notifications/stream?token=${userToken}`
+      );
 
-        newEventSource.onopen = () => {
-          console.log('SSE 연결 성공');
-          retryCountRef.current = 0; // 연결 성공 시 재시도 카운트 리셋
-          setSseError(false);
-        };
+      newEventSource.onopen = () => {
+        console.log('SSE 연결 성공');
+        retryCountRef.current = 0; // 연결 성공 시 재시도 카운트 리셋
+        setSseError(false);
+      };
 
-        newEventSource.onmessage = (e) => {
-          try {
-            const notification = JSON.parse(e.data);
-            setNotifications((prev) => [notification, ...prev]);
-            setUnreadCount((prev) => prev + 1);
-          } catch (error) {
-            console.error('알림 데이터 파싱 실패:', error);
-          }
-        };
+      newEventSource.onmessage = (e) => {
+        try {
+          const notification = JSON.parse(e.data);
+          setNotifications((prev) => [notification, ...prev]);
+          setUnreadCount((prev) => prev + 1);
+        } catch (error) {
+          console.error('알림 데이터 파싱 실패:', error);
+        }
+      };
 
-        newEventSource.onerror = (error) => {
-          console.error('SSE 연결 오류:', error);
-          newEventSource.close();
-          retryCountRef.current += 1;
-
-          // 3초 후 재시도
-          setTimeout(() => {
-            if (retryCountRef.current < maxRetries) {
-              setUpSSE();
-            } else {
-              setSseError(true);
-            }
-          }, 3000);
-
-          return null;
-        };
-
-        return newEventSource;
-      } catch (error) {
-        console.error('SSE 설정 실패:', error);
+      newEventSource.onerror = (error) => {
+        console.error('SSE 연결 오류:', error);
+        newEventSource.close();
         retryCountRef.current += 1;
-        return null;
-      }
-    });
-  }, [userToken]);
+
+        // 3초 후 재시도
+        setTimeout(() => {
+          if (retryCountRef.current < maxRetries) {
+            setUpSSE();
+          } else {
+            setSseError(true);
+          }
+        }, 3000);
+      };
+
+      // ref에 새 연결 저장
+      eventSourceRef.current = newEventSource;
+    } catch (error) {
+      console.error('SSE 설정 실패:', error);
+      retryCountRef.current += 1;
+    }
+  }, [userToken, closeEventSource]);
 
   const markAsRead = useCallback(
     async (notificationId: number) => {
@@ -166,6 +165,7 @@ export const useNotification = () => {
     setUpSSE();
   }, [setUpSSE]);
 
+  // 메인 useEffect - userToken이 변경될 때만 실행
   useEffect(() => {
     if (userToken) {
       // 초기 알림 로드
@@ -177,20 +177,11 @@ export const useNotification = () => {
       }
     }
 
+    // cleanup 함수
     return () => {
-      if (eventSource) {
-        eventSource.close();
-      }
+      closeEventSource();
     };
-  }, [userToken]); // 의존성 배열에서 setUpSSE, fetchNotifications, eventSource 제거
-
-  useEffect(() => {
-    return () => {
-      if (eventSource) {
-        eventSource.close();
-      }
-    };
-  }, [eventSource]);
+  }, [userToken, fetchNotifications, setUpSSE, closeEventSource]);
 
   return {
     notifications,

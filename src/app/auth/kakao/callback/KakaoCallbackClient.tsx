@@ -28,7 +28,7 @@ export default function KakaoCallbackClient() {
     };
 
     handleKakaoCallback();
-  }, [searchParams, initialize, router]);
+  }, [searchParams]);
 
   return <LoadingSpinner />;
 }
