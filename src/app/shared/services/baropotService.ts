@@ -1,5 +1,3 @@
-// import { get, patch, post } from '../api/client';
-
 import {
   BaropotsQueries,
   CreateBaropotRequest,
@@ -21,7 +19,7 @@ export class BaropotService {
 
     const entries = Object.entries(queries);
     const queryString = entries
-      .filter(([_, value]) => value !== '')
+      .filter(([, value]) => value !== '')
       .map(([key, value]) => `${key}=${value}`)
       .join('&');
 
@@ -35,7 +33,7 @@ export class BaropotService {
     restaurantID: number
   ): Promise<BaropotListResponse[]> {
     return await apiClient.get<BaropotListResponse[]>(
-      `/baropots?restaurantId=${restaurantID}&status=RECRUITING`
+      `/baropots?restaurantId=${restaurantID}`
     );
   }
 
@@ -102,7 +100,7 @@ export class BaropotService {
     const queryString = queries
       ? Object.entries(queries)
           .filter(
-            ([_, value]) =>
+            ([, value]) =>
               value !== '' &&
               value != null &&
               value !== undefined &&

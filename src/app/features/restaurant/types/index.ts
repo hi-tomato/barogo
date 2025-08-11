@@ -1,5 +1,5 @@
 export interface RestaurantData {
-  id: string;
+  id: number;
   name: string;
   location: string;
   category: string;

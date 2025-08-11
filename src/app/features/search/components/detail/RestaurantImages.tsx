@@ -1,124 +1,92 @@
-"use client";
-import { useState, useRef } from "react";
-import { motion } from "framer-motion";
-import Image from "next/image";
+import { useState, useRef, useCallback, useMemo } from 'react';
+import { useRestaurantDetail } from '@/app/shared/hooks/queries/useRestaurant';
+import {
+  BaropotToolTip,
+  ImageSlider,
+  ImageCounter,
+  ImageThumbnails,
+} from './image';
 
 const defaultImages = [
-  "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=400&h=300&fit=crop",
+  'https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=400&h=300&fit=crop',
 ];
 
 interface RestaurantImagesProps {
+  restaurantId: number;
   images?: string[];
   restaurantName?: string;
 }
 
 export default function RestaurantImages({
+  restaurantId,
   images = [],
-  restaurantName = "레스토랑",
+  restaurantName = '레스토랑',
 }: RestaurantImagesProps) {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
-  const scrollContainerRef = useRef<HTMLDivElement>(null);
-  const displayImages = images.length > 0 ? images : defaultImages;
+  const sliderRef = useRef<HTMLDivElement>(null);
+  const { data } = useRestaurantDetail(restaurantId);
 
-  const handleScroll = (): void => {
-    if (!scrollContainerRef.current) return;
+  const BAROPOT_INFO = useMemo(() => {
+    const baropots = data?.baropots || [];
+    return {
+      hasActive: baropots.length > 0,
+      redirectUrl: baropots[0]?.id,
+    };
+  }, [data?.baropots]);
 
-    const container = scrollContainerRef.current;
-    const scrollLeft = container.scrollLeft;
-    const imageWidth = container.offsetWidth;
+  const displayImages = useMemo(
+    () => (images.length > 0 ? images : defaultImages),
+    [images]
+  );
+
+  const handleScroll = useCallback(() => {
+    if (!sliderRef.current) return;
+
+    const scrollLeft = sliderRef.current.scrollLeft;
+    const imageWidth = sliderRef.current.clientWidth;
     const newIndex = Math.round(scrollLeft / imageWidth);
 
-    setCurrentImageIndex(newIndex);
-  };
+    setCurrentImageIndex((prev) => (prev !== newIndex ? newIndex : prev));
+  }, []);
 
-  const scrollToImage = (idx: number): void => {
-    if (!scrollContainerRef.current) return;
+  const scrollToImage = useCallback((idx: number): void => {
+    if (!sliderRef.current) return;
 
-    const container = scrollContainerRef.current;
-    const imageWidth = container.offsetWidth;
+    const imageWidth = sliderRef.current.offsetWidth;
 
-    container.scrollTo({
+    sliderRef.current.scrollTo({
       left: idx * imageWidth,
-      behavior: "smooth",
+      behavior: 'smooth',
     });
-  };
+  }, []);
 
   return (
     <div className="relative">
-      {/* Container*/}
-      <div
-        ref={scrollContainerRef}
-        className="flex overflow-x-auto h-64 snap-x snap-mandatory scrollbar-hide"
+      {/* 현재 진행중인 바로팟 툴팁 */}
+      {BAROPOT_INFO.hasActive && (
+        <BaropotToolTip redirectUrl={String(BAROPOT_INFO.redirectUrl)} />
+      )}
+
+      {/* 이미지 슬라이더 */}
+      <ImageSlider
+        displayImages={displayImages}
+        restaurantName={restaurantName}
         onScroll={handleScroll}
-        style={{
-          scrollSnapType: "x mandatory",
-          scrollBehavior: "smooth",
-        }}
-      >
-        {displayImages.map((image, index) => (
-          <div key={index} className="w-full flex-shrink-0 relative snap-start">
-            <Image
-              src={image}
-              alt={`${restaurantName} 이미지 ${index + 1}`}
-              fill
-              className="object-cover"
-              onError={() => {
-                console.error("이미지 로드 실패:", image);
-              }}
-            />
-            {/* 그라데이션 오버레이 */}
-            <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
-          </div>
-        ))}
-      </div>
+      />
 
       {/* 이미지 카운터 */}
-      <motion.div
-        className="absolute top-4 right-4 bg-black/60 text-white px-3 py-1 rounded-full text-sm font-medium"
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.3 }}
-      >
-        {currentImageIndex + 1} / {displayImages.length}
-      </motion.div>
+      <ImageCounter
+        currentImageIndex={currentImageIndex}
+        displayImages={displayImages}
+      />
 
-      {displayImages.length > 1 && (
-        <motion.div
-          className="px-4 py-3 bg-white"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2 }}
-        >
-          <div className="flex space-x-2 overflow-x-auto scrollbar-hide">
-            {displayImages.map((image, index) => (
-              <motion.button
-                key={index}
-                onClick={() => scrollToImage(index)}
-                className={`flex-shrink-0 w-16 h-16 rounded-lg overflow-hidden border-2 transition-all ${
-                  index === currentImageIndex
-                    ? "border-[#1C4E80] ring-1 ring-[#1C4E80]"
-                    : "border-gray-200 hover:border-gray-300"
-                }`}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                animate={{
-                  scale: index === currentImageIndex ? 1.05 : 1,
-                }}
-              >
-                <Image
-                  src={image}
-                  alt={`썸네일 ${index + 1}`}
-                  fill
-                  className="w-full h-full object-cover"
-                  onError={(e) => {
-                    e.currentTarget.src = defaultImages[0];
-                  }}
-                />
-              </motion.button>
-            ))}
-          </div>
-        </motion.div>
-      )}
+      {/* 이미지 썸네일 */}
+      <ImageThumbnails
+        displayImages={displayImages}
+        currentImageIndex={currentImageIndex}
+        restaurantName={restaurantName}
+        onThumbnailClick={scrollToImage}
+      />
 
       <style jsx>{`
         .scrollbar-hide {

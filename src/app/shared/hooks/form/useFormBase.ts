@@ -5,7 +5,7 @@ interface UseFormBaseProps<T extends FieldValues> extends UseFormProps<T> {
   onSubmit: (data: T) => void;
 }
 
-export function useFormBase<T extends Record<string, any>>({
+export function useFormBase<T extends FieldValues>({
   onSubmit,
   ...props
 }: UseFormBaseProps<T>) {

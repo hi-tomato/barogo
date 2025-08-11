@@ -6,6 +6,7 @@ import { Button, Input, StateDisplay } from '@/app/shared/ui';
 import { useSearchRestaurants } from '@/app/shared/hooks/useSearchRestaurants';
 import { useRestaurantSelection } from '@/app/shared/hooks/useRestaurantSelection';
 import { useRouter } from 'next/navigation';
+import { useToast } from '@/app/shared/hooks/useToast';
 
 interface SearchRestaurantModalProps {
   onClose: () => void;
@@ -16,16 +17,17 @@ export default function SearchRestaurantModal({
   onClose,
   onSelect,
 }: SearchRestaurantModalProps) {
+  const toast = useToast();
   const router = useRouter();
   const { handleRestaurantSelection, isProcessing } = useRestaurantSelection({
     onSuccess: (baropotId) => {
       onClose();
-      alert('바로팟을 생성되었습니다');
+      toast.success('바로팟을 생성되었습니다');
       router.push(`/baropot/${baropotId}`);
     },
     onBaropotFound: (baropotId) => {
       onClose();
-      alert('이미 등록된 맛집에 바로팟이 있습니다.');
+      toast.warning('이미 등록된 맛집에 바로팟이 있습니다.');
       router.push(`/baropot/${baropotId}`);
     },
     onRegistrationNeeded: () => {
@@ -54,7 +56,7 @@ export default function SearchRestaurantModal({
   const handleSelect = async (restaurant: KakaoRestaurant) => {
     if (onSelect) {
       const restaurantData = {
-        id: restaurant.id,
+        id: Number(restaurant.id),
         name: restaurant.place_name,
         location: restaurant.address_name,
         category: restaurant.category_name,
@@ -80,7 +82,9 @@ export default function SearchRestaurantModal({
         await handleRestaurantSelection(nearbyRestaurant);
       } catch (error) {
         console.error('맛집 선택 실패:', error);
-        alert(error instanceof Error ? error.message : '오류가 발생했습니다.');
+        toast.error(
+          error instanceof Error ? error.message : '오류가 발생했습니다.'
+        );
       }
     }
   };
@@ -199,12 +203,7 @@ export default function SearchRestaurantModal({
                     </div>
 
                     {/* 처리 중 표시 */}
-                    {isProcessing && (
-                      <div className="flex items-center space-x-2">
-                        <div className="h-4 w-4 animate-spin rounded-full border-2 border-blue-500 border-t-transparent"></div>
-                        <span className="text-xs text-gray-500">처리중...</span>
-                      </div>
-                    )}
+                    {isProcessing && <StateDisplay state="loading" size="sm" />}
                   </div>
                 </button>
               ))}

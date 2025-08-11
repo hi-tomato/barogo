@@ -1,11 +1,8 @@
-"use client";
-import FavoriteRestaurantCard from "@/app/features/popular/modal/FavoriteRestaurantCard";
-import PopularModalHeader from "@/app/features/popular/modal/PopularModalHeader";
-import PopularStatus from "@/app/features/popular/modal/PopularStatus";
-import {
-  useGetBookMarks,
-  useRestaurantList,
-} from "@/app/shared/hooks/queries/useRestaurant";
+'use client';
+import FavoriteRestaurantCard from '@/app/features/popular/modal/FavoriteRestaurantCard';
+import PopularModalHeader from '@/app/features/popular/modal/PopularModalHeader';
+import PopularStatus from '@/app/features/popular/modal/PopularStatus';
+import { useGetBookMarks } from '@/app/shared/hooks/queries/useRestaurant';
 
 export default function FavoriteRestaurantsModal() {
   const { data: favorites, isPending, isError } = useGetBookMarks();
@@ -14,12 +11,12 @@ export default function FavoriteRestaurantsModal() {
   if (isError) return <PopularStatus type="error" />;
   if (favorites?.length === 0) return <PopularStatus type="notFound" />;
   return (
-    <div className="fixed inset-0 bg-[#0000005d] flex items-center justify-center p-4 z-50">
-      <div className="bg-white rounded-xl w-full max-w-md max-h-[80vh] overflow-hidden shadow-2xl">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#0000005d] p-4">
+      <div className="max-h-[80vh] w-full max-w-md overflow-hidden rounded-xl bg-white shadow-2xl">
         {/* 헤더 */}
         <PopularModalHeader />
         {/* 리스트 */}
-        <div className="overflow-y-auto max-h-[60vh]">
+        <div className="max-h-[60vh] overflow-y-auto">
           <div className="divide-y divide-gray-100">
             {favorites?.map((restaurant, index: number) => (
               <FavoriteRestaurantCard

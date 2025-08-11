@@ -1,8 +1,21 @@
-@import url("https://cdn.jsdelivr.net/gh/sunn-us/SUIT/fonts/static/woff2/SUIT.css");
-@import "tailwindcss";
+@import url('https://cdn.jsdelivr.net/gh/sunn-us/SUIT/fonts/static/woff2/SUIT.css');
+@import 'tailwindcss';
+
+@font-face {
+  font-family: 'SUIT';
+  font-display: swap;
+  font-weight: 300 900;
+  src: url('https://cdn.jsdelivr.net/gh/sunn-us/SUIT/fonts/static/woff2/SUIT-Regular.woff2')
+    format('woff2');
+}
 
 body {
-  font-family: "SUIT", -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+  font-family:
+    'SUIT',
+    -apple-system,
+    BlinkMacSystemFont,
+    system-ui,
+    sans-serif;
 }
 
 @keyframes float-0 {
@@ -49,4 +62,42 @@ body {
 }
 .animate-float-2 {
   animation: float-2 infinite ease-in-out;
+}
+
+/* 카카오 지도 타일  */
+div[style*='width: 150px'][style*='height: 80px'] {
+  width: auto !important;
+  height: auto !important;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+/* 스크롤바 숨기기 */
+.scrollbar-hide {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none; /* Chrome, Safari and Opera */
+}
+
+/* 카카오 지도 성능 최적화 */
+.map-container {
+  content-visibility: auto;
+  contain: layout style paint;
+}
+
+/* 지도 타일 로딩 최적화 */
+.kakao-map {
+  will-change: transform;
+  transform: translateZ(0);
+}
+
+/* 지도 마커 최적화 */
+.map-marker {
+  contain: layout style paint;
+  will-change: transform;
 }

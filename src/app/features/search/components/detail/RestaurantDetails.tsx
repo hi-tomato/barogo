@@ -1,122 +1,64 @@
-"use client";
-import { motion } from "framer-motion";
-import { RestaurantDetail } from "@/app/shared/types/restaurant";
-import { HiPhone, HiClock, HiTag } from "react-icons/hi";
-import { Card } from "@/app/shared/ui";
+'use client';
+import { useMemo, useState } from 'react';
+import { AnimatePresence } from 'framer-motion';
+import { RestaurantDetail } from '@/app/shared/types/restaurant';
+import { HiInformationCircle, HiLocationMarker } from 'react-icons/hi';
+import BasicInfoTab from './tabs/BasicInfoTab';
+import LocationTab from './tabs/LocationTab';
 
 interface RestaurantDetailsProps {
   restaurant: RestaurantDetail;
 }
 
+type TabType = 'basic' | 'location';
+
+const tabs = [
+  { id: 'basic', label: '기본정보', icon: HiInformationCircle },
+  { id: 'location', label: '위치', icon: HiLocationMarker },
+] as const;
+
 export default function RestaurantDetails({
   restaurant,
 }: RestaurantDetailsProps) {
-  const formatTime = (time: string) => {
-    if (!time) return "정보 없음";
-    return time;
-  };
+  const [activeTab, setActiveTab] = useState<TabType>('basic');
 
-  const formatPhoneNumber = (phone: string) => {
-    if (!phone) return "정보 없음";
-    // 전화번호 형식화 (예: 010-1234-5678)
-    const cleaned = phone.replace(/\D/g, "");
-    if (cleaned.length === 11) {
-      return `${cleaned.slice(0, 3)}-${cleaned.slice(3, 7)}-${cleaned.slice(
-        7
-      )}`;
+  const renderContent = useMemo(() => {
+    switch (activeTab) {
+      case 'basic':
+        return <BasicInfoTab restaurant={restaurant} />;
+      case 'location':
+        return <LocationTab restaurant={restaurant} />;
+      default:
+        return <BasicInfoTab restaurant={restaurant} />;
     }
-    return phone;
-  };
+  }, [activeTab, restaurant]);
 
   return (
-    <div className="px-4 py-6 space-y-6">
-      {/* 카테고리 */}
-      <Card
-        variant="default"
-        size="md"
-        padding="sm"
-        className="flex items-center space-x-3"
-        animate={true}
-      >
-        <div className="w-12 h-12 bg-gradient-to-r from-[#1C4E80] to-[#2563eb] rounded-xl flex items-center justify-center">
-          <HiTag className="text-white" size={20} />
+    <div className="px-3 sm:px-4 md:px-6 lg:px-4">
+      {/* 탭 네비게이션 */}
+      <div className="mb-4 sm:mb-5 md:mb-6 lg:mb-4">
+        <div className="flex space-x-1 rounded-2xl bg-gray-100 p-1">
+          {tabs.map((tab) => {
+            const Icon = tab.icon;
+            return (
+              <button
+                key={tab.id}
+                onClick={() => setActiveTab(tab.id as TabType)}
+                className={`flex flex-1 items-center justify-center space-x-2 rounded-xl px-3 py-2 text-sm font-medium transition-all duration-200 sm:px-4 sm:py-3 md:px-4 md:py-3 lg:px-3 lg:py-2 ${
+                  activeTab === tab.id
+                    ? 'bg-white text-blue-600 shadow-sm'
+                    : 'text-gray-600 hover:text-gray-800'
+                }`}
+              >
+                <Icon size={16} />
+                <span className="hidden sm:inline">{tab.label}</span>
+              </button>
+            );
+          })}
         </div>
-        <div>
-          <p className="text-sm text-gray-600 font-medium">카테고리</p>
-          <p className="font-semibold text-[#2B2B2B]">
-            {restaurant.category || "정보 없음"}
-          </p>
-        </div>
-      </Card>
+      </div>
 
-      {/* 전화번호 */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.6 }}
-        className="flex items-center space-x-3 p-4 bg-gradient-to-r from-[#E6EEF5] to-[#EEF2FF] rounded-2xl"
-      >
-        <div className="w-12 h-12 bg-gradient-to-r from-[#10B981] to-[#06B6D4] rounded-xl flex items-center justify-center">
-          <HiPhone className="text-white" size={20} />
-        </div>
-        <div>
-          <p className="text-sm text-gray-600 font-medium">전화번호</p>
-          <p className="font-semibold text-[#2B2B2B]">
-            {formatPhoneNumber(restaurant.phoneNumber)}
-          </p>
-        </div>
-      </motion.div>
-
-      {/* 영업시간 */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.7 }}
-        className="flex items-center space-x-3 p-4 bg-gradient-to-r from-[#E6EEF5] to-[#EEF2FF] rounded-2xl"
-      >
-        <div className="w-12 h-12 bg-gradient-to-r from-[#F59E0B] to-[#F97316] rounded-xl flex items-center justify-center">
-          <HiClock className="text-white" size={20} />
-        </div>
-        <div className="flex-1">
-          <p className="text-sm text-gray-600 font-medium">영업시간</p>
-          <div className="space-y-1">
-            <p className="font-semibold text-[#2B2B2B]">
-              {formatTime(restaurant.openingTime)} -{" "}
-              {formatTime(restaurant.closingTime)}
-            </p>
-            {restaurant.lastOrderTime && (
-              <p className="text-sm text-gray-500">
-                마지막 주문: {formatTime(restaurant.lastOrderTime)}
-              </p>
-            )}
-          </div>
-        </div>
-      </motion.div>
-
-      {/* 태그 */}
-      {restaurant.restaurantToRestaurantTags &&
-        restaurant.restaurantToRestaurantTags.length > 0 && (
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.8 }}
-            className="p-4 bg-gradient-to-r from-[#E6EEF5] to-[#EEF2FF] rounded-2xl"
-          >
-            <p className="text-sm text-gray-600 font-medium mb-3">관련 태그</p>
-            <div className="flex flex-wrap gap-2">
-              {restaurant.restaurantToRestaurantTags.map(
-                (tag: string, index: number) => (
-                  <span
-                    key={index}
-                    className="px-3 py-1 bg-gradient-to-r from-[#1C4E80] to-[#2563eb] text-white text-sm rounded-full font-medium"
-                  >
-                    #{tag}
-                  </span>
-                )
-              )}
-            </div>
-          </motion.div>
-        )}
+      <AnimatePresence mode="wait">{renderContent}</AnimatePresence>
     </div>
   );
 }

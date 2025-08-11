@@ -1,3 +1,4 @@
+import React from 'react';
 import { cn } from '@/app/shared/lib/cn';
 
 interface LoadingSpinnerProps {

@@ -8,7 +8,7 @@ interface StateDisplayProps {
   loadingMessage?: string;
   errorMessage?: string;
   emptyMessage?: string;
-  emptyIcon?: string;
+  emptyIcon?: string | React.ReactNode;
   size: 'sm' | 'md' | 'lg';
   onRetry?: () => void;
   className?: string;

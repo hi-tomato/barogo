@@ -5,14 +5,20 @@ export interface BaropotFormData {
   date: string;
   time: string;
   maxPeople: string;
-  contactMethod: "APP_CHAT" | "KAKAO_TALK" | "PHONE_NUMBER";
+  contactMethod: 'APP_CHAT' | 'KAKAO_TALK' | 'PHONE_NUMBER';
   restaurantAddress?: string;
   contactInfo?: string;
   expectedCost?: string;
-  paymentMethod?: "DUTCH_PAY" | "HOST_PAYS" | "NEGOTIABLE";
+  paymentMethod?: 'DUTCH_PAY' | 'HOST_PAYS' | 'NEGOTIABLE';
   gender: string[];
   ageGroup: string[];
   tags: string[];
   description?: string;
   rules?: string;
+}
+
+export enum BaropotTab {
+  AVAILABLE = 'available',
+  JOINED = 'joined',
+  CREATED = 'created',
 }

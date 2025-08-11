@@ -3,6 +3,7 @@ import React, { ReactNode, useEffect } from 'react';
 import BottomTabBar from '@/app/features/main/components/Footer';
 import { useAuthStore } from '@/app/shared/store/useAuthStore';
 import { ErrorBoundary } from '../shared/ui/error-boundary/ErrorBoundary';
+import ToastContainer from '../shared/ui/toast/ToastContainer';
 
 export default function AfterLoginLayout({
   children,
@@ -24,6 +25,7 @@ export default function AfterLoginLayout({
         <BottomTabBar />
         {modal}
       </div>
+      <ToastContainer />
     </ErrorBoundary>
   );
 }

@@ -1,8 +1,10 @@
 import { useUpdateRestaurant } from '@/app/shared/hooks/queries/useRestaurant';
 import { RestaurantDetail } from '@/app/shared/types/restaurant';
 import { Button, Input, LoadingSpinner } from '@/app/shared/ui';
-import React, { useState } from 'react';
+
+import React, { useCallback, useState } from 'react';
 import { HiClock, HiPencil, HiX } from 'react-icons/hi';
+import { useToast } from '@/app/shared/hooks/useToast';
 
 interface EditRestaurantModalProps {
   restaurant: RestaurantDetail;
@@ -17,7 +19,7 @@ export default function EditRestaurantModal({
 }: EditRestaurantModalProps) {
   const updateRestaurant = useUpdateRestaurant();
   const [newTag, setNewTag] = useState('');
-
+  const toast = useToast();
   const [formData, setFormData] = useState({
     description: restaurant.description || '',
     photos: restaurant.photos || [],
@@ -26,46 +28,52 @@ export default function EditRestaurantModal({
     lastOrderTime: restaurant.lastOrderTime || '',
     tags: restaurant.restaurantToRestaurantTags || [],
   });
-  const handleInput = (field: string, value: string) => {
+
+  const handleInput = useCallback((field: string, value: string) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
-  };
-  const handleAddTag = () => {
+  }, []);
+
+  const handleAddTag = useCallback(() => {
     if (newTag.trim() === '') return;
     setFormData((prev) => ({
       ...prev,
       tags: [...prev.tags, newTag],
     }));
     setNewTag('');
-  };
-  const handleRemoveTag = (tagToRemove: string) => {
+  }, [newTag]);
+
+  const handleRemoveTag = useCallback((tagToRemove: string) => {
     setFormData((prev) => ({
       ...prev,
       tags: prev.tags.filter((tag) => tag !== tagToRemove),
     }));
-  };
+  }, []);
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    try {
-      updateRestaurant.mutate(
-        {
-          restaurantId: restaurant.id.toString(),
-          data: {
-            ...formData,
-            tags: formData.tags.map((tag) => tag.trim()),
+  const handleSubmit = useCallback(
+    (e: React.FormEvent<HTMLFormElement>) => {
+      e.preventDefault();
+      try {
+        updateRestaurant.mutate(
+          {
+            restaurantId: restaurant.id,
+            data: {
+              ...formData,
+              tags: formData.tags.map((tag) => tag.trim()),
+            },
           },
-        },
-        {
-          onSuccess: () => {
-            alert('맛집 정보가 수정되었습니다.');
-            onClose();
-          },
-        }
-      );
-    } catch (error) {
-      console.error('Error updating restaurant:', error);
-    }
-  };
+          {
+            onSuccess: () => {
+              toast.success('맛집 정보가 수정되었습니다.');
+              onClose();
+            },
+          }
+        );
+      } catch (error) {
+        console.error('Error updating restaurant:', error);
+      }
+    },
+    [restaurant.id, formData, updateRestaurant, toast, onClose]
+  );
 
   if (!isOpen) return null;
 

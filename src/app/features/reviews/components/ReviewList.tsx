@@ -7,7 +7,7 @@ interface ReviewListProps {
   isLoading: boolean;
   error: Error | null;
   currentUserId: number;
-  restaurantId: string; // 추가
+  restaurantId: number; // 추가
   onDeleteReview: (reviewId: number) => void;
   onRetry: () => void;
   isDeleting: boolean;
@@ -50,7 +50,7 @@ export default function ReviewList({
 
   if (reviews.length === 0) {
     return (
-      <div className="px-4 py-6">
+      <div className="min-h-[200px] px-4 py-6">
         <StateDisplay
           state="empty"
           emptyMessage="아직 리뷰가 없어요"

@@ -1,8 +1,9 @@
-import { useState } from "react";
-import { FormData, UploadedImage } from "../types";
-import { useImageUpload } from "@/app/shared/hooks/queries/useImageUpload";
-import Image from "next/image";
-import CreatedStatus from "./CreatedStatus";
+import { useState } from 'react';
+import { FormData, UploadedImage } from '../types';
+import { useImageUpload } from '@/app/shared/hooks/queries/useImageUpload';
+import Image from 'next/image';
+import CreatedStatus from './CreatedStatus';
+import { useToast } from '@/app/shared/hooks/useToast';
 
 interface CreateImageFileProps {
   formData: FormData;
@@ -17,8 +18,8 @@ export default function CreateImageFile({
   removeImage,
   onImageUpload,
 }: CreateImageFileProps) {
+  const toast = useToast();
   const [uploadedImages, setUploadedImages] = useState<UploadedImage[]>([]);
-
   const { uploadImage, isUploading } = useImageUpload({
     onSuccess: (data) => {
       // 현재 업로드 중인 이미지를 찾아서 성공 상태로 업데이트
@@ -45,7 +46,7 @@ export default function CreateImageFile({
       });
     },
     onError: (error) => {
-      console.error("❌ 업로드 실패:", error);
+      console.error('❌ 업로드 실패:', error);
       // 현재 업로드 중인 이미지를 찾아서 에러 상태로 업데이트
       setUploadedImages((prev) => {
         const uploadingIndex = prev.findIndex(
@@ -64,14 +65,14 @@ export default function CreateImageFile({
       });
     },
     maxSize: 10, // 10MB
-    allowedTypes: ["image/jpeg", "image/png", "image/webp"],
+    allowedTypes: ['image/jpeg', 'image/png', 'image/webp'],
   });
 
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files || []);
     // 총 이미지 개수 제한 체크
     if (formData.images.length + files.length > 5) {
-      alert("최대 5장까지만 업로드할 수 있습니다.");
+      toast.error('최대 5장까지만 업로드할 수 있습니다.');
       return;
     }
     // 기존 핸들러 호출 (폼 데이터 업데이트)
@@ -104,11 +105,11 @@ export default function CreateImageFile({
     if (!uploadedImg) return null;
 
     if (uploadedImg.uploading) {
-      return "uploading";
+      return 'uploading';
     } else if (uploadedImg.url) {
-      return "success";
+      return 'success';
     } else if (uploadedImg.error) {
-      return "error";
+      return 'error';
     }
     return null;
   };
@@ -127,18 +128,18 @@ export default function CreateImageFile({
   };
 
   return (
-    <div className="bg-white rounded-xl p-6 shadow-sm">
-      <label className="block text-sm font-medium text-[#2B2B2B] mb-3">
+    <div className="rounded-xl bg-white p-6 shadow-sm">
+      <label className="mb-3 block text-sm font-medium text-[#2B2B2B]">
         맛집 사진 (최대 5장, 각 10MB 이하)
       </label>
 
       {/* 업로드 영역 */}
-      <div className="border-2 border-dashed border-gray-200 rounded-lg p-6 text-center mb-4 hover:border-blue-300 transition-colors">
+      <div className="mb-4 rounded-lg border-2 border-dashed border-gray-200 p-6 text-center transition-colors hover:border-blue-300">
         <label
-          className={`cursor-pointer block ${
+          className={`block cursor-pointer ${
             isUploading || formData.images.length >= 5
-              ? "opacity-50 cursor-not-allowed"
-              : ""
+              ? 'cursor-not-allowed opacity-50'
+              : ''
           }`}
         >
           <div className="space-y-2">
@@ -175,7 +176,7 @@ export default function CreateImageFile({
       {/* 선택된 이미지 미리보기 */}
       {formData.images.length > 0 && (
         <div>
-          <div className="flex justify-between items-center mb-3">
+          <div className="mb-3 flex items-center justify-between">
             <span className="text-sm text-gray-600">
               선택된 이미지 ({formData.images.length}/5)
             </span>
@@ -199,35 +200,35 @@ export default function CreateImageFile({
               const uploadedImg = uploadedImages[index];
 
               return (
-                <div key={`${index}-${file.name}`} className="relative group">
+                <div key={`${index}-${file.name}`} className="group relative">
                   <div className="relative">
                     <Image
                       width={300}
                       height={300}
                       src={URL.createObjectURL(file)}
                       alt={`미리보기 ${index + 1}`}
-                      className={`w-full h-20 object-cover rounded-lg transition-opacity ${
-                        status === "uploading" ? "opacity-50" : ""
+                      className={`h-20 w-full rounded-lg object-cover transition-opacity ${
+                        status === 'uploading' ? 'opacity-50' : ''
                       }`}
                     />
 
                     {/* 업로드 상태 오버레이 */}
-                    {status === "uploading" && (
+                    {status === 'uploading' && (
                       <CreatedStatus type="uploading" />
                     )}
 
                     {/* 상태 아이콘 */}
                     <div className="absolute top-1 left-1">
-                      {status === "success" && <CreatedStatus type="success" />}
-                      {status === "error" && <CreatedStatus type="error" />}
+                      {status === 'success' && <CreatedStatus type="success" />}
+                      {status === 'error' && <CreatedStatus type="error" />}
                     </div>
 
                     {/* 삭제 버튼 */}
                     <button
                       type="button"
                       onClick={() => handleRemoveImage(index)}
-                      disabled={status === "uploading"}
-                      className="absolute -top-2 -right-2 w-6 h-6 bg-red-500 text-white rounded-full flex items-center justify-center text-xs hover:bg-red-600 disabled:opacity-50 opacity-0 group-hover:opacity-100 transition-opacity"
+                      disabled={status === 'uploading'}
+                      className="absolute -top-2 -right-2 flex h-6 w-6 items-center justify-center rounded-full bg-red-500 text-xs text-white opacity-0 transition-opacity group-hover:opacity-100 hover:bg-red-600 disabled:opacity-50"
                     >
                       ×
                     </button>
@@ -235,7 +236,7 @@ export default function CreateImageFile({
 
                   {/* 파일 정보 */}
                   <div className="mt-1">
-                    <div className="text-xs text-gray-500 truncate">
+                    <div className="truncate text-xs text-gray-500">
                       {file.name}
                     </div>
                     <div className="text-xs text-gray-400">
@@ -245,11 +246,11 @@ export default function CreateImageFile({
 
                   {/* 에러 메시지 */}
                   {uploadedImg?.error && (
-                    <div className="absolute -bottom-12 left-0 right-0 text-xs text-red-500 bg-white p-2 rounded shadow-lg border z-10">
+                    <div className="absolute right-0 -bottom-12 left-0 z-10 rounded border bg-white p-2 text-xs text-red-500 shadow-lg">
                       {uploadedImg.error}
                       <button
                         onClick={() => handleRetryUpload(index)}
-                        className="block mt-1 text-blue-500 hover:underline"
+                        className="mt-1 block text-blue-500 hover:underline"
                       >
                         다시 시도
                       </button>

@@ -1,52 +1,57 @@
-"use client";
-import React, { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
-import { useCreateRestaurant } from "@/app/shared/hooks/queries/useRestaurant";
-import { FormData, RestaurantData } from "../types";
+'use client';
+import React, { useEffect, useReducer, useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { useCreateRestaurant } from '@/app/shared/hooks/queries/useRestaurant';
+import { FormData, RestaurantData } from '../types';
 import {
   CreateStatus,
   CreateHeader,
   CreateBasicInfo,
   CreateTags,
-} from "./index";
-import CreatedeScription from "./CreatedeScription";
-import { CreateRestaurantRequest } from "@/app/shared/types/restaurant";
-import ImageUploader from "@/app/shared/components/ImageUploader";
-import CreateFormActions from "./CreateFormActions";
+} from './index';
+import CreatedeScription from './CreatedeScription';
+import { CreateRestaurantRequest } from '@/app/shared/types/restaurant';
+import ImageUploader from '@/app/shared/components/ImageUploader';
+import CreateFormActions from './CreateFormActions';
+import { useToast } from '@/app/shared/hooks/useToast';
+import Modal from '@/app/shared/ui/Modal';
+import SuccessModalContent from './SuccessModalContent';
+import useFormReducer, { initialState } from '../hooks/useFormReducer';
 
 export default function CreateFormContainer() {
   const router = useRouter();
-  const createRestaurant = useCreateRestaurant();
   const [restaurant, setRestaurant] = useState<RestaurantData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [formData, setFormData] = useState<FormData>({
-    description: "",
-    images: [],
-    tags: "",
-    openingTime: "09:00",
-    closingTime: "21:00",
-    lastOrderTime: "20:30",
-    category: "",
-  });
+  const [formData, dispatch] = useReducer(useFormReducer, initialState);
+
   const [uploadUrls, setUploadUrls] = useState<string[]>([]);
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [createdRestaurant, setCreatedRestaurant] = useState<{
+    id: number;
+    name: string;
+  } | null>(null);
+
+  const toast = useToast();
+
+  const createRestaurant = useCreateRestaurant();
 
   useEffect(() => {
     try {
-      const data = sessionStorage.getItem("selectedRestaurant");
+      const data = sessionStorage.getItem('selectedRestaurant');
       if (data) {
         const restaurantData = JSON.parse(data);
         setRestaurant(restaurantData);
 
         if (restaurantData.x && restaurantData.y) {
-          setFormData((prev) => ({
-            ...prev,
+          dispatch({
+            type: 'SET_LOCATION',
             lat: parseFloat(restaurantData.y),
             lng: parseFloat(restaurantData.x),
-          }));
+          });
         }
       }
     } catch (error) {
-      console.error("맛집 데이터 로드 실패:", error);
+      console.error('맛집 데이터 로드 실패:', error);
       router.back();
     } finally {
       setIsLoading(false);
@@ -59,30 +64,31 @@ export default function CreateFormContainer() {
     >
   ) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+    dispatch({
+      type: 'UPDATE_FIELD',
+      field: name as keyof FormData,
+      value,
+    });
   };
 
   const addTag = (tag: string) => {
-    const currentTags = formData.tags.split(" ").filter((t) => t.length > 0);
+    const currentTags = formData.tags.split(',').filter((t) => t.length > 0);
     if (!currentTags.includes(tag)) {
-      setFormData((prev) => ({
-        ...prev,
-        tags: [...currentTags, tag].join(" "),
-      }));
+      dispatch({
+        type: 'ADD_TAG',
+        tag,
+      });
     }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!formData.description.trim()) {
-      alert("맛집 설명을 입력해주세요!");
+      toast.error('맛집 설명을 입력해주세요!');
       return;
     }
     if (!formData.category) {
-      alert("카테고리를 선택해주세요!");
+      toast.error('카테고리를 선택해주세요!');
       return;
     }
     if (!restaurant) {
@@ -90,7 +96,7 @@ export default function CreateFormContainer() {
     }
 
     const cleanPhoneNumber = (phone: string) => {
-      return phone.replace(/[-\s]/g, ""); // 하이픈과 공백 제거
+      return phone.replace(/[-\s]/g, '');
     };
 
     const photos: string[] = uploadUrls;
@@ -101,28 +107,46 @@ export default function CreateFormContainer() {
       lat: Number(restaurant.y as number),
       lng: Number(restaurant.x as number),
       description: formData.description,
-      phoneNumber: cleanPhoneNumber(restaurant.phone || ""),
+      phoneNumber: cleanPhoneNumber(restaurant.phone || ''),
       openingTime: formData.openingTime,
       closingTime: formData.closingTime,
       lastOrderTime: formData.lastOrderTime,
-      tags: formData.tags.split(" ").filter((tag) => tag.trim().length > 0),
+      tags: formData.tags.split(',').filter((tag) => tag.trim().length > 0),
       photos: photos,
     };
 
     createRestaurant.mutate(createRestaurantData, {
       onSuccess: (response) => {
-        console.log("맛집 생성 성공:", response);
-        sessionStorage.removeItem("selectedRestaurant");
-        router.push("/main");
+        console.log('맛집 생성 성공:', response);
+        sessionStorage.removeItem('selectedRestaurant');
+
+        setCreatedRestaurant({
+          id: response.id,
+          name: response.name,
+        });
+        setShowSuccessModal(true);
       },
       onError: (error) => {
-        console.error("맛집 생성 실패:", error);
-        alert("맛집 등록에 실패했습니다. 다시 시도해주세요.");
+        console.error('맛집 생성 실패:', error);
+        toast.error('맛집 등록에 실패했습니다. 다시 시도해주세요.');
       },
     });
   };
 
   const isFormValid = formData.description.trim() && formData.category;
+
+  // Modal Handler
+  const handleCreateBaropot = () => {
+    if (createdRestaurant) {
+      setShowSuccessModal(false);
+      router.push(`/restaurants/${createdRestaurant.id}/baropot/create`);
+    }
+  };
+
+  const handleCloseModal = () => {
+    setShowSuccessModal(false);
+    router.push('/main');
+  };
 
   if (isLoading) return <CreateStatus type="isLoading" />;
   if (!restaurant) return <CreateStatus type="notFound" />;
@@ -130,7 +154,7 @@ export default function CreateFormContainer() {
   return (
     <div className="min-h-screen bg-[#E6EEF5]">
       <CreateHeader />
-      <form onSubmit={handleSubmit} className="px-4 py-6 space-y-6 pb-24">
+      <form onSubmit={handleSubmit} className="space-y-6 px-4 py-6 pb-24">
         <CreateBasicInfo restaurant={restaurant} />
         <CreatedeScription
           formData={formData}
@@ -153,6 +177,13 @@ export default function CreateFormContainer() {
         />
         <CreateStatus type="basicMessage" />
       </form>
+
+      <Modal isOpen={showSuccessModal} onClose={handleCloseModal}>
+        <SuccessModalContent
+          restaurantName={createdRestaurant?.name || ''}
+          onCreateBaropot={handleCreateBaropot}
+        />
+      </Modal>
     </div>
   );
 }

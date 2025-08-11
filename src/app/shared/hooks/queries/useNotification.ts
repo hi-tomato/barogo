@@ -1,7 +1,7 @@
-import { useCallback, useEffect, useState } from "react";
-import { getAccessToken } from "@/app/shared/lib/authToken";
-import { notificationsServices } from "../../services/notificationsServices";
-import { Notification } from "@/app/shared/types/notification";
+import { useCallback, useEffect, useState } from 'react';
+import { getAccessToken } from '@/app/shared/lib/authToken';
+import { notificationsServices } from '../../services/notificationsServices';
+import { Notification } from '@/app/shared/types/notification';
 
 export const useNotification = () => {
   const [unreadCount, setUnreadCount] = useState(0);
@@ -18,15 +18,16 @@ export const useNotification = () => {
     setIsLoading(true);
 
     try {
-      const { data = [] } = await notificationsServices.get({
+      const response = await notificationsServices.get({
         headers: {
           Authorization: `Bearer ${userToken}`,
         },
       });
+      const data = Array.isArray(response) ? response : [];
       setNotifications(data);
       setUnreadCount(data.filter((n: Notification) => !n.isRead).length);
     } catch (error) {
-      console.error("알림 조회 실패하였습니다", error);
+      console.error('알림 조회 실패하였습니다', error);
     } finally {
       setIsLoading(false);
     }
@@ -50,12 +51,12 @@ export const useNotification = () => {
           setNotifications((prev) => [notification, ...prev]);
           setUnreadCount((prev) => prev + 1);
         } catch (error) {
-          console.error("알림 데이터 파싱 실패:", error);
+          console.error('알림 데이터 파싱 실패:', error);
         }
       };
 
-      newEventSource.onerror = (e) => {
-        console.error("SSE 서버가 준비되지 않음");
+      newEventSource.onerror = () => {
+        console.error('SSE 서버가 준비되지 않음');
         newEventSource.close();
         return null;
       };
@@ -76,7 +77,7 @@ export const useNotification = () => {
         );
         setUnreadCount((prev) => Math.max(0, prev - 1));
       } catch (error) {
-        console.error("알림 읽음 처리 실패:", error);
+        console.error('알림 읽음 처리 실패:', error);
       }
     },
     [userToken]
@@ -95,7 +96,7 @@ export const useNotification = () => {
       setNotifications((prev) => prev.map((n) => ({ ...n, isRead: true })));
       setUnreadCount(0);
     } catch (error) {
-      console.error("모든 알림 읽음 처리 실패:", error);
+      console.error('모든 알림 읽음 처리 실패:', error);
       setNotifications((prev) => prev.map((n) => ({ ...n, isRead: true })));
       setUnreadCount(0);
     }
@@ -104,7 +105,7 @@ export const useNotification = () => {
   useEffect(() => {
     if (userToken) {
       fetchNotifications();
-      if (process.env.NODE_ENV === "production") {
+      if (process.env.NODE_ENV === 'production') {
         setUpSSE();
       }
     }
@@ -114,7 +115,7 @@ export const useNotification = () => {
         eventSource.close();
       }
     };
-  }, [userToken]);
+  }, [userToken, setUpSSE, fetchNotifications, eventSource]);
 
   useEffect(() => {
     return () => {

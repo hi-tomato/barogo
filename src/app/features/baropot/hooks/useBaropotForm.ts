@@ -1,15 +1,16 @@
-import { UseFormWatch, UseFormSetValue } from "react-hook-form";
-import { useRouter, useParams } from "next/navigation";
-import { BaropotFormData } from "../types/baropot";
-import { RestaurantData } from "../../nearby/types/restaurant";
-import { useCreateBaropot } from "@/app/shared/hooks/queries/useBaropot";
-import { CreateBaropotRequest } from "@/app/shared/types/baropots";
+import { UseFormWatch, UseFormSetValue } from 'react-hook-form';
+import { useRouter, useParams } from 'next/navigation';
+import { BaropotFormData } from '../types/baropot';
+import { RestaurantData } from '../../nearby/types/restaurant';
+import { useCreateBaropot } from '@/app/shared/hooks/queries/useBaropot';
+import { CreateBaropotRequest } from '@/app/shared/types/baropots';
 import {
   ParticipantGender,
   ParticipantAgeGroup,
   ContactMethod,
   PaymentMethod,
-} from "@/app/shared/types/enums";
+} from '@/app/shared/types/enums';
+import { useToast } from '@/app/shared/hooks/useToast';
 
 interface UseBaropotFormLogicProps {
   watch: UseFormWatch<BaropotFormData>;
@@ -26,14 +27,15 @@ export function useBaropotFormLogic({
 }: UseBaropotFormLogicProps) {
   const params = useParams();
   const createBaropot = useCreateBaropot();
+  const toast = useToast();
 
-  const watchContactMethod = watch("contactMethod");
-  const watchGender = watch("gender");
-  const watchAgeGroup = watch("ageGroup");
-  const watchTags = watch("tags");
+  const watchContactMethod = watch('contactMethod');
+  const watchGender = watch('gender');
+  const watchAgeGroup = watch('ageGroup');
+  const watchTags = watch('tags');
 
   const toggleArrayField = (
-    fieldName: keyof Pick<BaropotFormData, "gender" | "ageGroup" | "tags">,
+    fieldName: keyof Pick<BaropotFormData, 'gender' | 'ageGroup' | 'tags'>,
     value: string
   ) => {
     const currentValues = watch(fieldName) as string[];
@@ -49,11 +51,11 @@ export function useBaropotFormLogic({
     const restaurantId = (() => {
       if (params.restaurantId) {
         const id = Number(params.restaurantId);
-        console.log("🔗 URL 파라미터에서 restaurantId 가져옴:", id);
+        console.log('🔗 URL 파라미터에서 restaurantId 가져옴:', id);
         return id;
       }
 
-      const storedData = sessionStorage.getItem("selectedRestaurant");
+      const storedData = sessionStorage.getItem('selectedRestaurant');
       if (storedData) {
         const parsedData = JSON.parse(storedData);
         if (parsedData.restaurantId) {
@@ -81,25 +83,26 @@ export function useBaropotFormLogic({
       paymentMethod: mapPaymentMethodToEnum(data.paymentMethod),
 
       estimatedCostPerPerson: data.expectedCost
-        ? parseInt(data.expectedCost.replace(/[^0-9]/g, ""))
+        ? parseInt(data.expectedCost.replace(/[^0-9]/g, ''))
         : undefined,
 
       tags: ((data.tags as string[]) || []).filter(
         (tag: string) => tag.trim().length > 0
       ),
 
-      description: data.description?.trim() || "",
+      description: data.description?.trim() || '',
       rule: data.rules?.trim(),
     };
 
     //TODO: 실제 API 호출
     createBaropot.mutate(submitData, {
-      onSuccess: () => {
-        alert("✅ 바로팟이 생성되었습니다!");
-        router.push("/baropot");
+      onSuccess: async () => {
+        toast.success('✅ 바로팟이 생성되었습니다!');
+        router.push('/baropot');
       },
-      onError: () => {
-        alert("바로팟 생성에 실패했습니다. 다시 시도해주세요.");
+      onError: (error) => {
+        console.error('바로팟 생성 에러:', error);
+        toast.error('바로팟 생성에 실패했습니다. 다시 시도해주세요.');
       },
     });
   };
@@ -121,14 +124,14 @@ function mapGenderToEnum(genderArray: string[]): ParticipantGender {
 
   const gender = genderArray[0];
   switch (gender) {
-    case "남자":
-    case "MALE":
+    case '남자':
+    case 'MALE':
       return ParticipantGender.MALE;
-    case "여자":
-    case "FEMALE":
+    case '여자':
+    case 'FEMALE':
       return ParticipantGender.FEMALE;
-    case "무관":
-    case "ANY":
+    case '무관':
+    case 'ANY':
     default:
       return ParticipantGender.ANY;
   }
@@ -139,17 +142,17 @@ function mapAgeToEnum(ageArray: string[]): ParticipantAgeGroup {
 
   const age = ageArray[0];
   switch (age) {
-    case "20대":
-    case "TWENTIES":
+    case '20대':
+    case 'TWENTIES':
       return ParticipantAgeGroup.TWENTIES;
-    case "30대":
-    case "THIRTIES":
+    case '30대':
+    case 'THIRTIES':
       return ParticipantAgeGroup.THIRTIES;
-    case "40대":
-    case "FORTIES":
+    case '40대':
+    case 'FORTIES':
       return ParticipantAgeGroup.FORTIES;
-    case "무관":
-    case "ANY":
+    case '무관':
+    case 'ANY':
     default:
       return ParticipantAgeGroup.ANY;
   }
@@ -157,14 +160,14 @@ function mapAgeToEnum(ageArray: string[]): ParticipantAgeGroup {
 
 function mapContactMethodToEnum(method: string): ContactMethod {
   switch (method) {
-    case "app":
-    case "APP_CHAT":
+    case 'app':
+    case 'APP_CHAT':
       return ContactMethod.APP_CHAT;
-    case "kakao":
-    case "KAKAO_TALK":
+    case 'kakao':
+    case 'KAKAO_TALK':
       return ContactMethod.KAKAO_TALK;
-    case "phone":
-    case "PHONE_NUMBER":
+    case 'phone':
+    case 'PHONE_NUMBER':
       return ContactMethod.PHONE_NUMBER;
     default:
       return ContactMethod.APP_CHAT;
@@ -173,14 +176,14 @@ function mapContactMethodToEnum(method: string): ContactMethod {
 
 function mapPaymentMethodToEnum(method?: string): PaymentMethod {
   switch (method) {
-    case "dutch":
-    case "DUTCH_PAY":
+    case 'dutch':
+    case 'DUTCH_PAY':
       return PaymentMethod.DUTCH_PAY;
-    case "host":
-    case "HOST_PAYS":
+    case 'host':
+    case 'HOST_PAYS':
       return PaymentMethod.HOST_PAYS;
-    case "discuss":
-    case "NEGOTIABLE":
+    case 'discuss':
+    case 'NEGOTIABLE':
       return PaymentMethod.NEGOTIABLE;
     default:
       return PaymentMethod.DUTCH_PAY;
@@ -188,13 +191,13 @@ function mapPaymentMethodToEnum(method?: string): PaymentMethod {
 }
 
 export const CONTACT_METHODS = [
-  { value: ContactMethod.APP_CHAT, label: "앱 내 채팅", icon: "💬" },
-  { value: ContactMethod.KAKAO_TALK, label: "카카오톡", icon: "🟡" },
-  { value: ContactMethod.PHONE_NUMBER, label: "전화번호", icon: "📞" },
+  { value: ContactMethod.APP_CHAT, label: '앱 내 채팅', icon: '💬' },
+  { value: ContactMethod.KAKAO_TALK, label: '카카오톡', icon: '🟡' },
+  { value: ContactMethod.PHONE_NUMBER, label: '전화번호', icon: '📞' },
 ] as const;
 
 export const PAYMENT_METHODS = [
-  { value: PaymentMethod.DUTCH_PAY, label: "더치페이", icon: "💰" },
-  { value: PaymentMethod.HOST_PAYS, label: "호스트가", icon: "🎁" },
-  { value: PaymentMethod.NEGOTIABLE, label: "현장에서 상의", icon: "🤝" },
+  { value: PaymentMethod.DUTCH_PAY, label: '더치페이', icon: '💰' },
+  { value: PaymentMethod.HOST_PAYS, label: '호스트가', icon: '🎁' },
+  { value: PaymentMethod.NEGOTIABLE, label: '현장에서 상의', icon: '🤝' },
 ];

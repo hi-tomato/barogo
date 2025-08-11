@@ -1,5 +1,5 @@
-import Image from "next/image";
-import { HiX } from "react-icons/hi";
+import Image from 'next/image';
+import { HiX } from 'react-icons/hi';
 
 interface ImageFile {
   file: File;
@@ -23,38 +23,38 @@ export default function ImagePreview({
   onRetry,
   compact = false,
 }: ImagePreviewProps) {
-  const size = compact ? "w-20 h-20" : "w-full h-20";
+  const size = compact ? 'w-20 h-20' : 'w-full h-20';
 
   return (
-    <div className="relative group">
+    <div className="group relative">
       <div className="relative">
         <Image
           width={compact ? 80 : 300}
-          height={80}
+          height={compact ? 80 : 300}
           src={image.preview}
           alt="미리보기"
-          className={`${size} object-cover rounded-lg transition-opacity ${
-            image.uploading ? "opacity-50" : ""
+          className={`${size} rounded-lg object-cover transition-opacity ${
+            image.uploading ? 'opacity-50' : ''
           }`}
         />
 
         {/* 상태 오버레이 */}
         {image.uploading && (
-          <div className="absolute inset-0 flex items-center justify-center bg-black/30 rounded-lg">
-            <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+          <div className="absolute inset-0 flex items-center justify-center rounded-lg bg-black/30">
+            <div className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent"></div>
           </div>
         )}
 
         {/* 상태 아이콘 */}
         <div className="absolute top-1 left-1">
           {image.url && (
-            <div className="w-4 h-4 bg-green-500 rounded-full flex items-center justify-center">
-              <span className="text-white text-xs">✓</span>
+            <div className="flex h-4 w-4 items-center justify-center rounded-full bg-green-500">
+              <span className="text-xs text-white">✓</span>
             </div>
           )}
           {image.error && (
-            <div className="w-4 h-4 bg-red-500 rounded-full flex items-center justify-center">
-              <span className="text-white text-xs">!</span>
+            <div className="flex h-4 w-4 items-center justify-center rounded-full bg-red-500">
+              <span className="text-xs text-white">!</span>
             </div>
           )}
         </div>
@@ -64,7 +64,7 @@ export default function ImagePreview({
           type="button"
           onClick={onRemove}
           disabled={image.uploading}
-          className="absolute -top-2 -right-2 w-6 h-6 bg-red-500 text-white rounded-full flex items-center justify-center hover:bg-red-600 disabled:opacity-50 opacity-0 group-hover:opacity-100 transition-opacity"
+          className="absolute -top-2 -right-2 flex h-6 w-6 items-center justify-center rounded-full bg-red-500 text-white opacity-0 transition-opacity group-hover:opacity-100 hover:bg-red-600 disabled:opacity-50"
         >
           <HiX size={12} />
         </button>
@@ -73,7 +73,7 @@ export default function ImagePreview({
       {/* 파일 정보 */}
       {!compact && (
         <div className="mt-1">
-          <div className="text-xs text-gray-500 truncate">
+          <div className="truncate text-xs text-gray-500">
             {image.file.name}
           </div>
           <div className="text-xs text-gray-400">
@@ -84,11 +84,11 @@ export default function ImagePreview({
 
       {/* 에러 메시지 */}
       {image.error && (
-        <div className="absolute -bottom-12 left-0 right-0 text-xs text-red-500 bg-white p-2 rounded shadow-lg border z-10">
+        <div className="absolute right-0 -bottom-12 left-0 z-10 rounded border bg-white p-2 text-xs text-red-500 shadow-lg">
           {image.error}
           <button
             onClick={onRetry}
-            className="block mt-1 text-blue-500 hover:underline"
+            className="mt-1 block text-blue-500 hover:underline"
           >
             다시 시도
           </button>
