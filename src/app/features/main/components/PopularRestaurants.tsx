@@ -8,7 +8,6 @@ export default function PopularRestaurants() {
   const { data: restaurants = [], isLoading } = useRestaurantList();
 
   const popularRestaurants = restaurants.slice(0, 4);
-
   return (
     <div className="mb-4 sm:mb-5 md:mb-6 lg:mb-4">
       <h2 className="mb-3 flex items-center text-base font-semibold text-[#2B2B2B] sm:mb-4 sm:text-lg md:text-xl lg:text-lg">
@@ -53,8 +52,8 @@ export default function PopularRestaurants() {
                       {restaurant.name}
                     </h3>
                     <p className="text-xs text-[#8A8A8A]">
-                      {restaurant.rating
-                        ? `• ⭐ ${restaurant.rating}`
+                      {restaurant.reviewCount
+                        ? `${restaurant.reviewCount}개의 리뷰가 있습니다.`
                         : '등록된 리뷰가 없습니다.'}
                     </p>
                   </div>

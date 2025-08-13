@@ -117,7 +117,6 @@ export default function CreateFormContainer() {
 
     createRestaurant.mutate(createRestaurantData, {
       onSuccess: (response) => {
-        console.log('맛집 생성 성공:', response);
         sessionStorage.removeItem('selectedRestaurant');
 
         setCreatedRestaurant({

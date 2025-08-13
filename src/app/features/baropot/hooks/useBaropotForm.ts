@@ -51,7 +51,6 @@ export function useBaropotFormLogic({
     const restaurantId = (() => {
       if (params.restaurantId) {
         const id = Number(params.restaurantId);
-        console.log('🔗 URL 파라미터에서 restaurantId 가져옴:', id);
         return id;
       }
 
