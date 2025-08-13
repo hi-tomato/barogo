@@ -12,9 +12,6 @@ export async function GET(request: NextRequest) {
   try {
     const backendUrl = `${process.env.BACKEND_API_URL || 'https://api.backend-challenge.com'}/notifications/stream`;
 
-    console.log('SSE Proxy - Backend URL:', backendUrl);
-    console.log('SSE Proxy - Token:', token.substring(0, 20) + '...');
-
     const response = await fetch(backendUrl, {
       method: 'GET',
       headers: {

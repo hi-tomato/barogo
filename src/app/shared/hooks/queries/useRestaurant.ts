@@ -22,7 +22,6 @@ export const useCreateRestaurant = () => {
   return useMutation({
     mutationFn: restaurantService.create,
     onSuccess: async (response) => {
-      console.log('맛집 등록 성공! 서버 ID:', response.id);
       // 1. 모든 캐시 무효화
       queryClient.invalidateQueries({
         queryKey: queryKeys.restaurant.all,

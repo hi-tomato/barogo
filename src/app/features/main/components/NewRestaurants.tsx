@@ -87,7 +87,7 @@ export default function NewRestaurants() {
                 >
                   <div className="flex items-center space-x-3">
                     <div className="flex aspect-square w-12 items-center justify-center rounded-lg bg-gray-100 sm:w-14 md:w-16 lg:w-12">
-                      <span className="text-gray-400">🏪</span>
+                      {/* <span className="text-gray-400">🏪</span> */}
                     </div>
                     <div className="flex-1">
                       <div className="mb-2 h-4 rounded bg-gray-100"></div>

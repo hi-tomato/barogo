@@ -10,17 +10,6 @@ export const checkEnvironmentVariables = () => {
     NEXT_PUBLIC_GOOGLE_CLIENT_ID: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID,
   };
 
-  console.log('🔧 환경 변수 확인:', {
-    ...envVars,
-    NEXT_PUBLIC_KAKAO_CLIENT_ID: envVars.NEXT_PUBLIC_KAKAO_CLIENT_ID
-      ? '설정됨'
-      : '미설정',
-    NEXT_PUBLIC_GOOGLE_CLIENT_ID: envVars.NEXT_PUBLIC_GOOGLE_CLIENT_ID
-      ? '설정됨'
-      : '미설정',
-  });
-
-  // 필수 환경 변수 확인
   const missingVars = [];
 
   if (!envVars.NEXT_PUBLIC_API_URL) {
@@ -32,8 +21,6 @@ export const checkEnvironmentVariables = () => {
     console.error(
       '📝 .env.local 파일을 확인하거나 배포 환경에서 환경 변수를 설정해주세요.'
     );
-  } else {
-    console.log('✅ 모든 필수 환경 변수가 설정되었습니다.');
   }
 
   return {
